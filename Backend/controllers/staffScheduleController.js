@@ -17,7 +17,7 @@ exports.createStaffSchedule = async (req, res) => {
   }
 };
 
-exports.getAllSchedules = async (req, res) => {
+exports.getAllStaffSchedules = async (req, res) => {
   try {
     const schedules = await StaffSchedule.getAll();
     res.status(200).json(schedules);
@@ -26,7 +26,7 @@ exports.getAllSchedules = async (req, res) => {
   }
 };
 
-exports.getScheduleByStaffId = async (req, res) => {
+exports.getStaffScheduleByStaffId = async (req, res) => {
   try {
     const staffId = req.params.staffId;
     const schedule = await StaffSchedule.getByStaffId(staffId);
