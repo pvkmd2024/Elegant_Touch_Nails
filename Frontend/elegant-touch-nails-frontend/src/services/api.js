@@ -4,7 +4,7 @@ const API_URL = "http://localhost:5000/api";
 
 // Clients API
 export const fetchClients = () => axios.get(`${API_URL}/clients`);
-export const createClients = (data) => axios.post(`${API_URL}/clients`, data);
+export const createClient = (data) => axios.post(`${API_URL}/clients`, data);
 
 // Services API
 export const fetchServices = () => axios.get(`${API_URL}/services`);

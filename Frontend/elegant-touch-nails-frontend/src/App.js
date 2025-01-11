@@ -1,12 +1,23 @@
 import React from "react";
 
+// Consolidated API imports
+import {
+  fetchClients,
+  fetchServices,
+  fetchAppointments,
+  fetchPayments,
+  fetchStaff,
+  fetchStaffSchedules,
+} from "../services/api";
+
+// Component imports
 import ClientsList from "./components/Clients/ClientsList";
 import AddClientForm from "./components/Clients/AddClientForm";
 
-import ServicesList from "./components/Services/ServiceList";
+import ServicesList from "./components/Services/ServicesList";
 import AddServiceForm from "./components/Services/AddServiceForm";
 
-import AppointmentList from "./components/Appointments/AppointmentList";
+import AppointmentsList from "./components/Appointments/AppointmentsList";
 import AddAppointmentForm from "./components/Appointments/AddAppointmentForm";
 
 import PaymentsList from "./components/Payments/PaymentsList";
@@ -32,7 +43,7 @@ const App = () => (
 
     <h2>Appointments</h2>
     <AddAppointmentForm />
-    <AppointmentList />
+    <AppointmentsList />
 
     <h2>Payments</h2>
     <AddPaymentForm />
