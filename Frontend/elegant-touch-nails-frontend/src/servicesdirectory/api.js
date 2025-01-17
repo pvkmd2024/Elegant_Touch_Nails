@@ -1,6 +1,18 @@
 const API_URL = "http://localhost:5000/api";
 
 // Clients API
+export const fetchClients = async () => {
+  try {
+    const response = await fetch(`${API_URL}/clients`);
+    if (!response.ok) throw new Error("Failed to fetch clients");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching clients:", error);
+    return []; // Return an empty array in case of an error
+  }
+};
+
 export const createClient = async (data) => {
   try {
     const response = await fetch(`${API_URL}/clients`, {
@@ -51,7 +63,7 @@ export const createService = async (data) => {
 // Payments API
 export const fetchPayments = async () => {
   try {
-    const response = await fetch(`${API_URL}/payments`); // Fixed usage of API_URL
+    const response = await fetch(`${API_URL}/payments`);
     if (!response.ok) throw new Error("Failed to fetch payments");
     const data = await response.json();
     return data;
