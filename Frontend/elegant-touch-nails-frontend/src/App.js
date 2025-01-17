@@ -8,7 +8,7 @@ import {
   fetchPayments,
   fetchStaff,
   fetchStaffSchedules,
-} from "../services/api";
+} from "servicesdirectory/api";
 
 // Component imports
 import ClientsList from "./components/Clients/ClientsList";

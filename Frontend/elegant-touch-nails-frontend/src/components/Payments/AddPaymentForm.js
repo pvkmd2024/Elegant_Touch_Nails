@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createPayment } from "../services/api";
+import { createPayment } from "servicesdirectory/api"; // Adjust the import path if necessary
 
 const AddPaymentForm = () => {
   const [AppointmentID, setAppointmentID] = useState("");
@@ -13,6 +13,7 @@ const AddPaymentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validate input fields
     if (
       !AppointmentID ||
       !PaymentMethod ||
@@ -35,9 +36,11 @@ const AddPaymentForm = () => {
     setLoading(true); // Set loading state to true while waiting for the API response
     setError(""); // Clear any previous errors
 
+    // Send data to the server using the createPayment function
     createPayment(paymentData)
       .then(() => {
         alert("Payment added successfully!");
+        // Reset the form fields after successful submission
         setAppointmentID("");
         setPaymentMethod("");
         setPaymentStatus("");
@@ -55,20 +58,27 @@ const AddPaymentForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Add Payment</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-      {/* Show error message */}
+
+      {/* Display error message if present */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {/* Appointment ID input */}
       <input
         type="text"
         placeholder="Appointment ID"
         value={AppointmentID}
         onChange={(e) => setAppointmentID(e.target.value)}
       />
+
+      {/* Payment Method input */}
       <input
         type="text"
         placeholder="Payment Method"
         value={PaymentMethod}
         onChange={(e) => setPaymentMethod(e.target.value)}
       />
+
+      {/* Payment Status select dropdown */}
       <select
         value={PaymentStatus}
         onChange={(e) => setPaymentStatus(e.target.value)}
@@ -78,21 +88,24 @@ const AddPaymentForm = () => {
         <option value="Pending">Pending</option>
         <option value="Failed">Failed</option>
       </select>
+
+      {/* Amount input */}
       <input
         type="number"
         placeholder="Amount"
         value={Amount}
         onChange={(e) => setAmount(e.target.value)}
       />
+
+      {/* Paid At datetime input */}
       <input
         type="datetime-local"
-        placeholder="Paid At"
         value={PaidAt}
         onChange={(e) => setPaidAt(e.target.value)}
       />
+
+      {/* Submit button */}
       <button type="submit" disabled={loading}>
-        {" "}
-        {/* Disable button when loading */}
         {loading ? "Processing..." : "Add Payment"}
       </button>
     </form>

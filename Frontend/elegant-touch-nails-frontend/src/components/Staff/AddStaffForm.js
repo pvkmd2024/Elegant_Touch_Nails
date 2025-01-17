@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createStaff } from "../services/api";
+import { createStaff } from "servicesdirectory/api";
 
 const AddStaffForm = () => {
   const [FullName, setFullName] = useState("");

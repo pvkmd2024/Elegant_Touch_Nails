@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createService } from "../services/api";
+import { createService } from "servicesdirectory/api";
 
 const AddServiceForm = () => {
   const [serviceData, setServiceData] = useState({

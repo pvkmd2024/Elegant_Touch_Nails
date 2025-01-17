@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createClient } from "../../services/api";
+import { createClient } from "servicesdirectory/api";
 
 const AddClientForm = () => {
   const [fullName, setFullName] = useState("");

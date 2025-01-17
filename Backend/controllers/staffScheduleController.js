@@ -2,18 +2,18 @@ const StaffSchedule = require("../models/staffScheduleModel");
 
 exports.createStaffSchedule = async (req, res) => {
   try {
-    const { staffId, dayOfWeek, startTime, endTime } = req.body;
-    const result = await StaffSchedule.create({
-      staffId,
-      dayOfWeek,
-      startTime,
-      endTime,
-    });
+    const schedules = req.body; // Expecting an array of schedules
+    const results = [];
+    for (const schedule of schedules) {
+      const result = await StaffSchedule.create(schedule);
+      results.push(result);
+    }
     res
       .status(201)
-      .json({ message: "Staff schedule created successfully", result });
+      .json({ message: "Schedules created successfully", results });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error creating staff schedules:", error);
+    res.status(500).json({ error: "Failed to create schedules" });
   }
 };
 
@@ -22,22 +22,18 @@ exports.getAllStaffSchedules = async (req, res) => {
     const schedules = await StaffSchedule.getAll();
     res.status(200).json(schedules);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching staff schedules:", error);
+    res.status(500).json({ error: "Failed to fetch schedules" });
   }
 };
 
 exports.getStaffScheduleByStaffId = async (req, res) => {
   try {
-    const staffId = req.params.staffId;
-    const schedule = await StaffSchedule.getByStaffId(staffId);
-    if (schedule) {
-      res.status(200).json(schedule);
-    } else {
-      res
-        .status(404)
-        .json({ message: "Schedule not found for this staff member" });
-    }
+    const { staffId } = req.params;
+    const schedules = await StaffSchedule.getByStaffId(staffId);
+    res.status(200).json(schedules);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching staff schedule by ID:", error);
+    res.status(500).json({ error: "Failed to fetch schedule" });
   }
 };

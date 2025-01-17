@@ -3,38 +3,45 @@ const Service = require("../models/serviceModel");
 // Create a new service
 exports.createService = async (req, res) => {
   try {
-    const {
-      serviceName,
-      description,
-      minDuration,
-      maxDuration,
-      minPrice,
-      maxPrice,
-    } = req.body;
+    const services = req.body;
 
-    if (
-      isNaN(minDuration) ||
-      isNaN(maxDuration) ||
-      isNaN(minPrice) ||
-      isNaN(maxPrice)
-    ) {
+    if (!Array.isArray(services) || services.length === 0) {
       return res
         .status(400)
-        .json({ message: "Duration and price values must be numbers" });
+        .json({ message: "Request body must be an array of services" });
     }
 
-    const newService = await Service.create({
-      serviceName,
-      description,
-      minDuration,
-      maxDuration,
-      minPrice,
-      maxPrice,
-    });
+    // Validate each service object
+    for (const service of services) {
+      const {
+        serviceName,
+        description,
+        minDuration,
+        maxDuration,
+        minPrice,
+        maxPrice,
+      } = service;
+
+      if (
+        !serviceName ||
+        !description ||
+        isNaN(minDuration) ||
+        isNaN(maxDuration) ||
+        isNaN(minPrice) ||
+        isNaN(maxPrice)
+      ) {
+        return res.status(400).json({
+          message:
+            "Each service must have valid serviceName, description, minDuration, maxDuration, minPrice, and maxPrice",
+        });
+      }
+    }
+
+    const newServices = await Service.create(services);
 
     res
       .status(201)
-      .json({ message: "Service created successfully", result: newService });
+      .json({ message: "Services created successfully", result: newServices });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

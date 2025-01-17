@@ -6,7 +6,7 @@ const {
   getStaffScheduleByStaffId,
 } = require("../controllers/staffScheduleController");
 
-// Route to create a staff schedule
+// Route to create staff schedules
 router.post("/", createStaffSchedule);
 
 // Route to get all staff schedules

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchPayments } from "../services/api";
+import { fetchPayments } from "servicesdirectory/api";
 import "./PaymentList.css";
 
 const PaymentsList = () => {
@@ -10,8 +10,14 @@ const PaymentsList = () => {
   useEffect(() => {
     const fetchPaymentData = async () => {
       try {
-        const response = await fetchPayments();
-        setPayments(response.data);
+        const fetchedPayments = await fetchPayments(); // Fetch payments
+        // Ensure fetched data is an array
+        if (Array.isArray(fetchedPayments)) {
+          setPayments(fetchedPayments); // Set payments if valid
+        } else {
+          console.error("Fetched data is not an array:", fetchedPayments);
+          setPayments([]); // Set empty array if data is not valid
+        }
         setLoading(false); // Set loading to false once data is fetched
       } catch (error) {
         setError("Failed to fetch payments. Please try again later.");
@@ -33,28 +39,32 @@ const PaymentsList = () => {
   return (
     <div>
       <h2>Payment Records</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>AppointmentID</th>
-            <th>PaymentMethod</th>
-            <th>PaymentStatus</th>
-            <th>Amount</th>
-            <th>PaidAt</th>
-          </tr>
-        </thead>
-        <tbody>
-          {payments.map((payment) => (
-            <tr key={payment.id}>
-              <td>{payment.AppointmentID}</td>
-              <td>{payment.PaymentMethod}</td>
-              <td>{payment.PaymentStatus}</td>
-              <td>{payment.Amount}</td>
-              <td>{new Date(payment.PaidAt).toLocaleString()}</td>
+      {payments && payments.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>AppointmentID</th>
+              <th>PaymentMethod</th>
+              <th>PaymentStatus</th>
+              <th>Amount</th>
+              <th>PaidAt</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {payments.map((payment) => (
+              <tr key={payment.id}>
+                <td>{payment.AppointmentID}</td>
+                <td>{payment.PaymentMethod}</td>
+                <td>{payment.PaymentStatus}</td>
+                <td>{payment.Amount}</td>
+                <td>{new Date(payment.PaidAt).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No payments available</p> // Show a message if there are no payments
+      )}
     </div>
   );
 };

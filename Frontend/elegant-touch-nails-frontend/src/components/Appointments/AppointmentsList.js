@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchAppointments } from "../services/api";
+import { fetchAppointments } from "servicesdirectory/api"; // Import the fetch version of the function
 
 const AppointmentsList = () => {
   const [appointments, setAppointments] = useState([]);
@@ -7,17 +7,20 @@ const AppointmentsList = () => {
   const [error, setError] = useState(""); // Track error state
 
   useEffect(() => {
-    setLoading(true);
-    fetchAppointments()
-      .then((response) => {
-        setAppointments(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchAppointments(); // Call the new fetchAppointments function
+        setAppointments(data);
+      } catch (error) {
         setError("Failed to fetch appointments.");
         console.error("Error fetching appointments:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (

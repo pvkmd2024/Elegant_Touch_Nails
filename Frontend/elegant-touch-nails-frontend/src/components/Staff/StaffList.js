@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { fetchStaff } from "../services/api";
+import { fetchStaff } from "servicesdirectory/api";
 import "./StaffList.css";
 
 const StaffList = () => {
   const [staffMembers, setStaffMembers] = useState([]);
-  const [loading, setLoading] = useState(true); // Track loading state
-  const [error, setError] = useState(""); // Track error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchStaff()
       .then((response) => {
-        setStaffMembers(response.data);
+        if (Array.isArray(response.data)) {
+          setStaffMembers(response.data); // Set staff members if valid
+        } else {
+          setError("Staff members data is not in the expected format.");
+        }
         setLoading(false); // Set loading to false after data is fetched
       })
       .catch((error) => {
@@ -21,14 +25,13 @@ const StaffList = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading staff members...</div>; // Display loading text
+    return <div>Loading staff members...</div>;
   }
 
   return (
     <div>
       <h2>Staff Members</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-      {/* Display error message */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <table>
         <thead>
           <tr>

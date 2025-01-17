@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createAppointment } from "../services/api";
+import { createAppointment } from "servicesdirectory/api";
 
 const AddAppointmentForm = () => {
   const [ClientID, setClientID] = useState("");

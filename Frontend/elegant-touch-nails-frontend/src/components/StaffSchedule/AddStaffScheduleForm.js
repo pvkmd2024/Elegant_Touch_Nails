@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createStaffSchedule } from "../services/api";
+import { createStaffSchedule } from "servicesdirectory/api";
 import "./StaffScheduleForm.css";
 
 const AddStaffScheduleForm = () => {

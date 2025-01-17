@@ -1,16 +1,26 @@
 const db = require("../config/db"); // Adjust the path to your db.js
 
 class Staff {
-  static async create() {
-    const sql = `
-            INSERT INTO Staff (FullName, Role, Email, PasswordHash) VALUES
-            ('John Doe', 'Doctor', 'johndoe@eleganttouch.com', 'FJHFFJYHFD56598'),
-            ('Jane Smith', 'Nurse', 'janesmith@eleganttouch.com', 'MVMKHGDGDC887'),
-            ('Alice Johnson', 'Receptionist', 'alicejohnson@eleganttouch.com', 'hgkjgkjhlih4746f')
-        `;
+  static async create(staffData) {
+    const sql = `INSERT INTO Staff (FullName, Role, Email, PasswordHash) VALUES (?,?,?,?)`;
+    console.log("Staff data received in model:", staffData);
 
+    // Create the parameters array explicitly
+    const params = [
+      staffData.fullame || null,
+      staffData.role || null,
+      staffData.email || null,
+      staffData.passwordHash || null,
+    ];
+
+    console.log("SQL parameters:", params);
     try {
-      const [result] = await db.execute(sql);
+      const [result] = await db.execute(sql, [
+        staffData.fullname,
+        staffData.role,
+        staffData.email,
+        staffData.passwordHash,
+      ]);
       return result;
     } catch (error) {
       console.error("Error inserting staff data:", error);
