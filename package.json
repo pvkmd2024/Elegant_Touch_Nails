@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node Elegant_Touch_Nails/Backend/server.js",
+    "client": "npm run dev --prefix Elegant_Touch_Nails/Frontend/elegant-touch-nails-frontend"
+  }
+}

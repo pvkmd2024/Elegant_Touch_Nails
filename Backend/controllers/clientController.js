@@ -36,6 +36,7 @@ exports.createClients = async (req, res) => {
 exports.getAllClients = async (req, res) => {
   try {
     const clients = await Client.getAll();
+    console.log("Fetched clients:", clients); // Debugging log
     res.status(200).json(clients);
   } catch (error) {
     console.error("Error fetching clients:", error);

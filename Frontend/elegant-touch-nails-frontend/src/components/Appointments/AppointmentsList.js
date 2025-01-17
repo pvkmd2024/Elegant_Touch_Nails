@@ -7,21 +7,37 @@ const AppointmentsList = () => {
   const [error, setError] = useState(""); // Track error state
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getAppointments = async () => {
       setLoading(true);
       try {
-        const data = await fetchAppointments(); // Call the new fetchAppointments function
-        setAppointments(data);
+        const response = await fetchAppointments();
+        console.log("Fetched appointments data:", response); // Debugging log
+        setAppointments(response);
       } catch (error) {
-        setError("Failed to fetch appointments.");
         console.error("Error fetching appointments:", error);
+        setError("Failed to fetch appointments.");
       } finally {
         setLoading(false);
       }
     };
-
-    fetchData();
+    getAppointments();
   }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const data = await fetchAppointments(); // Call the new fetchAppointments function
+  //       setAppointments(data);
+  //     } catch (error) {
+  //       setError("Failed to fetch appointments.");
+  //       console.error("Error fetching appointments:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   return (
     <div>

@@ -1,3 +1,4 @@
+import { formatDateTime } from "../utils/utils"; // Import the correct function
 const API_URL = "http://localhost:5000/api";
 
 // Clients API
@@ -5,11 +6,22 @@ export const fetchClients = async () => {
   try {
     const response = await fetch(`${API_URL}/clients`);
     if (!response.ok) throw new Error("Failed to fetch clients");
+
     const data = await response.json();
-    return data;
+
+    // Transform the date format for each client
+    const transformedData = data.map((client) => {
+      if (client.CreatedAt) {
+        // Format the 'CreatedAt' field or any other date field
+        return { ...client, CreatedAt: formatDateTime(client.CreatedAt) };
+      }
+      return client;
+    });
+
+    return transformedData;
   } catch (error) {
     console.error("Error fetching clients:", error);
-    return []; // Return an empty array in case of an error
+    return [];
   }
 };
 
@@ -66,7 +78,16 @@ export const fetchPayments = async () => {
     const response = await fetch(`${API_URL}/payments`);
     if (!response.ok) throw new Error("Failed to fetch payments");
     const data = await response.json();
-    return data;
+
+    const transformedData = data.map((payment) => {
+      if (payment.date) {
+        // Use formatDateTime instead of formatToISODate
+        return { ...payment, date: formatDateTime(payment.date) };
+      }
+      return payment;
+    });
+
+    return transformedData;
   } catch (error) {
     console.error("Error fetching payments:", error);
     return [];
@@ -156,7 +177,16 @@ export const fetchAppointments = async () => {
     const response = await fetch(`${API_URL}/appointments`);
     if (!response.ok) throw new Error("Failed to fetch appointments");
     const data = await response.json();
-    return data;
+
+    const transformedData = data.map((appointment) => {
+      if (appointment.date) {
+        // Use formatDateTime instead of formatToISODate
+        return { ...appointment, date: formatDateTime(appointment.date) };
+      }
+      return appointment;
+    });
+
+    return transformedData;
   } catch (error) {
     console.error("Error fetching appointments:", error);
     return [];

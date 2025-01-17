@@ -24,8 +24,14 @@ class Client {
   // Static method to get all clients
   static async getAll() {
     const sql = `SELECT * FROM Clients`;
-    const [rows] = await db.execute(sql);
-    return rows;
+    try {
+      const [rows] = await db.execute(sql);
+      console.log("Database rows:", rows); // Debugging log
+      return rows;
+    } catch (error) {
+      console.error("Error in getAll method:", error);
+      throw error;
+    }
   }
 }
 

@@ -1,6 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { fetchClients } from "servicesdirectory/api"; // Adjust path if needed
 
+const ClientsTable = ({ clients }) => {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Password Hash</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {clients.map((client) => (
+          <tr key={client.ClientID}>
+            <td>{client.FullName}</td>
+            <td>{client.Email}</td>
+            <td>{client.PhoneNumber}</td>
+            <td>{client.PasswordHash}</td>
+            <td>{client.CreatedAt}</td> {/* Date displayed here */}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
 const ClientsList = () => {
   const [clients, setClients] = useState([]); // Initialize with an empty array
   const [loading, setLoading] = useState(false); // Track loading state
@@ -8,27 +35,21 @@ const ClientsList = () => {
 
   useEffect(() => {
     const getClients = async () => {
-      setLoading(true); // Set loading to true when the fetch begins
+      setLoading(true);
       try {
-        const response = await fetchClients(); // Assuming fetchClients returns a response
-        const data = response.data; // Assuming response.data contains the client list
-
-        // Ensure that data is an array before setting it
-        if (Array.isArray(data)) {
-          setClients(data); // Update state if data is an array
-        } else {
-          setError("Invalid data format received"); // Handle invalid data format
-        }
-        setLoading(false); // Stop loading after data is fetched
+        const response = await fetchClients();
+        console.log("Fetched clients data:", response.data); // Debugging log
+        setClients(response.data);
       } catch (error) {
-        setError("Failed to fetch clients.");
         console.error("Error fetching clients:", error);
-        setLoading(false); // Stop loading in case of an error
+        setError("Failed to fetch clients.");
+      } finally {
+        setLoading(false);
       }
     };
 
-    getClients(); // Fetch clients when the component mounts
-  }, []); // Empty dependency array ensures it runs only once after the component mounts
+    getClients();
+  }, []);
 
   // Render loading, error, or data
   if (loading) {
@@ -47,17 +68,8 @@ const ClientsList = () => {
   return (
     <div>
       <h2>Clients List</h2>
-      <ul>
-        {clients.length > 0 ? (
-          clients.map((client) => (
-            <li key={client.id}>
-              {client.name} {/* Assuming client object has a name property */}
-            </li>
-          ))
-        ) : (
-          <li>No clients available</li> // Handle empty client list
-        )}
-      </ul>
+      {/* Render ClientsTable and pass the clients data */}
+      <ClientsTable clients={clients} />
     </div>
   );
 };

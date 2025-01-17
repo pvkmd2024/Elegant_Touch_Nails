@@ -15,7 +15,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:3000", // Adjust the origin for production if needed
+    origin: "http://localhost:3000", // frontend running on PORT 3000
   })
 );
 app.use(express.json());

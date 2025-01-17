@@ -14,7 +14,7 @@ const AddClientForm = () => {
     e.preventDefault();
 
     // Input validation
-    if (!fullName || !email || !phoneNumber || !passwordHash) {
+    if (!fullName || !email || !phoneNumber || !passwordHash || !createdAt) {
       setError("All fields are required.");
       return;
     }
@@ -24,7 +24,7 @@ const AddClientForm = () => {
       email,
       phoneNumber,
       passwordHash,
-      createdAt,
+      createdAt: new Date().toISOString(),
     };
 
     setLoading(true); // Set loading state to true when the request starts

@@ -65,9 +65,9 @@ const AddAppointmentForm = () => {
       <select value={Status} onChange={(e) => setStatus(e.target.value)}>
         <option value="">Select Status</option>
         <option value="Pending">Pending</option>
-        <option value="Confirmed">Confirmed</option>
+        <option value="Confirmed">Scheduled</option>
         <option value="Completed">Completed</option>
-        <option value="Canceled">Canceled</option>
+        <option value="Cancelled">Cancelled</option>
       </select>
       <button type="submit" disabled={loading}>
         {loading ? "Adding..." : "Add Appointment"}
