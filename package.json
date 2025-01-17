@@ -4,7 +4,7 @@
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node Elegant_Touch_Nails/Backend/server.js",
+    "server": "node Backend/server.js",
     "client": "npm run dev --prefix Elegant_Touch_Nails/Frontend/elegant-touch-nails-frontend"
   }
 }

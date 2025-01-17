@@ -38,6 +38,7 @@ const StaffList = () => {
             <th>Full Name</th>
             <th>Role</th>
             <th>Email</th>
+            <th>PasswordHash</th>
           </tr>
         </thead>
         <tbody>
@@ -51,6 +52,7 @@ const StaffList = () => {
                 <td>{staff.FullName}</td>
                 <td>{staff.Role}</td>
                 <td>{staff.Email}</td>
+                <td>{staff.PasswordHash}</td>
               </tr>
             ))
           )}

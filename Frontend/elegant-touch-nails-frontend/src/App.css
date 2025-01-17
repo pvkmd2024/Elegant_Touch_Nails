@@ -1,10 +1,15 @@
 .center-heading {
+  text-align: center;
+  margin: 20px 0;
+  font-family: "Arial, sans-serif";
+}
+/* .center-heading {
   text-align: center; /* Centers the text horizontally */
   margin-top: 20px; /* Adds some space from the top of the page */
   font-size: 1rem; /* Adjust font size as needed */
   color: #333; /* Text color */
   font-family: "Arial", sans-serif; /* Optional font styling */
-}
+} */
 .App {
   text-align: center;
 }

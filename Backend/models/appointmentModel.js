@@ -26,7 +26,11 @@ class Appointment {
     const [rows] = await db.execute(sql);
     return rows;
   }
-
+  static async getById() {
+    const sql = `SELECT * FROM Appointments`;
+    const [rows] = await db.execute(sql);
+    return rows;
+  }
   // Add more CRUD methods as needed
 }
 

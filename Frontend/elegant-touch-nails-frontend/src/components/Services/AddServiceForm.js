@@ -25,6 +25,9 @@ const AddServiceForm = () => {
     // Simple validation
     if (
       !serviceData.ServiceName ||
+      !serviceData.Description ||
+      !serviceData.MinDuration ||
+      !serviceData.MaxDuration ||
       !serviceData.MinPrice ||
       !serviceData.MaxPrice
     ) {

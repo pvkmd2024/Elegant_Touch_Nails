@@ -9,7 +9,7 @@ router.post("/services", serviceController.createService);
 router.get("/services", serviceController.getAllServices);
 
 // Route to get a service by ID
-router.get("/services/:id", serviceController.getServiceById);
+// router.get("/services/:id", serviceController.getServiceById);
 
 // Route to update a service by its ID
 router.put("/services/:id", serviceController.updateService);
