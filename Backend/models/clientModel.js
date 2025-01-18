@@ -33,6 +33,33 @@ class Client {
       throw error;
     }
   }
+  static async delete(id) {
+    const sql = `DELETE FROM Clients WHERE ClientID = ?`;
+    try {
+      const [result] = await db.execute(sql, [id]);
+      return result;
+    } catch (error) {
+      console.error("Error in delete method:", error);
+      throw error;
+    }
+  }
+
+  // Static method to update a client's details
+  static async update(id, updates) {
+    const fields = Object.keys(updates)
+      .map((key) => `${key} = ?`)
+      .join(", ");
+    const values = [...Object.values(updates), id];
+
+    const sql = `UPDATE Clients SET ${fields} WHERE ClientID = ?`;
+    try {
+      const [result] = await db.execute(sql, values);
+      return result;
+    } catch (error) {
+      console.error("Error in update method:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = Client;

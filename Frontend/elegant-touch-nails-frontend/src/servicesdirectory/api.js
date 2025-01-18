@@ -1,4 +1,5 @@
-import { formatDateTime } from "../utils/utils"; // Import the correct function
+import { formatDateTime, transformDateField } from "../utils/utils";
+
 const API_URL = "http://localhost:5000/api";
 
 // Clients API
@@ -7,32 +8,23 @@ export const fetchClients = async () => {
     const response = await fetch(`${API_URL}/clients`);
     if (!response.ok) throw new Error("Failed to fetch clients");
 
-    const data = await response.json();
-
-    // Transform the date format for each client
-    const transformedData = data.map((client) => {
-      if (client.CreatedAt) {
-        // Format the 'CreatedAt' field or any other date field
-        return { ...client, CreatedAt: formatDateTime(client.CreatedAt) };
-      }
-      return client;
-    });
-
-    return transformedData;
+    const clients = await response.json();
+    // Use transformDateField to format the 'CreatedAt' field
+    return transformDateField(clients, "CreatedAt");
   } catch (error) {
     console.error("Error fetching clients:", error);
     return [];
   }
 };
 
-export const createClient = async (data) => {
+export const createClient = async (clients) => {
   try {
     const response = await fetch(`${API_URL}/clients`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(clients),
     });
     if (!response.ok) throw new Error("Failed to create client");
     return await response.json();
@@ -47,22 +39,22 @@ export const fetchServices = async () => {
   try {
     const response = await fetch(`${API_URL}/services`);
     if (!response.ok) throw new Error("Failed to fetch services");
-    const data = await response.json();
-    return data;
+    const clients = await response.json();
+    return clients;
   } catch (error) {
     console.error("Error fetching services:", error);
     return [];
   }
 };
 
-export const createService = async (data) => {
+export const createService = async (clients) => {
   try {
     const response = await fetch(`${API_URL}/services`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(clients),
     });
     if (!response.ok) throw new Error("Failed to create service");
     return await response.json();
@@ -72,36 +64,28 @@ export const createService = async (data) => {
   }
 };
 
-// Payments API
+// Fetch payments and transform the 'date' field
 export const fetchPayments = async () => {
   try {
     const response = await fetch(`${API_URL}/payments`);
     if (!response.ok) throw new Error("Failed to fetch payments");
-    const data = await response.json();
 
-    const transformedData = data.map((payment) => {
-      if (payment.date) {
-        // Use formatDateTime instead of formatToISODate
-        return { ...payment, date: formatDateTime(payment.date) };
-      }
-      return payment;
-    });
-
-    return transformedData;
+    const payments = await response.json();
+    // Use transformDateField to format the 'date' field
+    return transformDateField(payments, "date");
   } catch (error) {
     console.error("Error fetching payments:", error);
     return [];
   }
 };
-
-export const createPayment = async (data) => {
+export const createPayment = async (clients) => {
   try {
     const response = await fetch(`${API_URL}/payments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(clients),
     });
     if (!response.ok) throw new Error("Failed to create payment");
     return await response.json();
@@ -116,22 +100,22 @@ export const fetchStaff = async () => {
   try {
     const response = await fetch(`${API_URL}/staff`);
     if (!response.ok) throw new Error("Failed to fetch staff");
-    const data = await response.json();
-    return data;
+    const staff = await response.json(); // Changed `clients` to `staff`
+    return staff;
   } catch (error) {
     console.error("Error fetching staff:", error);
-    return [];
+    return []; // Return empty array if there's an error
   }
 };
 
-export const createStaff = async (data) => {
+export const createStaff = async (clients) => {
   try {
     const response = await fetch(`${API_URL}/staff`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(clients),
     });
     if (!response.ok) throw new Error("Failed to create staff");
     return await response.json();
@@ -146,22 +130,22 @@ export const fetchStaffSchedules = async () => {
   try {
     const response = await fetch(`${API_URL}/staff-schedules`);
     if (!response.ok) throw new Error("Failed to fetch staff schedules");
-    const data = await response.json();
-    return data;
+    const clients = await response.json();
+    return clients;
   } catch (error) {
     console.error("Error fetching staff schedules:", error);
     return [];
   }
 };
 
-export const createStaffSchedule = async (data) => {
+export const createStaffSchedule = async (clients) => {
   try {
     const response = await fetch(`${API_URL}/staff-schedules`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(clients),
     });
     if (!response.ok) throw new Error("Failed to create staff schedule");
     return await response.json();
@@ -171,36 +155,29 @@ export const createStaffSchedule = async (data) => {
   }
 };
 
-// Appointments API
+// Fetch appointments and transform the 'date' field
 export const fetchAppointments = async () => {
   try {
     const response = await fetch(`${API_URL}/appointments`);
     if (!response.ok) throw new Error("Failed to fetch appointments");
-    const data = await response.json();
 
-    const transformedData = data.map((appointment) => {
-      if (appointment.date) {
-        // Use formatDateTime instead of formatToISODate
-        return { ...appointment, date: formatDateTime(appointment.date) };
-      }
-      return appointment;
-    });
-
-    return transformedData;
+    const appointments = await response.json();
+    // Use transformDateField to format the 'date' field
+    return transformDateField(appointments, "date");
   } catch (error) {
     console.error("Error fetching appointments:", error);
     return [];
   }
 };
 
-export const createAppointment = async (data) => {
+export const createAppointment = async (clients) => {
   try {
     const response = await fetch(`${API_URL}/appointments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(clients),
     });
     if (!response.ok) throw new Error("Failed to create appointment");
     return await response.json();

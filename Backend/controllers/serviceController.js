@@ -50,18 +50,18 @@ exports.createService = async (req, res) => {
 // Get all services
 exports.getAllServices = async (req, res) => {
   try {
-    const services = await Service.getAll();
+    const services = await ServiceModel.getAll();
     res.status(200).json(services);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ Error: "Failed to fetch services" });
   }
 };
 
 // Get a service by its ID
 exports.getServiceById = async (req, res) => {
   try {
-    const serviceId = req.params.id;
-    const service = await Service.getById(serviceId);
+    const serviceID = req.params.id;
+    const service = await Service.getById(serviceID);
 
     if (service) {
       res.status(200).json(service);
@@ -76,7 +76,7 @@ exports.getServiceById = async (req, res) => {
 // Update a service by its ID
 exports.updateService = async (req, res) => {
   try {
-    const serviceId = req.params.id;
+    const serviceID = req.params.id;
     const {
       serviceName,
       description,
@@ -86,6 +86,7 @@ exports.updateService = async (req, res) => {
       maxPrice,
     } = req.body;
 
+    // Validation for number fields
     if (
       isNaN(minDuration) ||
       isNaN(maxDuration) ||
@@ -97,7 +98,8 @@ exports.updateService = async (req, res) => {
         .json({ message: "Duration and price values must be numbers" });
     }
 
-    const updatedService = await Service.update(serviceId, {
+    // Call the update method from the model
+    const updatedService = await Service.update(serviceID, {
       serviceName,
       description,
       minDuration,
@@ -122,7 +124,9 @@ exports.updateService = async (req, res) => {
 // Delete a service by its ID
 exports.deleteService = async (req, res) => {
   try {
-    const serviceId = req.params.id;
+    const serviceID = req.params.id;
+
+    // Call the delete method from the model
     const result = await Service.delete(serviceId);
 
     if (result) {

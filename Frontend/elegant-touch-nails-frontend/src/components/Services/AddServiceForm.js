@@ -1,3 +1,112 @@
+// import React, { useState } from "react";
+// import { createService } from "servicesdirectory/api"; // Ensure correct path to API service
+
+// const AddServiceForm = () => {
+//   const [ServiceName, setServiceName] = useState("");
+//   const [Description, setDescription] = useState("");
+//   const [MinDuration, setMinDuration] = useState("");
+//   const [MaxDuration, setMaxDuration] = useState("");
+//   const [MinPrice, setMinPrice] = useState("");
+//   const [MaxPrice, setMaxPrice] = useState("");
+//   const [error, setError] = useState(""); // Track error messages
+//   const [loading, setLoading] = useState(false); // Track loading state
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+
+//     // Input validation
+//     if (
+//       !ServiceName ||
+//       !Description ||
+//       !MinDuration ||
+//       !MaxDuration ||
+//       !MinPrice ||
+//       !MaxPrice
+//     ) {
+//       setError("All fields are required.");
+//       return;
+//     }
+
+//     const serviceData = {
+//       ServiceName,
+//       Description,
+//       MinDuration,
+//       MaxDuration,
+//       MinPrice,
+//       MaxPrice,
+//     };
+
+//     setLoading(true); // Set loading state to true when the request starts
+//     setError(""); // Reset error message
+
+//     createService(serviceData)
+//       .then(() => {
+//         alert("Service added successfully!");
+//         setServiceName("");
+//         setDescription("");
+//         setMinDuration("");
+//         setMaxDuration("");
+//         setMinPrice("");
+//         setMaxPrice("");
+//       })
+//       .catch((error) => {
+//         setError("Failed to add service. Please try again.");
+//         console.error("Error adding service:", error);
+//       })
+//       .finally(() => {
+//         setLoading(false); // Reset loading state when the request finishes
+//       });
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <h2>Add Service</h2>
+//       {error && <p style={{ color: "red" }}>{error}</p>}{" "}
+//       {/* Display error message */}
+//       <input
+//         type="text"
+//         placeholder="Service Name"
+//         value={ServiceName}
+//         onChange={(e) => setServiceName(e.target.value)}
+//       />
+//       <textarea
+//         placeholder="Description"
+//         value={Description}
+//         onChange={(e) => setDescription(e.target.value)}
+//       />
+//       <input
+//         type="number"
+//         placeholder="Min Duration (mins)"
+//         value={MinDuration}
+//         onChange={(e) => setMinDuration(e.target.value)}
+//       />
+//       <input
+//         type="number"
+//         placeholder="Max Duration (mins)"
+//         value={MaxDuration}
+//         onChange={(e) => setMaxDuration(e.target.value)}
+//       />
+//       <input
+//         type="number"
+//         placeholder="Min Price"
+//         value={MinPrice}
+//         onChange={(e) => setMinPrice(e.target.value)}
+//       />
+//       <input
+//         type="number"
+//         placeholder="Max Price"
+//         value={MaxPrice}
+//         onChange={(e) => setMaxPrice(e.target.value)}
+//       />
+//       <button type="submit" disabled={loading}>
+//         {loading ? "Adding..." : "Add Service"}
+//       </button>
+//     </form>
+//   );
+// };
+
+// export default AddServiceForm;
+
 import React, { useState } from "react";
 import { createService } from "servicesdirectory/api";
 

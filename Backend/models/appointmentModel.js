@@ -1,10 +1,10 @@
 const db = require("../config/db");
 
 class Appointment {
-  static async create({ clientId, serviceId, appointmentDate, status }) {
+  static async create({ clientID, serviceID, appointmentDate, status }) {
     if (
-      clientId === undefined ||
-      serviceId === undefined ||
+      clientID === undefined ||
+      serviceID === undefined ||
       appointmentDate === undefined ||
       status === undefined
     ) {
@@ -14,8 +14,8 @@ class Appointment {
     const sql = `INSERT INTO Appointments (ClientID, ServiceID, AppointmentDate, Status) VALUES (?, ?, ?, ?)`;
 
     const [result] = await db.execute(sql, [
-      clientId,
-      serviceId,
+      clientID,
+      serviceID,
       appointmentDate,
       status,
     ]);
@@ -26,12 +26,39 @@ class Appointment {
     const [rows] = await db.execute(sql);
     return rows;
   }
-  static async getById() {
+  static async getByID() {
     const sql = `SELECT * FROM Appointments`;
     const [rows] = await db.execute(sql);
     return rows;
   }
-  // Add more CRUD methods as needed
+  // Delete an appointment by ID
+  static async delete(id) {
+    const sql = `DELETE FROM Appointments WHERE AppointmentID = ?`;
+    try {
+      const [result] = await db.execute(sql, [id]);
+      return result;
+    } catch (error) {
+      console.error("Error in delete method:", error);
+      throw error;
+    }
+  }
+
+  // Update an appointment
+  static async update(id, updates) {
+    const fields = Object.keys(updates)
+      .map((key) => `${key} = ?`)
+      .join(", ");
+    const values = [...Object.values(updates), id];
+
+    const sql = `UPDATE Appointments SET ${fields} WHERE AppointmentID = ?`;
+    try {
+      const [result] = await db.execute(sql, values);
+      return result;
+    } catch (error) {
+      console.error("Error in update method:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = Appointment;

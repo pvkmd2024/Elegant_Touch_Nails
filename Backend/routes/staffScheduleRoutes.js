@@ -3,7 +3,9 @@ const router = express.Router();
 const {
   createStaffSchedule,
   getAllStaffSchedules,
-  getStaffScheduleByStaffId,
+  getStaffScheduleByStaffID,
+  updateStaffSchedule,
+  deleteStaffSchedule,
 } = require("../controllers/staffScheduleController");
 
 // Route to create staff schedules
@@ -13,6 +15,10 @@ router.post("/", createStaffSchedule);
 router.get("/", getAllStaffSchedules);
 
 // Route to get a staff schedule by staff ID
-router.get("/:staffId", getStaffScheduleByStaffId);
+router.get("/:staffID", getStaffScheduleByStaffID);
+// Route to update staff schedule by staff ID
+router.put("/:staffID", updateStaffSchedule);
 
+// Route to delete staff schedule by staff ID
+router.delete("/:staffID", deleteStaffSchedule);
 module.exports = router;

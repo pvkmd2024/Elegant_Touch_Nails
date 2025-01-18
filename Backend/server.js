@@ -25,21 +25,14 @@ app.use((req, res, next) => {
   console.log(`Request: ${req.method} ${req.url}`);
   next();
 });
-// app.use((req, res, next) => {
-//   console.log(`Request: ${req.method} ${req.url}`);
-//   if (req.method === "POST" || req.method === "PUT") {
-//     console.log("Request body:", req.body);
-//   }
-//   next();
-// });
 
 // Routes
 app.use("/api/clients", clientRoutes);
-app.use("/api", appointmentRoutes);
+app.use("/api/appointments", appointmentRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use("/api", serviceRoutes);
-app.use("/api", staffRoutes);
-app.use("/api/staffSchedule", staffScheduleRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/staff", staffRoutes);
+app.use("/api/staffSchedules", staffScheduleRoutes);
 
 // Example route for testing service addition
 app.post("/api/services", (req, res) => {
@@ -56,14 +49,6 @@ app.use((err, req, res, next) => {
   }
   return res.status(500).json({ error: "Internal Server Error" });
 });
-
-// app.use((err, req, res, next) => {
-//   console.error("Error stack:", err.stack);
-//   if (err.type === "validation") {
-//     return res.status(400).json({ error: err.message });
-//   }
-//   return res.status(500).json({ error: "Internal Server Error" });
-// });
 
 // Start Server
 const PORT = process.env.PORT || 5000;

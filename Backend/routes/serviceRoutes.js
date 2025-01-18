@@ -6,10 +6,10 @@ const serviceController = require("../controllers/serviceController");
 router.post("/services", serviceController.createService);
 
 // Route to get all services
-router.get("/services", serviceController.getAllServices);
+router.get("/", serviceController.getAllServices);
 
 // Route to get a service by ID
-// router.get("/services/:id", serviceController.getServiceById);
+router.get("/services/:id", serviceController.getServiceById);
 
 // Route to update a service by its ID
 router.put("/services/:id", serviceController.updateService);

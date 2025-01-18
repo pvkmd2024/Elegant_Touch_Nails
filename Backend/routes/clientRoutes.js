@@ -13,5 +13,7 @@ router.post("/", clientController.createClients);
 
 // Route to get all clients
 router.get("/", clientController.getAllClients);
+router.delete("/:id", clientController.deleteClient);
+router.put("/:id", clientController.updateClient);
 
 module.exports = router;

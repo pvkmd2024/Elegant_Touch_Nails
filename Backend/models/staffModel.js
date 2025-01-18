@@ -34,7 +34,35 @@ class Staff {
     return rows;
   }
 
-  // Add more CRUD methods as needed
+  static async update(id, staffData) {
+    const sql = `UPDATE Staff SET FullName = ?, Role = ?, Email = ?, PasswordHash = ? WHERE id = ?`;
+
+    try {
+      const [result] = await db.execute(sql, [
+        staffData.fullname,
+        staffData.role,
+        staffData.email,
+        staffData.passwordHash,
+        id,
+      ]);
+      return result.affectedRows > 0 ? staffData : null;
+    } catch (error) {
+      console.error("Error updating staff data:", error);
+      throw error;
+    }
+  }
+
+  static async delete(id) {
+    const sql = `DELETE FROM Staff WHERE id = ?`;
+
+    try {
+      const [result] = await db.execute(sql, [id]);
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error("Error deleting staff data:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = Staff;
