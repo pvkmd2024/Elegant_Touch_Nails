@@ -12,8 +12,8 @@ const StaffList = () => {
       try {
         const response = await fetchStaff();
         console.log("Fetched staff members:", response); // Log the response to verify the data format
-        if (Array.isArray(response.data)) {
-          setStaffMembers(response.data); // Set staff members if valid
+        if (Array.isArray(response)) {
+          setStaffMembers(response); // Set staff members if valid
         } else {
           setError("Staff members data is not in the expected format.");
         }

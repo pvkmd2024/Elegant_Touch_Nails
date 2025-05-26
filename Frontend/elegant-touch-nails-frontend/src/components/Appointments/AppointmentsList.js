@@ -57,7 +57,7 @@ const AppointmentsList = () => {
         <tbody>
           {appointments.length > 0 ? (
             appointments.map((appointment) => (
-              <tr key={appointment.iD}>
+              <tr key={appointment.ID}>
                 <td>{appointment.ClientID}</td>
                 <td>{appointment.ServiceID}</td>
                 <td>

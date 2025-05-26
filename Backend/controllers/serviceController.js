@@ -1,140 +1,156 @@
 const Service = require("../models/serviceModel");
 
-// Create a new service
+// Helper: Validate service fields
+const isValidService = (service) => {
+  const {
+    serviceName,
+    description,
+    minDuration,
+    maxDuration,
+    minPrice,
+    maxPrice,
+  } = service;
+
+  return (
+    serviceName &&
+    description &&
+    !isNaN(minDuration) &&
+    !isNaN(maxDuration) &&
+    !isNaN(minPrice) &&
+    !isNaN(maxPrice)
+  );
+};
+
+// Helper: Send error response
+const sendError = (res, code, message) => {
+  return res.status(code).json({ status: "error", message });
+};
+
+// Helper: Optional development logging
+const logError = (context, error) => {
+  if (process.env.NODE_ENV !== "production") {
+    console.error(`${context}:`, error.message);
+  }
+};
+
+// GET all services
+
+const db = require("../config/db");
+
+exports.getAllServices = async (req, res) => {
+  try {
+    const [rows] = await db.query("SELECT * FROM services");
+    res.json(rows); // ✅ Correct format
+  } catch (error) {
+    console.error("Error fetching services:", error);
+    res.status(500).json({ message: "Failed to fetch services" });
+  }
+};
+
+
+
+
+
+// exports.getAllServices = async (req, res) => {
+//   try {
+//     const services = await Service.getAll();
+//     res.status(200).json({ status: "success", data: services });
+//   } catch (error) {
+//     logError("getAllServices", error);
+//     sendError(res, 500, "Failed to fetch services");
+//   }
+// };
+
+// GET a service by ID
+exports.getServiceById = async (req, res) => {
+  try {
+    const serviceID = req.params.id;
+    if (isNaN(serviceID)) {
+      return sendError(res, 400, "Invalid service ID");
+    }
+
+    const service = await Service.getById(serviceID);
+    if (!service) {
+      return sendError(res, 404, "Service not found");
+    }
+
+    res.status(200).json({ status: "success", data: service });
+  } catch (error) {
+    logError("getServiceById", error);
+    sendError(res, 500, "Failed to fetch service");
+  }
+};
+
+// POST: Create multiple services
 exports.createService = async (req, res) => {
   try {
     const services = req.body;
 
     if (!Array.isArray(services) || services.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "Request body must be an array of services" });
+      return sendError(res, 400, "Request body must be an array of services");
     }
 
-    // Validate each service object
     for (const service of services) {
-      const {
-        serviceName,
-        description,
-        minDuration,
-        maxDuration,
-        minPrice,
-        maxPrice,
-      } = service;
-
-      if (
-        !serviceName ||
-        !description ||
-        isNaN(minDuration) ||
-        isNaN(maxDuration) ||
-        isNaN(minPrice) ||
-        isNaN(maxPrice)
-      ) {
-        return res.status(400).json({
-          message:
-            "Each service must have valid serviceName, description, minDuration, maxDuration, minPrice, and maxPrice",
-        });
+      if (!isValidService(service)) {
+        return sendError(res, 400, "Invalid service data provided");
       }
     }
 
     const newServices = await Service.create(services);
-
-    res
-      .status(201)
-      .json({ message: "Services created successfully", result: newServices });
+    res.status(201).json({
+      status: "success",
+      message: "Services created successfully",
+      data: newServices,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logError("createService", error);
+    sendError(res, 500, "Failed to create services");
   }
 };
 
-// Get all services
-exports.getAllServices = async (req, res) => {
-  try {
-    const services = await ServiceModel.getAll();
-    res.status(200).json(services);
-  } catch (error) {
-    res.status(500).json({ Error: "Failed to fetch services" });
-  }
-};
-
-// Get a service by its ID
-exports.getServiceById = async (req, res) => {
-  try {
-    const serviceID = req.params.id;
-    const service = await Service.getById(serviceID);
-
-    if (service) {
-      res.status(200).json(service);
-    } else {
-      res.status(404).json({ message: "Service not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Update a service by its ID
+// PUT: Update a service by ID
 exports.updateService = async (req, res) => {
   try {
     const serviceID = req.params.id;
-    const {
-      serviceName,
-      description,
-      minDuration,
-      maxDuration,
-      minPrice,
-      maxPrice,
-    } = req.body;
+    const updatedData = req.body;
 
-    // Validation for number fields
-    if (
-      isNaN(minDuration) ||
-      isNaN(maxDuration) ||
-      isNaN(minPrice) ||
-      isNaN(maxPrice)
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Duration and price values must be numbers" });
+    if (!isValidService(updatedData)) {
+      return sendError(res, 400, "Invalid service data");
     }
 
-    // Call the update method from the model
-    const updatedService = await Service.update(serviceID, {
-      serviceName,
-      description,
-      minDuration,
-      maxDuration,
-      minPrice,
-      maxPrice,
+    const updatedService = await Service.update(serviceID, updatedData);
+
+    if (!updatedService) {
+      return sendError(res, 404, "Service not found");
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Service updated successfully",
+      data: updatedService,
     });
-
-    if (updatedService) {
-      res.status(200).json({
-        message: "Service updated successfully",
-        result: updatedService,
-      });
-    } else {
-      res.status(404).json({ message: "Service not found" });
-    }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logError("updateService", error);
+    sendError(res, 500, "Failed to update service");
   }
 };
 
-// Delete a service by its ID
+// DELETE: Delete a service by ID
 exports.deleteService = async (req, res) => {
   try {
     const serviceID = req.params.id;
+    const result = await Service.delete(serviceID);
 
-    // Call the delete method from the model
-    const result = await Service.delete(serviceId);
-
-    if (result) {
-      res.status(200).json({ message: "Service deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Service not found" });
+    if (!result) {
+      return sendError(res, 404, "Service not found");
     }
+
+    res.status(200).json({
+      status: "success",
+      message: "Service deleted successfully",
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logError("deleteService", error);
+    sendError(res, 500, "Failed to delete service");
   }
 };

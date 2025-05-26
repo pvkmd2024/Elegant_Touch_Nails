@@ -1,6 +1,6 @@
-import { formatDateTime, transformDateField } from "../utils/utils";
+import { transformDateField } from "../utils/utils";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "http://localhost:5001/api";
 
 // Clients API
 export const fetchClients = async () => {
@@ -36,6 +36,32 @@ export const createClient = async (clients) => {
 
 // Services API
 export const fetchServices = async () => {
+  const response = await fetch("http://localhost:5001/api/services");
+
+  const contentType = response.headers.get("content-type");
+  console.log("Response Content-Type:", contentType); // ✅ log this
+
+  if (!response.ok) {
+    const text = await response.text(); // read the error body
+    console.error("Error response body:", text); // ✅ show what failed
+    throw new Error("Failed to fetch services");
+  }
+
+  return await response.json();
+};
+
+
+// export const fetchServices = async () => {
+//   const response = await fetch("http://localhost:5001/api/services");
+//   const json = await response.json();
+//   if (json.status === "success" && Array.isArray(json.data)) {
+//     return json.data; // ✅ return the actual services array
+//   } else {
+//     throw new Error("Invalid data format received from backend");
+//   }
+// };
+
+/*export const fetchServices = async () => {
   try {
     const response = await fetch(`${API_URL}/services`);
     if (!response.ok) throw new Error("Failed to fetch services");
@@ -45,9 +71,9 @@ export const fetchServices = async () => {
     console.error("Error fetching services:", error);
     return [];
   }
-};
+};*/
 
-export const createService = async (clients) => {
+/*export const createService = async (clients) => {
   try {
     const response = await fetch(`${API_URL}/services`, {
       method: "POST",
@@ -62,6 +88,33 @@ export const createService = async (clients) => {
     console.error("Error creating service:", error);
     return null;
   }
+};*/
+
+export const createService = async (serviceData) => {
+  // Convert PascalCase to camelCase
+  const formattedService = {
+    serviceName: serviceData.ServiceName,
+    description: serviceData.Description,
+    minDuration: Number(serviceData.MinDuration),
+    maxDuration: Number(serviceData.MaxDuration),
+    minPrice: Number(serviceData.MinPrice),
+    maxPrice: Number(serviceData.MaxPrice),
+  };
+
+  const response = await fetch("http://localhost:5001/api/services", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify([formattedService]), // backend expects array
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to create service");
+  }
+
+  return await response.json();
 };
 
 // Fetch payments and transform the 'date' field

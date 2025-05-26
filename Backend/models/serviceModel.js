@@ -1,127 +1,74 @@
-const db = require("../config/db");
+const db = require("../config/db"); // Your DB connection
 
-class Service {
-  // Create services
-  static async create(services) {
-    const placeholders = services.map(() => `(?, ?, ?, ?, ?, ?)`).join(", ");
-    const values = services.flatMap((service) => [
-      service.serviceName,
-      service.description,
-      service.minDuration,
-      service.maxDuration,
-      service.minPrice,
-      service.maxPrice,
+const Service = {
+  // Fetch all services
+  async getAll() {
+    const [rows] = await db.query("SELECT * FROM Services");
+    return rows;
+  },
+
+  // Fetch a service by ID
+  async getById(serviceID) {
+    const [rows] = await db.query("SELECT * FROM Services WHERE serviceID = ?", [serviceID]);
+    return rows[0] || null;
+  },
+
+  // Create multiple services
+  async create(services) {
+    const values = services.map(s => [
+      s.serviceName,
+      s.description,
+      s.minDuration,
+      s.maxDuration,
+      s.minPrice,
+      s.maxPrice,
     ]);
 
-    const sql = `INSERT INTO Services (ServiceName, Description, MinDuration, MaxDuration, MinPrice, MaxPrice) VALUES ${placeholders}`;
+    const placeholders = services.map(() => "(?, ?, ?, ?, ?, ?)").join(", ");
 
-    const connection = await db.getConnection(); // Acquire a connection for transaction
+    const sql = `
+      INSERT INTO Services (
+        serviceName, description, minDuration, maxDuration, minPrice, maxPrice
+      )
+      VALUES ${placeholders}
+    `;
 
-    try {
-      await connection.beginTransaction(); // Start a transaction
-      const [result] = await connection.query(sql, values);
-      await connection.commit(); // Commit the transaction
-      return result;
-    } catch (error) {
-      await connection.rollback(); // Rollback the transaction on error
-      console.error("Error in Service.create with transaction:", error.message);
-      throw error;
-    } finally {
-      connection.release(); // Release the connection back to the pool
-    }
-  }
+    const flatValues = values.flat();
+    const [result] = await db.query(sql, flatValues);
 
-  // Get all services
-  static async getAll() {
-    const sql = `SELECT * FROM Services`;
-    try {
-      const [rows] = await db.query(sql);
-      return rows;
-    } catch (error) {
-      console.error("Error in Service.getAll:", error.message);
-      throw error;
-    }
-  }
+    // Return inserted services or count
+    return {
+      insertedCount: result.affectedRows,
+      insertId: result.insertId,
+    };
+  },
 
-  // Search services by name or description
-  static async search(query) {
-    const sql = `SELECT * FROM Services WHERE ServiceName LIKE ? OR Description LIKE ?`;
-    try {
-      const [rows] = await db.query(sql, [`%${query}%`, `%${query}%`]);
-      return rows;
-    } catch (error) {
-      console.error("Error in Service.search:", error.message);
-      throw error;
-    }
-  }
+  // Update a service by ID
+  async update(serviceID, service) {
+    const {
+      serviceName,
+      description,
+      minDuration,
+      maxDuration,
+      minPrice,
+      maxPrice,
+    } = service;
 
-  // Filter services by price range
-  static async filterByPrice(minPrice, maxPrice) {
-    const sql = `SELECT * FROM Services WHERE MinPrice >= ? AND MaxPrice <= ?`;
-    try {
-      const [rows] = await db.query(sql, [minPrice, maxPrice]);
-      return rows;
-    } catch (error) {
-      console.error("Error in Service.filterByPrice:", error.message);
-      throw error;
-    }
-  }
+    const [result] = await db.query(
+      `UPDATE Services 
+       SET serviceName = ?, description = ?, minDuration = ?, maxDuration = ?, minPrice = ?, maxPrice = ?
+       WHERE serviceID = ?`,
+      [serviceName, description, minDuration, maxDuration, minPrice, maxPrice, serviceID]
+    );
 
-  // Sort services
-  static async sortBy(column, order = "ASC") {
-    const validColumns = [
-      "ServiceName",
-      "MinPrice",
-      "MaxPrice",
-      "MinDuration",
-      "MaxDuration",
-    ];
-    if (!validColumns.includes(column)) throw new Error("Invalid column name");
+    return result.affectedRows > 0 ? { serviceID, ...service } : null;
+  },
 
-    const sql = `SELECT * FROM Services ORDER BY ${column} ${order}`;
-    try {
-      const [rows] = await db.query(sql);
-      return rows;
-    } catch (error) {
-      console.error("Error in Service.sortBy:", error.message);
-      throw error;
-    }
-  }
+  // Delete a service by ID
+  async delete(serviceID) {
+    const [result] = await db.query("DELETE FROM Services WHERE serviceID = ?", [serviceID]);
+    return result.affectedRows > 0;
+  },
+};
 
-  // Paginate results
-  static async paginate(limit, offset) {
-    const sql = `SELECT * FROM Services LIMIT ? OFFSET ?`;
-    try {
-      const [rows] = await db.query(sql, [limit, offset]);
-      return rows;
-    } catch (error) {
-      console.error("Error in Service.paginate:", error.message);
-      throw error;
-    }
-  }
-
-  // Batch delete services
-  static async batchDelete(serviceIds) {
-    const placeholders = serviceIds.map(() => "?").join(", ");
-    const sql = `DELETE FROM Services WHERE id IN (${placeholders})`;
-
-    const connection = await db.getConnection();
-
-    try {
-      await connection.beginTransaction();
-      const [result] = await connection.query(sql, serviceIds);
-      await connection.commit();
-      return result;
-    } catch (error) {
-      await connection.rollback();
-      console.error(
-        "Error in Service.batchDelete with transaction:",
-        error.message
-      );
-      throw error;
-    } finally {
-      connection.release();
-    }
-  }
-}
 module.exports = Service;

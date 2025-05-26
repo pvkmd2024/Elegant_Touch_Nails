@@ -110,7 +110,7 @@
 import React, { useState } from "react";
 import { createService } from "servicesdirectory/api";
 
-const AddServiceForm = () => {
+const AddServiceForm = ({ onServiceAdded }) => {
   const [serviceData, setServiceData] = useState({
     ServiceName: "",
     Description: "",
@@ -159,6 +159,7 @@ const AddServiceForm = () => {
           MaxPrice: "",
         });
         setLoading(false); // Stop loading when done
+        onServiceAdded();
       })
       .catch((error) => {
         console.error("Failed to add service:", error);

@@ -3,10 +3,10 @@ const router = express.Router();
 const clientController = require("../controllers/clientController");
 
 // Debugging Route
-// router.post("/", (req, res) => {
-//   console.log("POST /api/clients route hit");
-//   res.send("Route working");
-// });
+ router.post("/", (req, res) => {
+   console.log("POST /api/clients route hit");
+   res.send("Route working");
+});
 
 // Route to create a new client
 router.post("/", clientController.createClients);
