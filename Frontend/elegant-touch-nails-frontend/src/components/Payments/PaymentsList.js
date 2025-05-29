@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { fetchStaffSchedules } from "servicesdirectory/api";
-
-const StaffScheduleList = () => {
-  const [staffSchedules, setStaffSchedules] = useState([]); // Initialize with an empty array
+import { fetchPayments } from "servicesdirectory/api";
+import "./PaymentsList.css"; // Import CSS for styling
+const PaymentsList = () => {
+  const [payments, setPayments] = useState([]); // Initialize with an empty array
   const [loading, setLoading] = useState(true); // Track loading state
   const [error, setError] = useState(null); // Track error state
 
   useEffect(() => {
-    const getStaffSchedules = async () => {
+    const getPayments = async () => {
       try {
-        const data = await fetchStaffSchedules();
-        console.log("Fetched staff schedules:", data); // Log the response to verify the data format
+        const data = await fetchPayments();
+        console.log("Fetched payments:", data); // Log the response to verify the data format
         if (Array.isArray(data)) {
-          setStaffSchedules(data); // Update state if data is an array
+          setPayments(data); // Update state if data is an array
         } else {
           setError("Invalid data format received.");
         }
@@ -22,46 +22,48 @@ const StaffScheduleList = () => {
         setLoading(false); // Stop loading in case of error
       }
     };
-    getStaffSchedules();
+    getPayments();
   }, []); // Empty dependency array ensures it runs once after mount
 
   // Check if data is still loading or an error occurred
   if (loading) {
-    return <div>Loading staff schedules...</div>;
+    return <div>Loading payments...</div>;
   }
 
   if (error) {
     return <div style={{ color: "red" }}>{error}</div>;
   }
 
-  // Ensure that staffSchedules is an array and not undefined
-  if (!Array.isArray(staffSchedules)) {
-    return <div>Error: Staff schedules data is not in expected format.</div>;
+  // Ensure that Payments is an array and not undefined
+  if (!Array.isArray(payments)) {
+    return <div>Error: Payments data is not in expected format.</div>;
   }
 
-  // Render staff schedules data
+  // Render payments data
   return (
     <div>
-      <h2>Staff Schedules</h2>
-      {staffSchedules.length === 0 ? (
-        <p>No staff schedules available.</p>
+      <h2>Payments</h2>
+      {payments.length === 0 ? (
+        <p>No Payments data available.</p>
       ) : (
         <table>
           <thead>
-            <tr>
-              <th>Staff ID</th>
-              <th>Day of Week</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-            </tr>
+            <tr>         
+              <th>Appointment ID</th>
+              <th>Payment Method</th>
+              <th>Payment Status</th>
+              <th>Amount</th>
+              <th>PaidAt</th>
+              </tr>
           </thead>
           <tbody>
-            {staffSchedules.map((schedule) => (
-              <tr key={schedule.staffScheduleID}>
-                <td>{schedule.staffID}</td>
-                <td>{schedule.DayOfWeek}</td>
-                <td>{schedule.startTime}</td>
-                <td>{schedule.endTime}</td>
+            {payments.map((payment) => (
+              <tr key={payment.PaymentID}>
+                <td>{payment.AppointmentID}</td>
+                <td>{payment.PaymentMethod}</td>
+                <td>{payment.PaymentStatus}</td>
+                <td>{payment.Amount}</td>
+                <td>{payment.PaidAt}</td>
               </tr>
             ))}
           </tbody>
@@ -71,4 +73,4 @@ const StaffScheduleList = () => {
   );
 };
 
-export default StaffScheduleList;
+export default PaymentsList;

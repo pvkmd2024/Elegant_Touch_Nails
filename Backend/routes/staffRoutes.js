@@ -1,19 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const paymentController = require("../controllers/paymentController");
+const staffController = require("../controllers/staffController");
 
-// Route to create a new payment
-router.post("/payments", paymentController.createPayment);
+// Route to create a new staff
+router.post("/", staffController.createStaff);
+console.log("staffController.createStaff:", staffController.createStaff);
 
-// Route to get all payments
-router.get("/", paymentController.getAllPayments);
+// Route to get all staffs
+router.get("/", staffController.getAllStaff);
 
-// Route to get a payment by ID
-router.get("/payments/:id", paymentController.getPaymentById);
-// Route to delete a payment by ID
-router.delete("/payments/:id", paymentController.deletePayment);
+// Route to get a staff by ID
+router.get("/staff/:id", staffController.getStaffById);
+// Route to delete a staff by ID
+router.delete("/:id", staffController.deleteStaff);
 
-// Route to update a payment by ID
-router.put("/payments/:id", paymentController.updatePayment);
+// Route to update a staff by ID
+router.put("/:id", staffController.updateStaff);
 
 module.exports = router;

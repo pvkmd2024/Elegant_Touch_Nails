@@ -2,25 +2,56 @@ const db = require("../config/db"); // Import the db connection
 
 class Client {
   // Static method to create a new client
-  static async create(data) {
-    const sql = `INSERT INTO Clients (FullName, Email, PhoneNumber, PasswordHash, CreatedAt) 
+ static async create(data) {
+  // Check if required fields are present
+  if (!data.FullName || !data.Email || !data.PhoneNumber || !data.PasswordHash) {
+    throw new Error('FullName, Email, and PasswordHash are required fields');
+  }
+
+  // Handle optional fields, default to null if undefined
+  const now = new Date();
+const pad = (n) => n.toString().padStart(2, '0');
+const CreatedAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ` +
+                  `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+
+  const sql = `INSERT INTO Clients (FullName, Email, PhoneNumber, PasswordHash, CreatedAt) 
                VALUES (?, ?, ?, ?, ?)`;
 
-    // You could prepare for multiple clients in bulk insert if needed
-    try {
-      const [result] = await db.execute(sql, [
-        data.fullName,
-        data.email,
-        data.phoneNumber,
-        data.passwordHash,
-        data.createdAt,
-      ]);
-      return result;
-    } catch (error) {
-      console.error("Error in create method:", error);
-      throw error;
+  try {
+    // Log the query and parameters for debugging purposes
+    console.log("Executing query:", sql);
+    console.log("With parameters:", [
+      data.FullName,
+      data.Email,
+      data.PhoneNumber,  // Pass null if undefined
+      data.PasswordHash,
+      CreatedAt     // Pass the current date if undefined
+    ]);
+
+    const [result] = await db.execute(sql, [
+      data.FullName,
+      data.Email,
+      data.PhoneNumber,  // Pass null if undefined
+      data.PasswordHash,
+      CreatedAt     // Pass the current date if undefined
+    ]);
+
+    // Log the result of the insert operation
+    console.log("Client created successfully:", result);
+
+    // Ensure result contains the expected values
+    if (!result || !result.insertId) {
+      throw new Error('Client creation failed: No insertId returned.');
     }
+
+    return result;
+  } catch (error) {
+    console.error("Error creating client in database:", error.message);  // More specific error logging
+    throw new Error(`Database error: ${error.message}`);  // Re-throw with clearer error message
   }
+}
+
   // Static method to get all clients
   static async getAll() {
     const sql = `SELECT * FROM Clients`;
@@ -33,6 +64,8 @@ class Client {
       throw error;
     }
   }
+
+  // Static method to delete a client
   static async delete(id) {
     const sql = `DELETE FROM Clients WHERE ClientID = ?`;
     try {
@@ -46,12 +79,19 @@ class Client {
 
   // Static method to update a client's details
   static async update(id, updates) {
-    const fields = Object.keys(updates)
-      .map((key) => `${key} = ?`)
-      .join(", ");
+    if (!id) {
+      throw new Error('Client ID is required for updating');
+    }
+
+    const fields = Object.keys(updates);
+    if (fields.length === 0) {
+      throw new Error('No fields to update');
+    }
+
+    const fieldsSet = fields.map((key) => `${key} = ?`).join(", ");
     const values = [...Object.values(updates), id];
 
-    const sql = `UPDATE Clients SET ${fields} WHERE ClientID = ?`;
+    const sql = `UPDATE Clients SET ${fieldsSet} WHERE ClientID = ?`;
     try {
       const [result] = await db.execute(sql, values);
       return result;

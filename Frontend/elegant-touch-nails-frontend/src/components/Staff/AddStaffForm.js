@@ -9,33 +9,33 @@ const AddStaffForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Simple validation
-    if (!FullName || !Role || !Email || !PasswordHash) {
-      setError("All fields are required.");
-      return;
-    }
+  if (!FullName || !Role || !Email || !PasswordHash) {
+    setError("All fields are required.");
+    return;
+  }
 
-    setLoading(true);
-    const staffData = { FullName, Role, Email, PasswordHash };
+  setLoading(true);
+  setError("");
 
-    createStaff(staffData)
-      .then(() => {
-        alert("Staff member added successfully!");
-        setFullName("");
-        setRole("");
-        setEmail("");
-        setPasswordHash("");
-        setError(""); // Clear error on success
-      })
-      .catch((error) => {
-        console.error("Failed to add staff member:", error);
-        setError("Failed to add staff member. Please try again.");
-      })
-      .finally(() => setLoading(false)); // Stop loading once the request is complete
-  };
+  const staffData = { FullName, Role, Email, PasswordHash };
+
+  try {
+    await createStaff(staffData);
+    alert("Staff member added successfully!");
+    setFullName("");
+    setRole("");
+    setEmail("");
+    setPasswordHash("");
+  } catch (error) {
+    console.error("Failed to add staff member:", error);
+    setError("Failed to add staff member. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <form onSubmit={handleSubmit}>

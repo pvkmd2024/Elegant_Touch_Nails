@@ -1,38 +1,24 @@
 const Client = require("../models/clientModel");
 
-exports.createClients = async (req, res) => {
+exports.createClient = async (req, res) => {
   try {
-    const clients = req.body; // Array of clients
-    if (!Array.isArray(clients)) {
-      return res.status(400).json({ error: "Expected an array of clients" });
-    }
-
-    const clientPromises = clients.map((client, index) => {
-      const { fullName, email, phoneNumber, passwordHash, createdAt } = client;
-
-      if (!fullName || !email || !phoneNumber || !passwordHash || !createdAt) {
-        return Promise.reject(
-          new Error(`Missing required fields for client at index ${index}`)
-        );
-      }
-
-      return Client.create({
-        fullName,
-        email,
-        phoneNumber,
-        passwordHash,
-        createdAt,
-      });
+    const { FullName, Email, PhoneNumber, PasswordHash, CreatedAt } =
+      req.body;
+    const result = await Client.create({
+      FullName,
+      Email,
+      PhoneNumber,
+      PasswordHash,
+      CreatedAt,
     });
-
-    // Wait for all insert operations to complete
-    await Promise.all(clientPromises);
-    res.status(201).json({ message: "Clients added successfully!" });
+    console.log(req.body);
+    res.status(201).json({ message: "Client created successfully", result });
   } catch (error) {
-    console.error("Error in createClients:", error.message); // Debugging
     res.status(500).json({ error: error.message });
   }
 };
+
+
 exports.getAllClients = async (req, res) => {
   try {
     const clients = await Client.getAll();

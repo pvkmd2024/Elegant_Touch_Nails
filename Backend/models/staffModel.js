@@ -5,22 +5,16 @@ class Staff {
     const sql = `INSERT INTO Staff (FullName, Role, Email, PasswordHash) VALUES (?,?,?,?)`;
     console.log("Staff data received in model:", staffData);
 
-    // Create the parameters array explicitly
     const params = [
-      staffData.fullame || null,
-      staffData.role || null,
-      staffData.email || null,
-      staffData.passwordHash || null,
+      staffData.FullName || null,
+      staffData.Role || null,
+      staffData.Email || null,
+      staffData.PasswordHash || null,
     ];
 
     console.log("SQL parameters:", params);
     try {
-      const [result] = await db.execute(sql, [
-        staffData.fullname,
-        staffData.role,
-        staffData.email,
-        staffData.passwordHash,
-      ]);
+      const [result] = await db.execute(sql, params);
       return result;
     } catch (error) {
       console.error("Error inserting staff data:", error);
@@ -35,14 +29,14 @@ class Staff {
   }
 
   static async update(id, staffData) {
-    const sql = `UPDATE Staff SET FullName = ?, Role = ?, Email = ?, PasswordHash = ? WHERE id = ?`;
+    const sql = `UPDATE Staff SET FullName = ?, Role = ?, Email = ?, PasswordHash = ? WHERE StaffID = ?`;
 
     try {
       const [result] = await db.execute(sql, [
-        staffData.fullname,
-        staffData.role,
-        staffData.email,
-        staffData.passwordHash,
+        staffData.FullName,
+        staffData.Role,
+        staffData.Email,
+        staffData.PasswordHash,
         id,
       ]);
       return result.affectedRows > 0 ? staffData : null;
@@ -53,15 +47,8 @@ class Staff {
   }
 
   static async delete(id) {
-    const sql = `DELETE FROM Staff WHERE id = ?`;
-
-    try {
-      const [result] = await db.execute(sql, [id]);
-      return result.affectedRows > 0;
-    } catch (error) {
-      console.error("Error deleting staff data:", error);
-      throw error;
-    }
+    const [result] = await db.query("DELETE FROM Staff WHERE StaffID = ?", [id]);
+    return result.affectedRows > 0;
   }
 }
 

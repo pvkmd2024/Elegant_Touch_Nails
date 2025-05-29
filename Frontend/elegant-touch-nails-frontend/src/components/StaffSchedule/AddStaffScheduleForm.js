@@ -3,10 +3,10 @@ import { createStaffSchedule } from "servicesdirectory/api";
 import "./StaffScheduleForm.css";
 
 const AddStaffScheduleForm = () => {
-  const [staffID, setStaffID] = useState("");
+  const [StaffID, setStaffID] = useState("");
   const [DayOfWeek, setDayOfWeek] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [StartTime, setStartTime] = useState("");
+  const [EndTime, setEndTime] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -14,12 +14,12 @@ const AddStaffScheduleForm = () => {
     e.preventDefault();
 
     // Validation
-    if (!staffID || !DayOfWeek || !startTime || !endTime) {
+    if (!StaffID || !DayOfWeek || !StartTime || !EndTime) {
       alert("Please fill in all fields.");
       return;
     }
 
-    const scheduleData = { staffID, DayOfWeek, startTime, endTime };
+    const scheduleData = { StaffID, DayOfWeek, StartTime, EndTime };
 
     setLoading(true);
     setError(""); // Reset error message before starting the request
@@ -34,7 +34,7 @@ const AddStaffScheduleForm = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Failed to add staff schedule:", error);
+        console.error("Failed to add Staff schedule:", error);
         setError("Failed to add schedule. Please try again later.");
         setLoading(false);
       });
@@ -47,9 +47,9 @@ const AddStaffScheduleForm = () => {
       {/* Display error message */}
       <input
         type="text"
-        name="staffID"
+        name="StaffID"
         placeholder="Staff ID"
-        value={staffID}
+        value={StaffID}
         onChange={(e) => setStaffID(e.target.value)}
       />
       <select
@@ -68,16 +68,16 @@ const AddStaffScheduleForm = () => {
       </select>
       <input
         type="time"
-        name="startTime"
+        name="StartTime"
         placeholder="Start Time"
-        value={startTime}
+        value={StartTime}
         onChange={(e) => setStartTime(e.target.value)}
       />
       <input
         type="time"
-        name="endTime"
+        name="EndTime"
         placeholder="End Time"
-        value={endTime}
+        value={EndTime}
         onChange={(e) => setEndTime(e.target.value)}
       />
       <button type="submit" disabled={loading}>

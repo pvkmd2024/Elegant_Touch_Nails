@@ -11,9 +11,9 @@ exports.createStaff = async (req, res) => {
     }
 
     const staffPromises = staffMembers.map((staff, index) => {
-      const { fullname, role, email, passwordHash } = staff;
+      const { FullName, Role, Email, PasswordHash } = staff;
 
-      if (!fullname || !role || !email || !passwordHash) {
+      if (!FullName || !Role || !Email || !PasswordHash) {
         return Promise.reject(
           new Error(
             `Missing required fields for staff member at index ${index}`
@@ -22,14 +22,14 @@ exports.createStaff = async (req, res) => {
       }
 
       return Staff.create({
-        fullname,
-        role,
-        email,
-        passwordHash,
+        FullName,
+        Role,
+        Email,
+        PasswordHash,
       });
     });
 
-    // Wait for all insert operations to complete
+   // Wait for all insert operations to complete
     await Promise.all(staffPromises);
 
     res.status(201).json({ message: "Staff members added successfully!" });
@@ -38,10 +38,25 @@ exports.createStaff = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// exports.creatStaff = async (req, res) => {
+//   try {
+//     const { fullname, role, Email, PasswordHash } =
+//       req.body;
+//     const result = await Staff.create({
+//     fullname, 
+//     role, 
+//     Email, 
+//     PasswordHash
+//     });
+//     res.status(201).json({ message: "Staff created successfully", result });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 exports.getAllStaff = async (req, res) => {
   try {
-    const staff = await StaffModel.getAll();
+    const staff = await Staff.getAll();
     res.status(200).json(staff);
   } catch (error) {
     console.error("Error fetching staff:", error);
@@ -62,20 +77,21 @@ exports.getStaffById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 exports.updateStaff = async (req, res) => {
   try {
     const staffID = req.params.id;
-    const { fullname, role, email, passwordHash } = req.body;
+    const { FullName, Role, Email, PasswordHash } = req.body;
 
-    if (!fullname || !role || !email || !passwordHash) {
+    if (!FullName || !Role || !Email || !PasswordHash) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     const updatedStaff = await Staff.update(staffID, {
-      fullname,
-      role,
-      email,
-      passwordHash,
+      FullName,
+      Role,
+      Email,
+      PasswordHash,
     });
 
     if (updatedStaff) {

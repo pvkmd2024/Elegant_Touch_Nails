@@ -31,7 +31,11 @@ app.use("/api/clients", clientRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/services", serviceRoutes);
-app.use("/api/staff", staffRoutes);
+app.use("/api/staff", (req, res, next) => {
+  console.log("Staff route hit:", req.method, req.url);
+  next();
+}, staffRoutes);
+
 app.use("/api/staffSchedules", staffScheduleRoutes);
 
 // Example route for testing service addition
@@ -48,6 +52,10 @@ app.use((err, req, res, next) => {
     return res.status(400).json({ error: err.message });
   }
   return res.status(500).json({ error: "Internal Server Error" });
+});
+
+app.get("/", (req, res) => {
+  res.send("API is running");
 });
 
 // Start Server

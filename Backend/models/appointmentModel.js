@@ -1,12 +1,12 @@
 const db = require("../config/db");
 
 class Appointment {
-  static async create({ clientID, serviceID, appointmentDate, status }) {
+  static async create({ ClientID, ServiceID, AppointmentDate, Status }) {
     if (
-      clientID === undefined ||
-      serviceID === undefined ||
-      appointmentDate === undefined ||
-      status === undefined
+      ClientID === undefined ||
+      ServiceID === undefined ||
+      AppointmentDate === undefined ||
+      Status === undefined
     ) {
       throw new Error("Required fields cannot be undefined");
     }
@@ -14,10 +14,10 @@ class Appointment {
     const sql = `INSERT INTO Appointments (ClientID, ServiceID, AppointmentDate, Status) VALUES (?, ?, ?, ?)`;
 
     const [result] = await db.execute(sql, [
-      clientID,
-      serviceID,
-      appointmentDate,
-      status,
+      ClientID,
+      ServiceID,
+      AppointmentDate,
+      Status,
     ]);
     return result;
   }
@@ -26,11 +26,18 @@ class Appointment {
     const [rows] = await db.execute(sql);
     return rows;
   }
-  static async getByID() {
-    const sql = `SELECT * FROM Appointments`;
-    const [rows] = await db.execute(sql);
-    return rows;
+  
+  static async getById(id) {
+  const sql = `SELECT * FROM Appointments WHERE AppointmentID = ?`;
+  try {
+    const [rows] = await db.execute(sql, [id]);
+    return rows[0]; // or return rows if you want to return an array
+  } catch (error) {
+    console.error("Error in getById method:", error);
+    throw error;
   }
+}
+
   // Delete an appointment by ID
   static async delete(id) {
     const sql = `DELETE FROM Appointments WHERE AppointmentID = ?`;

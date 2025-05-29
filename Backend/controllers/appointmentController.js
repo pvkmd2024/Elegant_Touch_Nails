@@ -1,40 +1,19 @@
 const Appointment = require("../models/appointmentModel");
+console.log("Imported Appointment model:", Appointment);
 
 exports.createAppointment = async (req, res) => {
-  const appointments = req.body; // Array of appointments
-
-  if (!Array.isArray(appointments) || appointments.length === 0) {
-    return res.status(400).json({ error: "Appointments data is required" });
-  }
-
   try {
-    // Loop through the appointments and create each one
-    const results = [];
-    for (const appointment of appointments) {
-      const { clientID, serviceId, appointmentDate, status } = appointment;
-
-      // Validate that each appointment has the required fields
-      if (!clientID || !serviceId || !appointmentDate || !status) {
-        return res.status(400).json({
-          error:
-            "All fields are required for each appointment (clientID, serviceId, appointmentDate, status)",
-        });
-      }
-
-      const result = await Appointment.create({
-        clientID,
-        serviceId,
-        appointmentDate,
-        status,
-      });
-      results.push(result);
-    }
-
-    res
-      .status(201)
-      .json({ message: "Appointments created successfully", results });
+    const { ClientID, ServiceID, AppointmentDate, Status } =
+      req.body;
+    const result = await Appointment.create({
+      ClientID,
+      ServiceID,
+      AppointmentDate,
+      Status,
+    });
+    console.log(req.body);
+    res.status(201).json({ message: "Appointment created successfully", result });
   } catch (error) {
-    console.error("Error creating appointments:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -52,16 +31,21 @@ exports.getAllAppointments = async (req, res) => {
 exports.getAppointmentById = async (req, res) => {
   try {
     const appointmentId = req.params.id;
+    
     const appointment = await Appointment.getById(appointmentId);
-    if (appointment) {
-      res.status(200).json(appointment);
-    } else {
-      res.status(404).json({ message: "Appointment not found" });
+
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
     }
+
+    res.status(200).json(appointment);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error getting appointment by ID:", error);
+    res.status(500).json({ error: "Failed to retrieve appointment" });
   }
 };
+
+
 exports.deleteAppointment = async (req, res) => {
   try {
     const appointmentId = req.params.id;

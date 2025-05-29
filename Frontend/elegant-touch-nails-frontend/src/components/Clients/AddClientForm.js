@@ -1,79 +1,109 @@
 import React, { useState } from "react";
 import { createClient } from "servicesdirectory/api";
-import { formatDateForInput } from "../../utils/dateUtils";
+import { formatDateForInput } from "../../utils/dateUtils"; // Make sure to format the date properly
 
-const AddClientForm = ({ setClients }) => {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [passwordHash, setPasswordHash] = useState("");
-  const [createdAt, setCreatedAt] = useState(formatDateForInput(new Date()));
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const AddClientForm = ({ onClientAdded }) => {
+  const [clientData, setClientData] = useState({
+    FullName: "",
+    Email: "",
+    PhoneNumber: "",
+    PasswordHash: "",
+    CreatedAt: formatDateForInput(new Date()), // Make sure to format the date correctly
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [loading, setLoading] = useState(false); // To handle loading state
+  const [error, setError] = useState(null); // To handle error state
 
-    if (!fullName || !email || !phoneNumber || !passwordHash || !createdAt) {
-      setError("All fields are required.");
-      return;
-    }
-
-    const newClient = { fullName, email, phoneNumber, passwordHash, createdAt };
-
-    setLoading(true);
-    setError("");
-
-    createClient(newClient)
-      .then(() => {
-        alert("Client added successfully!");
-        setFullName("");
-        setEmail("");
-        setPhoneNumber("");
-        setPasswordHash("");
-        setCreatedAt(formatDateForInput(new Date()));
-
-        setClients((prevClients) => [...prevClients, newClient]);
-      })
-      .catch((err) => {
-        console.error("Create Client Error:", err);
-        setError("Failed to add client. Please try again.");
-      })
-      .finally(() => setLoading(false));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setClientData({ ...clientData, [name]: value });
   };
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Simple validation
+  if (
+    !clientData.FullName ||
+    !clientData.Email ||
+    !clientData.PhoneNumber ||
+    !clientData.PasswordHash ||
+    !clientData.CreatedAt
+  ) {
+    setError("Please fill out all required fields.");
+    return;
+  }
+
+  setLoading(true);
+  setError(null); // Reset previous error
+
+  try {
+    // Log the client data for debugging purposes
+    console.log("Client data being sent to API:", clientData);
+
+    // Send request to create client
+    await createClient(clientData);
+    
+    alert("Client added successfully!");
+    setClientData({
+      FullName: "",
+      Email: "",
+      PhoneNumber: "",
+      PasswordHash: "",
+      CreatedAt: formatDateForInput(new Date()), // Reset CreatedAt
+    });
+    setLoading(false); // Stop loading when done
+    onClientAdded(); // Trigger callback if necessary
+
+  } catch (error) {
+    console.error("Failed to add client:", error);
+    setError("An error occurred while adding the client.");
+    setLoading(false); // Stop loading on error
+  }
+};
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Add Client</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <div style={{ color: "red" }}>{error}</div>} {/* Display error message */}
       <input
         type="text"
+        name="FullName"
         placeholder="Full Name"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
+        value={clientData.FullName}
+        onChange={handleChange}
+        disabled={loading}
       />
       <input
         type="email"
+        name="Email"
         placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={clientData.Email}
+        onChange={handleChange}
+        disabled={loading}
       />
       <input
         type="text"
+        name="PhoneNumber"
         placeholder="Phone Number"
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
+        value={clientData.PhoneNumber}
+        onChange={handleChange}
+        disabled={loading}
       />
       <input
         type="password"
+        name="PasswordHash"
         placeholder="Password Hash"
-        value={passwordHash}
-        onChange={(e) => setPasswordHash(e.target.value)}
+        value={clientData.PasswordHash}
+        onChange={handleChange}
+        disabled={loading}
       />
       <input
         type="datetime-local"
-        value={createdAt}
-        onChange={(e) => setCreatedAt(e.target.value)}
+        name="CreatedAt"
+        value={clientData.CreatedAt}
+        onChange={handleChange}
+        disabled={loading}
       />
       <button type="submit" disabled={loading}>
         {loading ? "Adding..." : "Add Client"}

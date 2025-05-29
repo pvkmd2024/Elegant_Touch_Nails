@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchServices } from "servicesdirectory/api"; 
 
-const ServicesList = ({ services, loading, error }) => {
+const ServicesList = () =>{
+  const [services, setServices] = useState([]);
+    const [loading, setLoading] = useState(false); // Track loading state
+    const [error, setError] = useState(""); // Track error state
+  
+    useEffect(() => {
+      const getServices = async () => {
+        setLoading(true);
+        try {
+          const response = await fetchServices();
+          console.log("Fetched services data:", response); // Debugging log
+          setServices(response);
+        } catch (error) {
+          console.error("Error fetching services:", error);
+          setError("Failed to fetch services.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      getServices();
+    }, []);
   if (loading) return <div>Loading services...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
   if (!Array.isArray(services)) return <div>Invalid data format.</div>;
@@ -14,7 +35,6 @@ const ServicesList = ({ services, loading, error }) => {
         <table>
           <thead>
             <tr>
-              <th>ServiceID</th>
               <th>ServiceName</th>
               <th>Description</th>
               <th>MinDuration</th>
@@ -25,14 +45,13 @@ const ServicesList = ({ services, loading, error }) => {
           </thead>
           <tbody>
             {services.map((service) => (
-              <tr key={service.serviceID}>
-                <td>{service.serviceID}</td>
-                <td>{service.serviceName}</td>
-                <td>{service.description}</td>
-                <td>{service.minDuration}</td>
-                <td>{service.maxDuration}</td>
-                <td>{service.minPrice}</td>
-                <td>{service.maxPrice}</td>
+              <tr key={service.ServiceID}>
+                <td>{service.ServiceName}</td>
+                <td>{service.Description}</td>
+                <td>{service.MinDuration}</td>
+                <td>{service.MaxDuration}</td>
+                <td>{service.MinPrice}</td>
+                <td>{service.MaxPrice}</td>
               </tr>
             ))}
           </tbody>
@@ -47,7 +66,7 @@ export default ServicesList;
 
 
 /*const ServicesList = () => {
-  const [services, setServices] = useState([]);
+  const [services, setervices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -57,7 +76,8 @@ export default ServicesList;
         const data = await fetchServices();
         console.log("Fetched services:", data);
         if (Array.isArray(data)) {
-          setServices(data);
+          setS
+    ervices(data);
         } else {
           setError("Invalid data format received.");
         }
