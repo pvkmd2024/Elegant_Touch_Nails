@@ -16,9 +16,10 @@ router.post("/", createStaffSchedule);
 
 // Route to get a staff schedule by staff ID
 router.get("/:staffID", getStaffScheduleByStaffID);
+
 // Route to update staff schedule by staff ID
-router.put("/:staffID", updateStaffSchedule);
+router.put("/:id", updateStaffSchedule);
 
 // Route to delete staff schedule by staff ID
-router.delete("/:staffID", deleteStaffSchedule);
+router.delete("/:id", deleteStaffSchedule);
 module.exports = router;

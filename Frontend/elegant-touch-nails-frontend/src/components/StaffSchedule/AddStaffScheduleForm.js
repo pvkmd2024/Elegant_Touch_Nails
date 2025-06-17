@@ -1,90 +1,218 @@
-import React, { useState } from "react";
-import { createStaffSchedule } from "servicesdirectory/api";
+import React, { useState, useRef } from "react";
+import {
+  fetchStaffSchedules,
+  createStaffSchedule,
+  updateStaffSchedule,
+  deleteStaffSchedule,
+} from "servicesdirectory/api";
+
 import "./StaffScheduleForm.css";
 
-const AddStaffScheduleForm = () => {
+const StaffScheduleForm = () => {
+  const formRef = useRef(null);
+
+  const [schedules, setSchedules] = useState([]);
+  const [showSchedules, setShowSchedules] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [StaffID, setStaffID] = useState("");
   const [DayOfWeek, setDayOfWeek] = useState("");
   const [StartTime, setStartTime] = useState("");
   const [EndTime, setEndTime] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Load schedules initially
+  const fetchData = async () => {
+    try {
+      const data = await fetchStaffSchedules();
+      setSchedules(data);
+      setShowSchedules(true);
+      console.log("Updated schedules state:", data); // Debugging log
+    } catch (error) {
+      console.error("Failed to fetch schedules:", error.message);
+    }
+  };
 
-    // Validation
-    if (!StaffID || !DayOfWeek || !StartTime || !EndTime) {
-      alert("Please fill in all fields.");
-      return;
+const unloadData = () => {
+  setSchedules([]);
+  setShowSchedules(false);
+};
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
+  const resetForm = () => {
+    setEditingId(null);
+    setStaffID("");
+    setDayOfWeek("");
+    setStartTime("");
+    setEndTime("");
+  };
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const schedule = { StaffID, DayOfWeek, StartTime, EndTime };
+
+  try {
+    if (editingId) {
+      await updateStaffSchedule(editingId, schedule);
+      alert("Schedule updated successfully.");
+    } else {
+      const result = await createStaffSchedule(schedule);
+      console.log("Created schedule response:", result); 
+      alert("Schedule added successfully.");
     }
 
-    const scheduleData = { StaffID, DayOfWeek, StartTime, EndTime };
+    await fetchData();      
+    setShowSchedules(true); 
+    resetForm();
 
-    setLoading(true);
-    setError(""); // Reset error message before starting the request
+  } catch (err) {
+    console.error("Operation failed:", err.message);
+    alert("Failed to submit schedule.");
+  }
+};
 
-    createStaffSchedule(scheduleData)
-      .then(() => {
-        alert("Staff schedule added successfully!");
-        setStaffID("");
-        setDayOfWeek("");
-        setStartTime("");
-        setEndTime("");
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Failed to add Staff schedule:", error);
-        setError("Failed to add schedule. Please try again later.");
-        setLoading(false);
-      });
+const handleEdit = (schedule) => {
+  setEditingId(schedule.ScheduleID);
+  setStaffID(schedule.StaffID);
+  setDayOfWeek(schedule.DayOfWeek);
+  setStartTime(schedule.StartTime);
+  setEndTime(schedule.EndTime);
+
+  setTimeout(() => {
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, 100);
+};
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this schedule?")) return;
+    try {
+      await deleteStaffSchedule(id);
+      alert("Schedule deleted successfully.");
+      fetchData();
+      if (editingId === id) resetForm();
+    } catch (err) {
+      console.error("Delete failed:", err.message);
+      alert("Failed to delete schedule.");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Add Staff Schedule</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-      {/* Display error message */}
-      <input
-        type="text"
-        name="StaffID"
-        placeholder="Staff ID"
-        value={StaffID}
-        onChange={(e) => setStaffID(e.target.value)}
-      />
-      <select
-        name="DayOfWeek"
-        value={DayOfWeek}
-        onChange={(e) => setDayOfWeek(e.target.value)}
-      >
-        <option value="">Select Day</option>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-        <option value="Saturday">Saturday</option>
-        <option value="Sunday">Sunday</option>
-      </select>
-      <input
-        type="time"
-        name="StartTime"
-        placeholder="Start Time"
-        value={StartTime}
-        onChange={(e) => setStartTime(e.target.value)}
-      />
-      <input
-        type="time"
-        name="EndTime"
-        placeholder="End Time"
-        value={EndTime}
-        onChange={(e) => setEndTime(e.target.value)}
-      />
-      <button type="submit" disabled={loading}>
-        {loading ? "Adding..." : "Add Schedule"}
-      </button>
-    </form>
+    <div className="staff-schedule-form" ref={formRef}>
+      <form onSubmit={handleSubmit}>
+  <h2>{editingId ? "Edit" : "Add"} Staff Schedule </h2>
+
+  {editingId && (
+    <div>
+      <label>Schedule ID</label>
+      <input type="text" value={editingId} readOnly />
+    </div>
+  )}
+
+  <input
+    type="text"
+    placeholder="Staff ID"
+    value={StaffID}
+    onChange={(e) => setStaffID(e.target.value)}
+    required
+  />
+
+  <select
+    value={DayOfWeek}
+    onChange={(e) => setDayOfWeek(e.target.value)}
+    required
+  >
+    <option value="">Select Day</option>
+    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(
+      (day) => (
+        <option key={day} value={day}>
+          {day}
+        </option>
+      )
+    )}
+  </select>
+
+  <input
+    type="time"
+    value={StartTime}
+    onChange={(e) => setStartTime(e.target.value)}
+    required
+  />
+  <input
+    type="time"
+    value={EndTime}
+    onChange={(e) => setEndTime(e.target.value)}
+    required
+  />
+
+ <div className="action-buttons">
+  <button id="add-schedule-btn" type="submit">
+    {editingId ? "Update" : "Add"}
+  </button>
+  <button id="load-schedules-btn" type="button" onClick={fetchData}>
+    Load
+  </button>
+  <button id="unload-schedules-btn" type="button" onClick={unloadData}>
+    Unload
+  </button>
+  <button id="clear-btn" type="button" onClick={resetForm}>
+    Clear
+  </button>
+  {/* <button
+    className="delete-button"
+    type="button"
+    onClick={() => handleDelete(editingId)}
+    disabled={!editingId}
+  >
+    Delete
+  </button> */}
+</div>
+
+
+</form>
+
+{showSchedules && (
+  <>
+    <h3 ref={formRef}>Existing Schedules</h3>
+      {schedules.length === 0 ? (
+        <p>No schedules found.</p>
+      ) : (
+        <table className="schedule-table">
+          <thead>
+            <tr>
+              <th>ScheduleID</th>
+              <th>StaffID</th>
+              <th>Day</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {schedules.map((s) => (
+              <tr key={s.ScheduleID}>
+                <td>{s.ScheduleID}</td>
+                <td>{s.StaffID}</td>
+                <td>{s.DayOfWeek}</td>
+                <td>{s.StartTime}</td>
+                <td>{s.EndTime}</td>
+                <td className="action-buttons">
+  <button className="edit-button" onClick={() => handleEdit(s)}>Edit</button>
+  <button
+    className="delete-button"
+    onClick={() => handleDelete(s.ScheduleID)}
+  >
+    Delete
+  </button>
+</td>
+ </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      </>
+      )}
+    </div>
   );
 };
-
-export default AddStaffScheduleForm;
+export default StaffScheduleForm;

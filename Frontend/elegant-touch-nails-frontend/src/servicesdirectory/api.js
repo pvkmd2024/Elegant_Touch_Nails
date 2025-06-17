@@ -1,22 +1,6 @@
 import { transformDateField } from "../utils/utils";
-
 const API_URL = "http://localhost:5001/api";
-
-// Clients API
-// export const fetchClients = async () => {
-//   const response = await fetch("http://localhost:5001/api/clients");
-
-//   const contentType = response.headers.get("content-type");
-//   console.log("Response Content-Type:", contentType); // ✅ log this
-// console.log("response.json")
-//   if (!response.ok) {
-//     const text = await response.text(); // read the error body
-//     console.error("Error response body:", text); // ✅ show what failed
-//     throw new Error("Failed to fetch Clients");
-//   }
-
-//   return await response.json();
-// };
+const API_BASE_URL = "http://localhost:5001/api";
 export const fetchClients = async () => {
   try {
     const response = await fetch("http://localhost:5001/api/clients");
@@ -24,13 +8,13 @@ export const fetchClients = async () => {
     console.log("Response Content-Type:", contentType);
 
     if (!response.ok) {
-      const text = await response.text(); // Read error body
+      const text = await response.text(); 
       console.error("Error response body:", text);
       throw new Error("Failed to fetch clients");
     }
 
     const data = await response.json();
-    console.log("Clients fetched from API:", data); // Log the response
+    console.log("Clients fetched from API:", data); 
     return data;
   } catch (error) {
     console.error("Error fetching clients:", error);
@@ -38,133 +22,155 @@ export const fetchClients = async () => {
   }
 };
 
-export const createClient = async (clientData) => {
-  console.log("Raw client data received:", clientData); // Log the client data
-  const formattedClient = {
-    fullName: clientData.FullName,
-    email: clientData.Email,
-    phoneNumber: clientData.PhoneNumber,
-    passwordHash: clientData.PasswordHash,
-    createdAt: new Date().toISOString(), // Ensure the CreatedAt is in correct format
-  };
-
-  console.log("Formatted client data:", formattedClient); // Log the formatted client data
-
+export const createClient = async (client) => {
   const response = await fetch("http://localhost:5001/api/clients", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify([formattedClient]), // backend expects an array
+    body: JSON.stringify(client),
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    console.error("Error response from API:", error); // Log the error response from the API
-    throw new Error(error.message || "Failed to create client");
+    throw new Error("Failed to create client");
   }
 
+  const data = await response.json();
+  return data;
+};
+
+// PUT/UPDATE client
+export const updateClient = async (id, updatedData) => {
+  const response = await fetch(`http://localhost:5001/api/clients/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
+  });
+
+  if (!response.ok) throw new Error("Failed to update client");
   return await response.json();
 };
 
+// DELETE client
+export const deleteClient = async (id) => {
+  const response = await fetch(`http://localhost:5001/api/clients/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) throw new Error("Failed to delete client");
+  return await response.json();
+};
 
 // Services API
-export const fetchServices = async () => {
-  const response = await fetch("http://localhost:5001/api/services");
 
-  const contentType = response.headers.get("content-type");
-  console.log("Response Content-Type:", contentType); // ✅ log this
-console.log("response.json")
+export async function fetchServices() {
+  const response = await fetch(`${API_BASE_URL}/services`);
   if (!response.ok) {
-    const text = await response.text(); // read the error body
-    console.error("Error response body:", text); // ✅ show what failed
     throw new Error("Failed to fetch services");
   }
-
   return await response.json();
-};
+}
 
+// export async function createService(service) {
+//   const formattedService = {
+//     serviceName: service.ServiceName,
+//     description: service.Description,
+//     minDuration: Number(service.MinDuration),
+//     maxDuration: Number(service.MaxDuration),
+//     minPrice: Number(service.MinPrice),
+//     maxPrice: Number(service.MaxPrice),
+//   };
 
-// export const fetchServices = async () => {
-//   const response = await fetch("http://localhost:5001/api/services");
-//   const json = await response.json();
-//   if (json.status === "success" && Array.isArray(json.data)) {
-//     return json.data; // ✅ return the actual services array
-//   } else {
-//     throw new Error("Invalid data format received from backend");
+//   const response = await fetch(`${API_BASE_URL}/services`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify([formattedService]), 
+//   });
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(errorData.message || "Failed to create service");
 //   }
-// };
 
-/*export const fetchServices = async () => {
-  try {
-    const response = await fetch(`${API_URL}/services`);
-    if (!response.ok) throw new Error("Failed to fetch services");
-    const clients = await response.json();
-    return clients;
-  } catch (error) {
-    console.error("Error fetching services:", error);
-    return [];
-  }
-};*/
+//   return await response.json();
+// }
 
-/*export const createService = async (clients) => {
-  try {
-    const response = await fetch(`${API_URL}/services`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(clients),
-    });
-    if (!response.ok) throw new Error("Failed to create service");
-    return await response.json();
-  } catch (error) {
-    console.error("Error creating service:", error);
-    return null;
-  }
-};*/
+// export async function updateService(id, service) {
+//   // Convert PascalCase to camelCase for backend consistency
+//   const formattedService = {
+//     serviceName: service.ServiceName,
+//     description: service.Description,
+//     minDuration: Number(service.MinDuration),
+//     maxDuration: Number(service.MaxDuration),
+//     minPrice: Number(service.MinPrice),
+//     maxPrice: Number(service.MaxPrice),
+//   };
 
-export const createService = async (serviceData) => {
-  // Convert PascalCase to camelCase
-  const formattedService = {
-    serviceName: serviceData.ServiceName,
-    description: serviceData.Description,
-    minDuration: Number(serviceData.MinDuration),
-    maxDuration: Number(serviceData.MaxDuration),
-    minPrice: Number(serviceData.MinPrice),
-    maxPrice: Number(serviceData.MaxPrice),
-  };
+//   const response = await fetch(`${API_BASE_URL}/services/${id}`, {
+//     method: "PUT",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(formattedService),
+//   });
 
-  const response = await fetch("http://localhost:5001/api/services", {
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(errorData.message || "Failed to update service");
+//   }
+
+//   return await response.json();
+// }
+// servicesdirectory/api.js
+
+export const createService = async (service) => {
+  const res = await fetch("/api/services", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify([formattedService]), // backend expects array
+    body: JSON.stringify(service),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to create service");
+  }
+
+  return await res.json();
+};
+
+export const updateService = async (id, service) => {
+  const res = await fetch(`/api/services/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(service),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update service");
+  }
+
+  return await res.json();
+};
+
+export async function deleteService(id) {
+  const response = await fetch(`${API_BASE_URL}/services/${id}`, {
+    method: "DELETE",
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Failed to create service");
+    throw new Error("Failed to delete service");
   }
 
   return await response.json();
-};
+}
 
-// Fetch payments and transform the 'date' field
-// export const fetchPayments = async () => {
-//   try {
-//     const response = await fetch(`${API_URL}/payments`);
-//     if (!response.ok) throw new Error("Failed to fetch payments");
-
-//     const payments = await response.json();
-//     // Use transformDateField to format the 'date' field
-//     return transformDateField(payments, "date");
-//   } catch (error) {
-//     console.error("Error fetching payments:", error);
-//     return [];
-//   }
-// };
 export const fetchPayments = async () => {
   try {
     const response = await fetch(`${API_URL}/payments`);
@@ -191,23 +197,46 @@ export const fetchPayments = async () => {
 };
 
 
-export const createPayment = async (clients) => {
+export async function createPayment(payment) {
+  const response = await fetch(`${API_BASE_URL}/payments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payment),
+  });
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || "Failed to create payment");
+  }
+  return await response.json();
+}
+
+export async function updatePayment(id, payment) {
+  const response = await fetch(`${API_BASE_URL}/payments/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payment),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update payment");
+  }
+  return await response.json();
+}
+
+// Delete a payment by ID
+export const deletePayment = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/payments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(clients),
+    const response = await fetch(`${API_URL}/payments/${id}`, {
+      method: "DELETE",
     });
-    if (!response.ok) throw new Error("Failed to create payment");
+
+    if (!response.ok) throw new Error("Failed to delete payment");
+
     return await response.json();
   } catch (error) {
-    console.error("Error creating payment:", error);
+    console.error("Error deleting payment:", error);
     return null;
   }
 };
-
 // Staff API
 export const fetchStaff = async () => {
   const response = await fetch("http://localhost:5001/api/staff");
@@ -222,23 +251,10 @@ export const fetchStaff = async () => {
   }
 
   const data = await response.json();
-  console.log("✅ Staff fetched from API:", JSON.stringify(data, null, 2)); // Log clearly
+  console.log(" Staff fetched from API:", JSON.stringify(data, null, 2)); // Log clearly
   return data;
 };
 
-
-
-// export const fetchStaff = async () => {
-//   try {
-//     const response = await fetch(`${API_URL}/staff`);
-//     if (!response.ok) throw new Error("Failed to fetch staff");
-//     const staff = await response.json(); // Changed `clients` to `staff`
-//     return staff;
-//   } catch (error) {
-//     console.error("Error fetching staff:", error);
-//     return []; // Return empty array if there's an error
-//   }
-// };
 export const createStaff = async (staffData) => {
   // Convert PascalCase to camelCase
   const formattedStaff = {
@@ -265,84 +281,147 @@ console.log("Sending formattedStaff:", [formattedStaff]);
   return await response.json();
 };
 
-// export const createStaff = async (clients) => {
-//   try {
-//     const response = await fetch(`${API_URL}/staff`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(clients),
-//     });
-//     if (!response.ok) throw new Error("Failed to create staff");
-//     return await response.json();
-//   } catch (error) {
-//     console.error("Error creating staff:", error);
-//     return null;
-//   }
-// };
+export const updateStaff = async (id, data) => {
+  const res = await fetch(`http://localhost:5001/api/staff/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    throw new Error("Failed to update staff");
+  }
+};
 
-// Staff Schedule API
+
+export const deleteStaff = async (id) => {
+   
+  const res = await fetch(`http://localhost:5001/api/staff/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to delete staff");
+  }
+};
+
 export const fetchStaffSchedules = async () => {
   const response = await fetch("http://localhost:5001/api/staffschedules");
 
   const contentType = response.headers.get("content-type");
-  console.log("Response Content-Type:", contentType); // ✅ log this
+  console.log("Response Content-Type:", contentType); 
 console.log("response.json")
   if (!response.ok) {
-    const text = await response.text(); // read the error body
-    console.error("Error response body:", text); // ✅ show what failed
+    const text = await response.text(); 
+    console.error("Error response body:", text);
     throw new Error("Failed to fetch staff schedules");
   }
 
   return await response.json();
 };
 
-export const createStaffSchedule = async (clients) => {
-  try {
-    const response = await fetch(`${API_URL}/staff-schedules`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(clients),
-    });
-    if (!response.ok) throw new Error("Failed to create staff schedule");
-    return await response.json();
-  } catch (error) {
-    console.error("Error creating staff schedule:", error);
-    return null;
+export const createStaffSchedule = async (schedule) => {
+  const response = await fetch("http://localhost:5001/api/staffSchedules", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(schedule),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create schedule");
   }
+
+  const data = await response.json();  
+  return data;                         
 };
 
-// Fetch appointments and transform the 'date' field
+
+export const updateStaffSchedule = async (id, updatedData) => {
+  const response = await fetch(`http://localhost:5001/api/staffschedules/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
+  });
+
+  if (!response.ok) throw new Error("Failed to update staff schedule");
+  return await response.json();
+};
+
+export const deleteStaffSchedule = async (id) => {
+  const response = await fetch(`http://localhost:5001/api/staffschedules/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) throw new Error("Failed to delete staff schedule");
+  return await response.json();
+};
+
+// appointmentsApi.js
 export const fetchAppointments = async () => {
-  try {
-    const response = await fetch(`${API_URL}/appointments`);
-    if (!response.ok) throw new Error("Failed to fetch appointments");
+  const response = await fetch("http://localhost:5001/api/appointments");
 
-    const appointments = await response.json();
-    // Use transformDateField to format the 'date' field
-    return transformDateField(appointments, "date");
-  } catch (error) {
-    console.error("Error fetching appointments:", error);
-    return [];
+  const contentType = response.headers.get("content-type");
+  console.log("Response Content-Type:", contentType); 
+  console.log("response.json");
+
+  if (!response.ok) {
+    const text = await response.text(); 
+    console.error("Error response body:", text);
+    throw new Error("Failed to fetch appointments");
   }
+  return await response.json();
 };
 
-export const createAppointment = async (clients) => {
-  try {
-    const response = await fetch(`${API_URL}/appointments/appointments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(clients),
-    });
-    if (!response.ok) throw new Error("Failed to create appointment");
-    return await response.json();
-  } catch (error) {
-    console.error("Error creating appointment:", error);
-    return null;
+export const createAppointment = async (appointment) => {
+  const response = await fetch("http://localhost:5001/api/appointments", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(appointment),
+  });
+
+  if (!response.ok) {
+    const text = await response.text(); 
+    console.error("Error response body:", text);
+    throw new Error("Failed to create appointment");
   }
+
+  return await response.json();
+};
+
+export const updateAppointment = async (id, updatedData) => {
+  const response = await fetch(`http://localhost:5001/api/appointments/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
+  });
+
+  if (!response.ok) {
+    const text = await response.text(); 
+    console.error("Error response body:", text);
+    throw new Error("Failed to update appointment");
+  }
+
+  return await response.json();
+};
+
+export const deleteAppointment = async (id) => {
+  const response = await fetch(`http://localhost:5001/api/appointments/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    const text = await response.text(); 
+    console.error("Error response body:", text);
+    throw new Error("Failed to delete appointment");
+  }
+
+  return await response.json();
 };

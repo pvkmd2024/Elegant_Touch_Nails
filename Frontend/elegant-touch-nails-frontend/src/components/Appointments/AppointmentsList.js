@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { fetchAppointments } from "servicesdirectory/api"; // Import the fetch version of the function
+import { fetchAppointments } from "servicesdirectory/api"; 
+import "./AppointmentsForm.css"; 
 
 const AppointmentsList = () => {
   const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(false); // Track loading state
-  const [error, setError] = useState(""); // Track error state
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const getAppointments = async () => {
       setLoading(true);
       try {
         const response = await fetchAppointments();
-        console.log("Fetched appointments data:", response); // Debugging log
+        console.log("Fetched appointments data:", response);
         setAppointments(response);
       } catch (error) {
         console.error("Error fetching appointments:", error);
@@ -22,57 +23,41 @@ const AppointmentsList = () => {
     };
     getAppointments();
   }, []);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const data = await fetchAppointments(); // Call the new fetchAppointments function
-  //       setAppointments(data);
-  //     } catch (error) {
-  //       setError("Failed to fetch appointments.");
-  //       console.error("Error fetching appointments:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
 
-  //   fetchData();
-  // }, []);
+  if (loading) return <div>Loading appointments...</div>;
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
+  if (!Array.isArray(appointments)) return <div>Invalid data format.</div>;
 
   return (
-    <div>
-      <h2>Appointments</h2>
-      {loading && <p>Loading appointments...</p>} {/* Show loading message */}
-      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-      {/* Show error message */}
-      <table>
-        <thead>
-          <tr>
-            <th>Client ID</th>
-            <th>Service ID</th>
-            <th>Appointment Date</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {appointments.length > 0 ? (
-            appointments.map((appointment) => (
-              <tr key={appointment.ID}>
-                <td>{appointment.ClientID}</td>
-                <td>{appointment.ServiceID}</td>
-                <td>
-                  {new Date(appointment.AppointmentDate).toLocaleString()}
-                </td>
-                <td>{appointment.Status}</td>
-              </tr>
-            ))
-          ) : (
+    <div className="appointments-container">
+      <h2 className="page-heading">Appointments</h2>
+
+      {appointments.length === 0 ? (
+        <p>No appointments available.</p>
+      ) : (
+        <table className="appointments-table">
+          <thead>
             <tr>
-              <td colSpan="4">No appointments available</td>
+              <th>AppointmentID</th>
+              <th>ClientID</th>
+              <th>ServiceID</th>
+              <th>AppointmentDate</th>
+              <th>Status</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {appointments.map((appt) => (
+              <tr key={appt.AppointmentID}>
+                <td>{appt.AppointmentID}</td>
+                <td>{appt.ClientID}</td>
+                <td>{appt.ServiceID}</td>
+                <td>{appt.AppointmentDate}</td>
+                <td>{appt.Status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

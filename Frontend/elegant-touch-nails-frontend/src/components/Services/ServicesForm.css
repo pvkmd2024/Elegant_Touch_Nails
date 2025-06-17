@@ -1,4 +1,4 @@
-/* ===== Global Reset and Page Setup ===== */
+/* ===== Global Reset and Page Setup (can be omitted if already in global CSS) ===== */
 body {
   margin: 0;
   padding: 0;
@@ -6,10 +6,6 @@ body {
   background-color: #f0f2f5;
   color: #333;
 }
-
-h1 {
-  text-align: center;
-} */
 
 h2, h3, h4 {
   margin: 0;
@@ -23,7 +19,7 @@ h2, h3, h4 {
 }
 
 /* ===== Form Container ===== */
-.staff-schedule-form {
+.services-form {
   max-width: 800px;
   margin: 30px auto;
   padding: 25px;
@@ -33,12 +29,13 @@ h2, h3, h4 {
 }
 
 /* Headings */
-.staff-schedule-form h2{
+.services-form h2 {
   text-align: center;
   color: #222;
   margin-bottom: 20px;
 }
-.staff-schedule-form h3 {
+
+.services-form h3 {
   margin-top: 25px;
   font-size: 1.5em;
   text-align: center;
@@ -47,8 +44,9 @@ h2, h3, h4 {
 }
 
 /* Form Elements */
-.staff-schedule-form input,
-.staff-schedule-form select {
+.services-form input,
+.services-form textarea,
+.services-form select {
   width: 100%;
   padding: 12px;
   margin: 10px 0 20px 0;
@@ -56,53 +54,42 @@ h2, h3, h4 {
   border-radius: 6px;
   font-size: 16px;
   box-sizing: border-box;
+  resize: vertical;
 }
+
+/* Textarea specific */
+.services-form textarea {
+  min-height: 80px;
+}
+
 /* Updated table style */
-.schedule-table {
+.services-table {
   width: 100%;
   border-collapse: collapse;
   background-color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e3e3e3; /* lighter border */
+  border: 1px solid #e3e3e3;
 }
 
-.schedule-table th,
-.schedule-table td {
+.services-table th,
+.services-table td {
   padding: 12px 10px;
-  border: 1px solid #e3e3e3; /* lighter and consistent with outer border */
+  border: 1px solid #e3e3e3;
   text-align: center;
 }
 
-/* 
-/* ===== Table Styles ===== */
-/* .schedule-table {
-  text-align: center;
-  width: 90%;
-  margin: 30px auto;
-  border-collapse: collapse;
-  background-color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-} */
-
-/* .schedule-table th,
-.schedule-table td {
-  padding: 12px 10px;
-  border: 1px solid #ccc;
-  text-align: center;
-} */ */
-
-.schedule-table th {
+.services-table th {
   background-color: #f8f9fa;
   font-weight: 600;
   color: #444;
 }
 
-.schedule-table tr:nth-child(even) {
+.services-table tr:nth-child(even) {
   background-color: #fcfcfc;
 }
 
 /* ===== Table Action Buttons ===== */
-.schedule-table button {
+.services-table button {
   padding: 8px 14px;
   font-size: 14px;
   font-weight: bold;
@@ -115,23 +102,23 @@ h2, h3, h4 {
   margin: 0 4px;
 }
 
-.schedule-table button:hover {
+.services-table button:hover {
   background-color: #455a64;
 }
 
-.schedule-table .edit-button {
+.services-table .edit-button {
   background-color: #4caf50;
 }
 
-.schedule-table .edit-button:hover {
+.services-table .edit-button:hover {
   background-color: #388e3c;
 }
 
-.schedule-table .delete-button {
+.services-table .delete-button {
   background-color: #f44336;
 }
 
-.schedule-table .delete-button:hover {
+.services-table .delete-button:hover {
   background-color: #d32f2f;
 }
 
@@ -144,27 +131,26 @@ h2, h3, h4 {
   margin-top: 20px;
 }
 
-
 /* ===== Messages ===== */
-.staff-schedule-form p {
+.services-form p {
   text-align: center;
   color: red;
 }
 
 /* ===== Responsive Adjustments ===== */
 @media (max-width: 600px) {
-  .staff-schedule-form,
-  .schedule-table {
+  .services-form,
+  .services-table {
     width: 95%;
   }
 
-  .schedule-table th,
-  .schedule-table td {
+  .services-table th,
+  .services-table td {
     font-size: 14px;
     padding: 8px;
   }
 
-  .staff-schedule-form button,
+  .services-form button,
   .load-button,
   .unload-button {
     width: 100%;
@@ -172,13 +158,13 @@ h2, h3, h4 {
   }
 
   .action-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
 }
 
 /* ===== Custom Button Styles by ID ===== */
@@ -196,29 +182,29 @@ button {
 }
 
 /* Add button - Blue */
-#add-schedule-btn {
+#add-service-btn {
   background-color: #2196f3;
   color: white;
 }
-#add-schedule-btn:hover {
+#add-service-btn:hover {
   background-color: #007bff;
 }
 
 /* Load button - Green */
-#load-schedules-btn {
+#load-services-btn {
   background-color: #28a745;
   color: white;
 }
-#load-schedules-btn:hover {
-  background-color: #28a745;
+#load-services-btn:hover {
+  background-color: #218838;
 }
 
 /* Unload button - Yellow */
-#unload-schedules-btn {
+#unload-services-btn {
   background-color: #ffc107;
   color: #333;
 }
-#unload-schedules-btn:hover {
+#unload-services-btn:hover {
   background-color: #fbc02d;
 }
 
@@ -231,8 +217,8 @@ button {
   background-color: #757575;
 }
 
-/* Center container for the schedule list */
-.staff-schedule-container {
+/* Center container for the services list */
+.services-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -240,10 +226,16 @@ button {
   margin: 30px auto;
   padding: 0 15px;
 }
+
 .page-heading {
   text-align: center;
   font-size: 1.5rem;
   margin-top: 30px;
   margin-bottom: 20px;
   color: #222;
+}
+.readonly-input {
+  background-color: #f0f0f0;
+  color: #555;
+  border: 1px solid #ccc;
 }

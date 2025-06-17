@@ -1,72 +1,65 @@
-const db = require("../config/db"); // Your DB connection
+const db = require("../config/db");
 
 const Service = {
-  // Fetch all services
   async getAll() {
     const [rows] = await db.query("SELECT * FROM Services");
     return rows;
   },
 
-  // Fetch a service by ID
-  async getById(serviceID) {
-    const [rows] = await db.query("SELECT * FROM Services WHERE serviceID = ?", [serviceID]);
+  async getById(ServiceID) {
+    const [rows] = await db.query("SELECT * FROM Services WHERE ServiceID = ?", [ServiceID]);
     return rows[0] || null;
   },
 
-  // Create multiple services
   async create(services) {
     const values = services.map(s => [
-      s.serviceName,
-      s.description,
-      s.minDuration,
-      s.maxDuration,
-      s.minPrice,
-      s.maxPrice,
+      s.ServiceName,
+      s.Description,
+      s.MinDuration,
+      s.MaxDuration,
+      s.MinPrice,
+      s.MaxPrice,
     ]);
 
     const placeholders = services.map(() => "(?, ?, ?, ?, ?, ?)").join(", ");
 
     const sql = `
       INSERT INTO Services (
-        serviceName, description, minDuration, maxDuration, minPrice, maxPrice
-      )
-      VALUES ${placeholders}
+        ServiceName, Description, MinDuration, MaxDuration, MinPrice, MaxPrice
+      ) VALUES ${placeholders}
     `;
 
     const flatValues = values.flat();
     const [result] = await db.query(sql, flatValues);
 
-    // Return inserted services or count
     return {
       insertedCount: result.affectedRows,
       insertId: result.insertId,
     };
   },
 
-  // Update a service by ID
-  async update(serviceID, service) {
+  async update(ServiceID, service) {
     const {
-      serviceName,
-      description,
-      minDuration,
-      maxDuration,
-      minPrice,
-      maxPrice,
+      ServiceName,
+      Description,
+      MinDuration,
+      MaxDuration,
+      MinPrice,
+      MaxPrice,
     } = service;
 
     const [result] = await db.query(
       `UPDATE Services 
-       SET serviceName = ?, description = ?, minDuration = ?, maxDuration = ?, minPrice = ?, maxPrice = ?
-       WHERE serviceID = ?`,
-      [serviceName, description, minDuration, maxDuration, minPrice, maxPrice, serviceID]
+       SET ServiceName = ?, Description = ?, MinDuration = ?, MaxDuration = ?, MinPrice = ?, MaxPrice = ?
+       WHERE ServiceID = ?`,
+      [ServiceName, Description, MinDuration, MaxDuration, MinPrice, MaxPrice, ServiceID]
     );
 
-    return result.affectedRows > 0 ? { serviceID, ...service } : null;
+    return result.affectedRows > 0 ? { ServiceID, ...service } : null;
   },
 
-  // Delete a service by ID
-  async delete(serviceID) {
-    const [result] = await db.query("DELETE FROM Services WHERE serviceID = ?", [serviceID]);
+  async delete(ServiceID) {
+    const [result] = await db.query("DELETE FROM Services WHERE ServiceID = ?", [ServiceID]);
     return result.affectedRows > 0;
   },
 };

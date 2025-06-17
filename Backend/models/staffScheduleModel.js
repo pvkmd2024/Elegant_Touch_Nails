@@ -6,10 +6,10 @@ class StaffSchedule {
       INSERT INTO StaffSchedule (StaffID, DayOfWeek, StartTime, EndTime) VALUES (?,?,?,?)
     `;
     const params = [
-      scheduleData.staffID || null,
-      scheduleData.dayOfWeek || null,
-      scheduleData.startTime || null,
-      scheduleData.endTime || null,
+      scheduleData.StaffID || null,
+      scheduleData.DayOfWeek || null,
+      scheduleData.StartTime || null,
+      scheduleData.EndTime || null,
     ];
 
     try {
@@ -27,40 +27,29 @@ class StaffSchedule {
     return rows;
   }
 
-  static async getByStaffID(staffID) {
+  static async getByStaffID(StaffID) {
     const sql = "SELECT * FROM StaffSchedule WHERE StaffID = ?";
-    const [rows] = await db.execute(sql, [staffID]);
+    const [rows] = await db.execute(sql, [StaffID]);
     return rows;
   }
 
   // Update staff schedule by staff ID
-  static async update(staffID, scheduleData) {
-    const sql = `
-      UPDATE StaffSchedule 
-      SET DayOfWeek = ?, StartTime = ?, EndTime = ? 
-      WHERE StaffID = ?
-    `;
-
-    try {
-      const [result] = await db.execute(sql, [
-        scheduleData.dayOfWeek,
-        scheduleData.startTime,
-        scheduleData.endTime,
-        staffID,
-      ]);
-      return result.affectedRows > 0 ? scheduleData : null;
-    } catch (error) {
-      console.error("Error updating staff schedule data:", error);
-      throw error;
-    }
-  }
+  async update(scheduleId, { StaffID, DayOfWeek, StartTime, EndTime }) {
+  const [result] = await pool.execute(
+    `UPDATE StaffSchedule
+     SET StaffID = ?, DayOfWeek = ?, StartTime = ?, EndTime = ?
+     WHERE ScheduleID = ?`,
+    [StaffID, DayOfWeek, StartTime, EndTime, scheduleId]
+  );
+  return result;
+}
 
   // Delete staff schedule by staff ID
-  static async delete(staffID) {
+  static async delete(StaffID) {
     const sql = `DELETE FROM StaffSchedule WHERE StaffID = ?`;
 
     try {
-      const [result] = await db.execute(sql, [staffID]);
+      const [result] = await db.execute(sql, [StaffID]);
       return result.affectedRows > 0;
     } catch (error) {
       console.error("Error deleting staff schedule data:", error);

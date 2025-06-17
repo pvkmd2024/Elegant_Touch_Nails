@@ -6,13 +6,21 @@ import AddStaffForm from "../components/Staff/AddStaffForm";
 const StaffPage = () => {
   const [staff, setStaff] = useState([]);
 
+   const loadStaff = async () => {
+    try {
+      const data = await fetchStaff();
+      setStaff(data);
+    } catch (err) {
+      console.error("Failed to load staff:", err.message);
+    }
+  };
+
   useEffect(() => {
-    fetchStaff().then((data) => setStaff(data));
+    loadStaff();
   }, []);
 
   return (
     <div>
-      <h2>Staff</h2>
       <AddStaffForm />
       <StaffList staff={staff} />
     </div>

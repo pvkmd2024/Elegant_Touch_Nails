@@ -3,7 +3,7 @@ const router = express.Router();
 const appointmentController = require("../controllers/appointmentController");
 
 // Create a new appointment
-router.post("/appointments", appointmentController.createAppointment);
+router.post("/", appointmentController.createAppointment);
 
 // Get all appointments
 router.get("/", appointmentController.getAllAppointments);

@@ -1,23 +1,22 @@
 const Service = require("../models/serviceModel");
 
-// Helper: Validate service fields
 const isValidService = (service) => {
   const {
-    serviceName,
-    description,
-    minDuration,
-    maxDuration,
-    minPrice,
-    maxPrice,
+    ServiceName,
+    Description,
+    MinDuration,
+    MaxDuration,
+    MinPrice,
+    MaxPrice,
   } = service;
 
   return (
-    serviceName &&
-    description &&
-    !isNaN(minDuration) &&
-    !isNaN(maxDuration) &&
-    !isNaN(minPrice) &&
-    !isNaN(maxPrice)
+    ServiceName &&
+    Description &&
+    !isNaN(MinDuration) &&
+    !isNaN(MaxDuration) &&
+    !isNaN(MinPrice) &&
+    !isNaN(MaxPrice)
   );
 };
 
@@ -33,33 +32,15 @@ const logError = (context, error) => {
   }
 };
 
-// GET all services
-
-const db = require("../config/db");
-
 exports.getAllServices = async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT * FROM services");
-    res.json(rows); // ✅ Correct format
+    const rows = await Service.getAll();
+    res.status(200).json({ status: "success", data: rows });
   } catch (error) {
-    console.error("Error fetching services:", error);
-    res.status(500).json({ message: "Failed to fetch services" });
+    logError("getAllServices", error);
+    sendError(res, 500, "Failed to fetch services");
   }
 };
-
-
-
-
-
-// exports.getAllServices = async (req, res) => {
-//   try {
-//     const services = await Service.getAll();
-//     res.status(200).json({ status: "success", data: services });
-//   } catch (error) {
-//     logError("getAllServices", error);
-//     sendError(res, 500, "Failed to fetch services");
-//   }
-// };
 
 // GET a service by ID
 exports.getServiceById = async (req, res) => {

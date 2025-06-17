@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchPayments } from "../servicesdirectory/api";
 import PaymentsList from "../components/Payments/PaymentsList";
-import AddPaymentForm from "../components/Payments/AddPaymentForm";
+import AddPaymentsForm from "../components/Payments/AddPaymentsForm";
 
 const PaymentsPage = () => {
   const [payments, setPayments] = useState([]);
@@ -12,8 +12,7 @@ const PaymentsPage = () => {
 
   return (
     <div>
-      <h2>Payments</h2>
-      <AddPaymentForm />
+      <AddPaymentsForm />
       <PaymentsList payments={payments} />
     </div>
   );

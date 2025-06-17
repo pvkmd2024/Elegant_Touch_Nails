@@ -3,8 +3,7 @@ const db = require("../config/db"); // Import the db connection
 class Client {
   // Static method to create a new client
  static async create(data) {
-  // Check if required fields are present
-  if (!data.FullName || !data.Email || !data.PhoneNumber || !data.PasswordHash) {
+   if (!data.FullName || !data.Email || !data.PhoneNumber || !data.PasswordHash) {
     throw new Error('FullName, Email, and PasswordHash are required fields');
   }
 

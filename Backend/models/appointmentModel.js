@@ -1,71 +1,58 @@
 const db = require("../config/db");
 
-class Appointment {
-  static async create({ ClientID, ServiceID, AppointmentDate, Status }) {
-    if (
-      ClientID === undefined ||
-      ServiceID === undefined ||
-      AppointmentDate === undefined ||
-      Status === undefined
-    ) {
-      throw new Error("Required fields cannot be undefined");
-    }
-
+class AppointmentsModel {
+  static async create(data) {
     const sql = `INSERT INTO Appointments (ClientID, ServiceID, AppointmentDate, Status) VALUES (?, ?, ?, ?)`;
-
-    const [result] = await db.execute(sql, [
-      ClientID,
-      ServiceID,
-      AppointmentDate,
-      Status,
-    ]);
+    const params = [data.ClientID, data.ServiceID, data.AppointmentDate, data.Status];
+    const [result] = await db.execute(sql, params);
     return result;
   }
+
+  // Get all appointments
   static async getAll() {
-    const sql = `SELECT * FROM Appointments`;
-    const [rows] = await db.execute(sql);
-    return rows;
-  }
-  
-  static async getById(id) {
-  const sql = `SELECT * FROM Appointments WHERE AppointmentID = ?`;
-  try {
-    const [rows] = await db.execute(sql, [id]);
-    return rows[0]; // or return rows if you want to return an array
-  } catch (error) {
-    console.error("Error in getById method:", error);
-    throw error;
-  }
-}
+    const sql = `SELECT * FROM Appointments ORDER BY AppointmentDate DESC`;
 
-  // Delete an appointment by ID
-  static async delete(id) {
+    try {
+      const [rows] = await db.execute(sql);
+      return rows;
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+      throw error;
+    }
+  }
+
+  // Get appointment by ID
+  static async getById(appointmentId) {
+    const sql = `SELECT * FROM Appointments WHERE AppointmentID = ?`;
+
+    try {
+      const [rows] = await db.execute(sql, [appointmentId]);
+      return rows[0];
+    } catch (error) {
+      console.error("Error fetching appointment by ID:", error);
+      throw error;
+    }
+  }
+
+ static async update(id, data) {
+    const sql = `UPDATE Appointments SET ClientID=?, ServiceID=?, AppointmentDate=?, Status=? WHERE AppointmentID=?`;
+    const params = [data.ClientID, data.ServiceID, data.AppointmentDate, data.Status, id];
+    const [result] = await db.execute(sql, params);
+    return result.affectedRows > 0;
+  }
+
+  // Delete appointment
+  static async delete(appointmentId) {
     const sql = `DELETE FROM Appointments WHERE AppointmentID = ?`;
-    try {
-      const [result] = await db.execute(sql, [id]);
-      return result;
-    } catch (error) {
-      console.error("Error in delete method:", error);
-      throw error;
-    }
-  }
 
-  // Update an appointment
-  static async update(id, updates) {
-    const fields = Object.keys(updates)
-      .map((key) => `${key} = ?`)
-      .join(", ");
-    const values = [...Object.values(updates), id];
-
-    const sql = `UPDATE Appointments SET ${fields} WHERE AppointmentID = ?`;
     try {
-      const [result] = await db.execute(sql, values);
-      return result;
+      const [result] = await db.execute(sql, [appointmentId]);
+      return result.affectedRows > 0;
     } catch (error) {
-      console.error("Error in update method:", error);
+      console.error("Error deleting appointment:", error);
       throw error;
     }
   }
 }
 
-module.exports = Appointment;
+module.exports = AppointmentsModel;

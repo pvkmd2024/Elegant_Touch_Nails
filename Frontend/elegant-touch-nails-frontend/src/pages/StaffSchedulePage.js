@@ -12,11 +12,9 @@ const StaffSchedulePage = () => {
 
   return (
     <div>
-      <h2>Staff Schedule</h2>
       <AddStaffScheduleForm />
       <StaffScheduleList staffSchedules={staffSchedules} />
     </div>
   );
 };
-
 export default StaffSchedulePage;

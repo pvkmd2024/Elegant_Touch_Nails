@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchPayments } from "servicesdirectory/api";
-import "./PaymentsList.css"; // Import CSS for styling
+import "./PaymentsForm.css"; 
+
 const PaymentsList = () => {
   const [payments, setPayments] = useState([]); // Initialize with an empty array
   const [loading, setLoading] = useState(true); // Track loading state
@@ -41,12 +42,12 @@ const PaymentsList = () => {
 
   // Render payments data
   return (
-    <div>
-      <h2>Payments</h2>
+    <div className="payments-container">
+      <h2 className="page-heading">Payments</h2>
       {payments.length === 0 ? (
         <p>No Payments data available.</p>
       ) : (
-        <table>
+        <table className="payments-table">
           <thead>
             <tr>         
               <th>Appointment ID</th>

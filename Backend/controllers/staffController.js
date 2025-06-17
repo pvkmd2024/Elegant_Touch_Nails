@@ -79,25 +79,26 @@ exports.getStaffById = async (req, res) => {
 };
 
 exports.updateStaff = async (req, res) => {
+  console.log("Updating staff with ID:", req.params.id);
+  console.log("New data:", req.body);
   try {
     const staffID = req.params.id;
     const { FullName, Role, Email, PasswordHash } = req.body;
 
-    if (!FullName || !Role || !Email || !PasswordHash) {
+    if (!FullName || !Role || !Email) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const updatedStaff = await Staff.update(staffID, {
-      FullName,
-      Role,
-      Email,
-      PasswordHash,
-    });
+    const updateData = { FullName, Role, Email };
+
+    if (PasswordHash && PasswordHash.trim() !== "") {
+      updateData.PasswordHash = PasswordHash;
+    }
+    
+    const updatedStaff = await Staff.update(staffID, updateData); // ✅ Use updateData
 
     if (updatedStaff) {
-      res
-        .status(200)
-        .json({ message: "Staff updated successfully", result: updatedStaff });
+      res.status(200).json({ message: "Staff updated successfully", result: updatedStaff });
     } else {
       res.status(404).json({ message: "Staff member not found" });
     }
@@ -107,16 +108,17 @@ exports.updateStaff = async (req, res) => {
 };
 
 exports.deleteStaff = async (req, res) => {
+  console.log("Deleting staff with ID:", req.params.id);
   try {
     const staffID = req.params.id;
-    const result = await Staff.delete(staffID);
-
-    if (result) {
-      res.status(200).json({ message: "Staff member deleted successfully" });
+    const deleted = await Staff.delete(staffID);
+    if (deleted) {
+      res.status(200).json({ message: "Staff deleted successfully" });
     } else {
-      res.status(404).json({ message: "Staff member not found" });
+      res.status(404).json({ message: "Staff not found" });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error deleting staff", error: error.message });
   }
 };
+

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchClients } from "../servicesdirectory/api";
 import ClientsList from "../components/Clients/ClientsList";
-import AddClientForm from "../components/Clients/AddClientForm";
+import AddClientsForm from "../components/Clients/AddClientsForm";
 
 const ClientsPage = () => {
   const [clients, setClients] = useState([]);
@@ -12,8 +12,7 @@ const ClientsPage = () => {
 
   return (
     <div>
-      <h2>Clients</h2>
-      <AddClientForm />
+      <AddClientsForm />
       <ClientsList clients={clients} />
     </div>
   );

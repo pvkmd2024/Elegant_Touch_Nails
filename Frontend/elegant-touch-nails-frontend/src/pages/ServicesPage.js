@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchServices } from "../servicesdirectory/api";
 import ServicesList from "../components/Services/ServicesList";
-import AddServiceForm from "../components/Services/AddServiceForm";
+import AddServicesForm from "../components/Services/AddServicesForm";
 
 const ServicesPage = () => {
   const [services, setServices] = useState([]);
@@ -12,8 +12,7 @@ const ServicesPage = () => {
 
   return (
     <div>
-      <h2>Services</h2>
-      <AddServiceForm />
+      <AddServicesForm />
       <ServicesList services={services} />
     </div>
   );
