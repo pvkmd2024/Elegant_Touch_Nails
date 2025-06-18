@@ -27,6 +27,7 @@ const AddPaymentsForm = () => {
       setShowPayments(true);
     } catch (error) {
       console.error("Failed to fetch payments:", error.message);
+      alert("Failed to load payments.");
     }
   };
 
@@ -45,52 +46,45 @@ const AddPaymentsForm = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const payment = {
-    AppointmentID,
-    PaymentMethod,
-    PaymentStatus,
-    Amount: parseFloat(Amount),
-    PaidAt,
-  };
-  
-  console.log("Submitting payment:", payment);
+    const payment = {
+      AppointmentID,
+      PaymentMethod,
+      PaymentStatus,
+      Amount: parseFloat(Amount),
+      PaidAt,
+    };
 
-  try {
-    if (editingId) {
-      console.log("Updating payment with ID:", editingId);
-      await updatePayment(editingId, payment);
-      alert("Payment updated successfully.");
-    } else {
-      console.log("Creating payment");
-      await createPayment(payment);
-      alert("Payment added successfully.");
+    try {
+      if (editingId) {
+        await updatePayment(editingId, payment);
+        alert("Payment updated successfully.");
+      } else {
+        await createPayment(payment);
+        alert("Payment added successfully.");
+      }
+
+      await fetchData();
+      resetForm();
+    } catch (err) {
+      console.error("Payment operation failed:", err.message);
+      alert("Failed to submit payment.");
     }
+  };
 
-    await fetchData();
-    setShowPayments(true);
-    resetForm();
-  } catch (err) {
-    console.error("Payment operation failed:", err.message);
-    alert("Failed to submit payment.");
-  }
-};
+  const handleEdit = (payment) => {
+    setEditingId(payment.PaymentID);
+    setAppointmentID(payment.AppointmentID);
+    setPaymentMethod(payment.PaymentMethod);
+    setPaymentStatus(payment.PaymentStatus);
+    setAmount(payment.Amount);
+    setPaidAt(payment.PaidAt?.slice(0, 16)); // Trim seconds if needed
 
-const handleEdit = (payment) => {
-  console.log("Editing payment:", payment);
-  setEditingId(payment.PaymentID);
-  setAppointmentID(payment.AppointmentID);
-  setPaymentMethod(payment.PaymentMethod);
-  setPaymentStatus(payment.PaymentStatus);
-  setAmount(payment.Amount);
-  setPaidAt(payment.PaidAt?.slice(0, 16)); // for datetime-local input
-
-  setTimeout(() => {
-    formRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, 100);
-};
-
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this payment?")) return;
@@ -108,7 +102,7 @@ const handleEdit = (payment) => {
   return (
     <div className="payments-form" ref={formRef}>
       <form onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit" : "Add"} Payment</h2>
+        <h2>{editingId ? "Edit Payment" : "Add Payment"}</h2>
 
         {editingId && (
           <div>
@@ -162,14 +156,28 @@ const handleEdit = (payment) => {
         />
 
         <div className="action-buttons">
-          <button type="submit">{editingId ? "Update" : "Add"}</button>
-          <button type="button" onClick={fetchData}>
+          <button className="add-payment-btn" type="submit">
+            {editingId ? "Update" : "Add"}
+          </button>
+          <button
+            type="button"
+            className="load-payments-btn"
+            onClick={fetchData}
+          >
             Load
           </button>
-          <button type="button" onClick={unloadData}>
+          <button
+            type="button"
+            className="unload-payments-btn"
+            onClick={unloadData}
+          >
             Unload
           </button>
-          <button type="button" onClick={resetForm}>
+          <button
+            type="button"
+            className="clear-btn"
+            onClick={resetForm}
+          >
             Clear
           </button>
         </div>
@@ -203,8 +211,18 @@ const handleEdit = (payment) => {
                     <td>${parseFloat(p.Amount).toFixed(2)}</td>
                     <td>{p.PaidAt}</td>
                     <td className="action-buttons">
-                      <button onClick={() => handleEdit(p)}>Edit</button>
-                      <button onClick={() => handleDelete(p.PaymentID)}>Delete</button>
+                      <button
+                        className="edit-button"
+                        onClick={() => handleEdit(p)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(p.PaymentID)}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}

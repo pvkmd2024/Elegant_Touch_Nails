@@ -11,32 +11,55 @@ const Service = {
     return rows[0] || null;
   },
 
-  async create(services) {
-    const values = services.map(s => [
-      s.ServiceName,
-      s.Description,
-      s.MinDuration,
-      s.MaxDuration,
-      s.MinPrice,
-      s.MaxPrice,
-    ]);
+async create(service) {
+  const {
+    ServiceName,
+    Description,
+    MinDuration,
+    MaxDuration,
+    MinPrice,
+    MaxPrice,
+  } = service;
 
-    const placeholders = services.map(() => "(?, ?, ?, ?, ?, ?)").join(", ");
+  const [result] = await db.query(
+    `INSERT INTO Services (
+      ServiceName, Description, MinDuration, MaxDuration, MinPrice, MaxPrice
+    ) VALUES (?, ?, ?, ?, ?, ?)`,
+    [ServiceName, Description, MinDuration, MaxDuration, MinPrice, MaxPrice]
+  );
 
-    const sql = `
-      INSERT INTO Services (
-        ServiceName, Description, MinDuration, MaxDuration, MinPrice, MaxPrice
-      ) VALUES ${placeholders}
-    `;
+  return {
+    insertId: result.insertId,
+    ...service,
+  };
+},
 
-    const flatValues = values.flat();
-    const [result] = await db.query(sql, flatValues);
+  // async create(services) {
+  //   const values = services.map(s => [
+  //     s.ServiceName,
+  //     s.Description,
+  //     s.MinDuration,
+  //     s.MaxDuration,
+  //     s.MinPrice,
+  //     s.MaxPrice,
+  //   ]);
 
-    return {
-      insertedCount: result.affectedRows,
-      insertId: result.insertId,
-    };
-  },
+  //   const placeholders = services.map(() => "(?, ?, ?, ?, ?, ?)").join(", ");
+
+  //   const sql = `
+  //     INSERT INTO Services (
+  //       ServiceName, Description, MinDuration, MaxDuration, MinPrice, MaxPrice
+  //     ) VALUES ${placeholders}
+  //   `;
+
+  //   const flatValues = values.flat();
+  //   const [result] = await db.query(sql, flatValues);
+
+  //   return {
+  //     insertedCount: result.affectedRows,
+  //     insertId: result.insertId,
+  //   };
+  // },
 
   async update(ServiceID, service) {
     const {

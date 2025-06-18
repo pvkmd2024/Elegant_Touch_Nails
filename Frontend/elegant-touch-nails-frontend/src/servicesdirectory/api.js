@@ -72,92 +72,36 @@ export async function fetchServices() {
   }
   return await response.json();
 }
-
-// export async function createService(service) {
-//   const formattedService = {
-//     serviceName: service.ServiceName,
-//     description: service.Description,
-//     minDuration: Number(service.MinDuration),
-//     maxDuration: Number(service.MaxDuration),
-//     minPrice: Number(service.MinPrice),
-//     maxPrice: Number(service.MaxPrice),
-//   };
-
-//   const response = await fetch(`${API_BASE_URL}/services`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify([formattedService]), 
-//   });
-
-//   if (!response.ok) {
-//     const errorData = await response.json();
-//     throw new Error(errorData.message || "Failed to create service");
-//   }
-
-//   return await response.json();
-// }
-
-// export async function updateService(id, service) {
-//   // Convert PascalCase to camelCase for backend consistency
-//   const formattedService = {
-//     serviceName: service.ServiceName,
-//     description: service.Description,
-//     minDuration: Number(service.MinDuration),
-//     maxDuration: Number(service.MaxDuration),
-//     minPrice: Number(service.MinPrice),
-//     maxPrice: Number(service.MaxPrice),
-//   };
-
-//   const response = await fetch(`${API_BASE_URL}/services/${id}`, {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(formattedService),
-//   });
-
-//   if (!response.ok) {
-//     const errorData = await response.json();
-//     throw new Error(errorData.message || "Failed to update service");
-//   }
-
-//   return await response.json();
-// }
-// servicesdirectory/api.js
-
-export const createService = async (service) => {
-  const res = await fetch("/api/services", {
+// Create a new service
+export async function createService(service) {
+  const response = await fetch(`${API_BASE_URL}/services`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(service),
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to create service");
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || "Failed to create service");
   }
 
-  return await res.json();
-};
+  return await response.json();
+}
 
-export const updateService = async (id, service) => {
-  const res = await fetch(`/api/services/${id}`, {
+export async function updateService(id, service) {
+  const response = await fetch(`${API_BASE_URL}/services/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(service),
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to update service");
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || "Failed to update service");
   }
 
-  return await res.json();
-};
+  return await response.json();
+}
 
 export async function deleteService(id) {
   const response = await fetch(`${API_BASE_URL}/services/${id}`, {
@@ -195,7 +139,6 @@ export const fetchPayments = async () => {
     return [];
   }
 };
-
 
 export async function createPayment(payment) {
   const response = await fetch(`${API_BASE_URL}/payments`, {

@@ -8,7 +8,7 @@ import {
 
 import "./AppointmentsForm.css";
 
-const AppointmentsForm = () => {
+const AddAppointmentsForm = () => {
   const formRef = useRef(null);
 
   const [appointments, setAppointments] = useState([]);
@@ -142,10 +142,19 @@ const handleSubmit = async (e) => {
         </select>
 
         <div className="action-buttons">
-          <button type="submit">{editingId ? "Update" : "Add"}</button>
-          <button type="button" onClick={fetchData}>Load</button>
-          <button type="button" onClick={unloadData}>Unload</button>
-          <button type="button" onClick={resetForm}>Clear</button>
+          <button className="add-appointment-btn" type="submit">
+  {editingId ? "Update" : "Add"}
+</button>
+<button className="load-appointments-btn" type="button" onClick={fetchData}>
+  Load
+</button>
+<button className="unload-appointments-btn" type="button" onClick={unloadData}>
+  Unload
+</button>
+<button className="clear-btn" type="button" onClick={resetForm}>
+  Clear
+</button>
+
         </div>
       </form>
 
@@ -175,8 +184,8 @@ const handleSubmit = async (e) => {
                     <td>{a.AppointmentDate}</td>
                     <td>{a.Status}</td>
                     <td className="action-buttons">
-                      <button onClick={() => handleEdit(a)}>Edit</button>
-                      <button onClick={() => handleDelete(a.AppointmentID)}>Delete</button>
+                      <button className="edit-button" onClick={() => handleEdit(a)}>Edit</button>
+                      <button className="delete-button" onClick={() => handleDelete(a.AppointmentID)}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -189,4 +198,4 @@ const handleSubmit = async (e) => {
   );
 };
 
-export default AppointmentsForm;
+export default AddAppointmentsForm;

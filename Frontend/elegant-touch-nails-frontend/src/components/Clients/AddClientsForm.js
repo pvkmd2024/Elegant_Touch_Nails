@@ -95,6 +95,7 @@ const fetchData = async () => {
   };
 
   return (
+    <div className="clients-container">
     <div className="clients-form" ref={formRef}>
       <form onSubmit={handleSubmit}>
         <h2>{editingId ? "Edit" : "Add"} Client</h2>
@@ -139,14 +140,14 @@ const fetchData = async () => {
         />
 
         <div className="action-buttons">
-          <button type="submit">{editingId ? "Update" : "Add"}</button>
-     <button type="button" onClick={fetchData} disabled={loading}>
+          <button className="add-clients-btn" type="submit">{editingId ? "Update" : "Add"}</button>
+     <button className="load-clients-btn" type="button" onClick={fetchData} disabled={loading}>
   {loading ? "Loading..." : "Load"}
 </button>
-          <button type="button" onClick={unloadData}>
+          <button className="unload-clients-btn" type="button" onClick={unloadData}>
             Unload
           </button>
-          <button type="button" onClick={resetForm}>
+          <button className="clear-client-btn" type="button" onClick={resetForm}>
             Clear
           </button>
         </div>
@@ -190,6 +191,7 @@ const fetchData = async () => {
           )}
         </>
       )}
+    </div>
     </div>
   );
 };

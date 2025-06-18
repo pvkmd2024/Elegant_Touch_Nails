@@ -175,38 +175,38 @@ button {
 }
 
 /* Add button - Blue */
-#add-payment-btn {
+.add-payment-btn {
   background-color: #2196f3;
   color: white;
 }
-#add-payment-btn:hover {
+.add-payment-btn:hover {
   background-color: #007bff;
 }
 
 /* Load button - Green */
-#load-payments-btn {
+.load-payments-btn {
   background-color: #28a745;
   color: white;
 }
-#load-payments-btn:hover {
+.load-payments-btn:hover {
   background-color: #218838;
 }
 
 /* Unload button - Yellow */
-#unload-payments-btn {
+.unload-payments-btn {
   background-color: #ffc107;
   color: #333;
 }
-#unload-payments-btn:hover {
+.unload-payments-btn:hover {
   background-color: #fbc02d;
 }
 
 /* Clear button - Grey */
-#clear-btn {
+.clear-btn {
   background-color: #9e9e9e;
   color: white;
 }
-#clear-btn:hover {
+.clear-btn:hover {
   background-color: #757575;
 }
 

@@ -82,7 +82,7 @@ const AddServicesForm = () => {
       alert("Service updated successfully.");
     } else {
       console.log("Creating new service...");
-      await createService(service);
+      await createService([service]);
       alert("Service added successfully.");
     }
 
