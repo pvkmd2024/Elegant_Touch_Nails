@@ -10,8 +10,10 @@ import StaffSchedulePage from "../pages/StaffSchedulePage";
 const AppRoutes = () => {
   return (
     <div>
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
       <div className="center-heading">
         <h1>Elegant Touch Nails</h1>
+      </div>
       </div>
 
       <Routes>

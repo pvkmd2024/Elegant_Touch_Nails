@@ -1,4 +1,4 @@
-import React, { useState, useRef , useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   fetchServices,
   createService,
@@ -6,7 +6,7 @@ import {
   deleteService,
 } from "servicesdirectory/api";
 
-import "./ServicesForm.css";
+import styles from "./ServicesForm.module.css";
 
 const AddServicesForm = () => {
   const [services, setServices] = useState([]);
@@ -23,27 +23,27 @@ const AddServicesForm = () => {
   const formRef = useRef(null);
 
   const fetchData = async () => {
-  try {
-    const response = await fetchServices();
+    try {
+      const response = await fetchServices();
 
-    if (Array.isArray(response)) {
-      setServices(response);
-    } else if (response?.data && Array.isArray(response.data)) {
-      setServices(response.data);
-    } else {
-      console.error("Unexpected response from fetchServices:", response);
-      setServices([]);
+      if (Array.isArray(response)) {
+        setServices(response);
+      } else if (response?.data && Array.isArray(response.data)) {
+        setServices(response.data);
+      } else {
+        console.error("Unexpected response from fetchServices:", response);
+        setServices([]);
+      }
+
+      setShowServices(true);
+    } catch (error) {
+      console.error("Failed to fetch services:", error);
     }
+  };
 
-    setShowServices(true);              
-  } catch (error) {
-    console.error("Failed to fetch services:", error);
-  }
-};
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   const unloadData = () => {
     setServices([]);
@@ -62,41 +62,41 @@ const AddServicesForm = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const service = {
-    ServiceName,
-    Description,
-    MinDuration: Number(MinDuration),
-    MaxDuration: Number(MaxDuration),
-    MinPrice: Number(MinPrice),
-    MaxPrice: Number(MaxPrice),
+    const service = {
+      ServiceName,
+      Description,
+      MinDuration: Number(MinDuration),
+      MaxDuration: Number(MaxDuration),
+      MinPrice: Number(MinPrice),
+      MaxPrice: Number(MaxPrice),
+    };
+
+    console.log("Submitting service:", service);
+
+    try {
+      if (editingId) {
+        console.log("Updating service with ID:", editingId);
+        await updateService(editingId, service);
+        alert("Service updated successfully.");
+      } else {
+        console.log("Creating new service...");
+        await createService([service]);
+        alert("Service added successfully.");
+      }
+
+      await fetchData();
+      resetForm();
+    } catch (err) {
+      console.error("Submit failed:", err);
+      if (err.response) {
+        const text = await err.response.text();
+        console.error("Response data:", text);
+      }
+      alert("Failed to submit service.");
+    }
   };
-
-  console.log("Submitting service:", service);
-
-  try {
-    if (editingId) {
-      console.log("Updating service with ID:", editingId);
-      await updateService(editingId, service);
-      alert("Service updated successfully.");
-    } else {
-      console.log("Creating new service...");
-      await createService([service]);
-      alert("Service added successfully.");
-    }
-
-    await fetchData();
-    resetForm();
-  } catch (err) {
-    console.error("Submit failed:", err);
-    if (err.response) {
-      const text = await err.response.text();
-      console.error("Response data:", text);
-    }
-    alert("Failed to submit service.");
-  }
-};
 
   const handleEdit = (service) => {
     setEditingId(service.ServiceID);
@@ -124,9 +124,12 @@ const AddServicesForm = () => {
       alert("Failed to delete service.");
     }
   };
+  const alertDescription = async (description) => {
+    alert(description)
+  }
 
   return (
-    <div className="services-form" ref={formRef}>
+    <div className={styles.servicesFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
         <h2>{editingId ? "Edit" : "Add"} Service</h2>
 
@@ -183,17 +186,17 @@ const AddServicesForm = () => {
           required
         />
 
-        <div className="action-buttons">
-          <button id="add-service-btn" type="submit">
+        <div className={styles.actionButtons}>
+          <button className={styles.addServiceBtn} type="submit">
             {editingId ? "Update" : "Add"}
           </button>
-          <button id="load-services-btn" type="button" onClick={fetchData}>
+          <button className={styles.loadServicesBtn} type="button" onClick={fetchData}>
             Load
           </button>
-          <button id="unload-services-btn" type="button" onClick={unloadData}>
+          <button className={styles.unloadServicesBtn} type="button" onClick={unloadData}>
             Unload
           </button>
-          <button id="clear-btn" type="button" onClick={resetForm}>
+          <button className={styles.clearBtn} type="button" onClick={resetForm}>
             Clear
           </button>
         </div>
@@ -205,7 +208,7 @@ const AddServicesForm = () => {
           {services.length === 0 ? (
             <p>No services found.</p>
           ) : (
-            <table className="services-table">
+            <table className={styles.servicesTable}>
               <thead>
                 <tr>
                   <th>ServiceID</th>
@@ -221,22 +224,24 @@ const AddServicesForm = () => {
               <tbody>
                 {services.map((s) => (
                   <tr key={s.ServiceID}>
-                    <td>{s.ServiceID}</td>
-                    <td>{s.ServiceName}</td>
-                    <td>{s.Description}</td>
-                    <td>{s.MinDuration}</td>
-                    <td>{s.MaxDuration}</td>
-                    <td>{s.MinPrice}</td>
-                    <td>{s.MaxPrice}</td>
-                    <td className="action-buttons">
-                      <button className="edit-button" onClick={() => handleEdit(s)}>Edit</button>
-                      <button
-                        className="delete-button"
-                        onClick={() => handleDelete(s.ServiceID)}
-                      >
-                        Delete
-                      </button>
-                    </td>
+                    <td data-label="ServiceID">{s.ServiceID}</td>
+                    <td data-label="ServiceName">{s.ServiceName}</td>
+                    <td data-label="Description"> <button className={styles.viewButton} onClick={() => alertDescription(s.Description)}>View Description</button></td>
+                    <td data-label="MinDuration">{s.MinDuration}</td>
+                    <td data-label="MinDuration">{s.MaxDuration}</td>
+                    <td data-label="MinPrice">${s.MinPrice}</td>
+                    <td data-label="MaxPrice">${s.MaxPrice}</td>
+                    <td className={styles.actionButtons}>
+                      <div className={styles.actionButtonWrapper}>
+                        <button className={styles.editButton} onClick={() => handleEdit(s)}>Edit</button>
+                        <button
+                          className={styles.deleteButton}
+                          onClick={() => handleDelete(s.ServiceID)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      </td>
                   </tr>
                 ))}
               </tbody>

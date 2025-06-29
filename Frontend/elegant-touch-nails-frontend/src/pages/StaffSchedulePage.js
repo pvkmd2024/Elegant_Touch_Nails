@@ -11,7 +11,7 @@ const StaffSchedulePage = () => {
   }, []);
 
   return (
-    <div>
+    <div className={StyleSheet.mainwrapper}>
       <AddStaffScheduleForm />
       <StaffScheduleList staffSchedules={staffSchedules} />
     </div>

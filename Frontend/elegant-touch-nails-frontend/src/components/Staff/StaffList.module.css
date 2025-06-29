@@ -1,0 +1,184 @@
+.staffContainer {
+  padding: 24px;
+  max-width: 850px;
+  margin-left: 55px;
+  margin-right: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.pageHeading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.staffTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 20px;
+  font-size: 1rem;
+  min-width: 600px;
+}
+
+.staffTable th,
+.staffTable td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.staffTable th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.staffTable tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+/* Buttons */
+.editButton,
+.deleteButton {
+  padding: 6px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.editButton {
+  background-color: #17a2b8;
+}
+.editButton:hover {
+  background-color: #138496;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .staffContainer {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .staffContainer {
+    padding: 16px;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .staffTable {
+    font-size: 1rem;
+    min-width: 500px;
+  }
+
+  .staffTable th,
+  .staffTable td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .staffTable,
+  .staffTable thead,
+  .staffTable tbody,
+  .staffTable th,
+  .staffTable td,
+  .staffTable tr {
+    display: block;
+  }
+  .staffTable {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .staffTable thead {
+    display: none;
+  }
+.staffTable th {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+
+  .emailCell {
+    max-width: 140px;
+  }
+
+  .staffTable tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .staffTable td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    position: relative;
+    font-size: 0.8rem;
+    padding: 6px;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .staffTable td::before {
+    position: absolute;
+    left: 12px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #555;
+    content: attr(data-label);
+  }
+
+  .editButton,
+  .deleteButton {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .staffContainer {
+    padding: 12px 10px;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
+  .pageHeading {
+    font-size: 18px;
+  }
+
+  .staffTable {
+    font-size: 1rem;
+    min-width: 450px;
+  }
+
+  .editButton,
+  .deleteButton {
+    font-size: 1rem;
+    padding: 5px 8px;
+  }
+}

@@ -1,0 +1,227 @@
+.appointmentsFormContainer {
+  padding: 24px;
+  max-width: 900px;
+  margin-left: 35px;
+  margin-right: auto;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input,
+select {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Base form buttons */
+.addAppointmentBtn,
+.loadAppointmentsBtn,
+.unloadAppointmentsBtn,
+.clearBtn {
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  flex: 1;
+  min-width: 0;
+  max-width: 120px;
+  text-align: center;
+}
+
+.appointmentsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 1rem;
+  min-width: 600px;
+}
+
+.appointmentsTable th,
+.appointmentsTable td {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.editButton,
+.deleteButton {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  margin-right: 6px;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Button colors */
+.addAppointmentBtn {
+  background-color: #28a745;
+}
+.addAppointmentBtn:hover {
+  background-color: #218838;
+}
+
+.loadAppointmentsBtn {
+  background-color: #5c067d;
+}
+.loadAppointmentsBtn:hover {
+  background-color: #4c0c56;
+}
+
+.unloadAppointmentsBtn {
+  background-color: #ffc107;
+  color: #000;
+}
+.unloadAppointmentsBtn:hover {
+  background-color: #e0a800;
+}
+
+.clearBtn {
+  background-color: #6c757d;
+}
+.clearBtn:hover {
+  background-color: #5a6268;
+}
+
+.editButton {
+  background-color: #17a2b8;
+}
+.editButton:hover {
+  background-color: #138496;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+.actionButtonWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+  .appointmentsFormContainer {
+    padding: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .actionButtons {
+    flex-direction: row !important;
+    gap: 6px;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .appointmentsTable {
+    font-size: 1rem;
+    min-width: 100%;
+  }
+
+  .appointmentsTable,
+  .appointmentsTable thead,
+  .appointmentsTable tbody,
+  .appointmentsTable th,
+  .appointmentsTable td,
+  .appointmentsTable tr {
+    display: block;
+  }
+
+  .appointmentsTable thead {
+    display: none;
+  }
+
+  .appointmentsTable tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+
+  .appointmentsTable td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    position: relative;
+    padding-left: 50%;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .appointmentsTable td::before {
+    position: absolute;
+    left: 12px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #555;
+    content: attr(data-label);
+  }
+}
+
+/* Mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .appointmentsFormContainer {
+    padding: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  input,
+  select {
+    font-size: 1rem;
+  }
+
+  .actionButtons {
+    flex-direction: row !important;
+    gap: 6px;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .actionButtons button,
+  .editButton,
+  .deleteButton {
+    width: auto;
+    margin-right: 0;
+  }
+
+  .appointmentsTable {
+    font-size: 1rem;
+  }
+
+  .appointmentsTable td {
+    font-size: 1rem;
+  }
+}

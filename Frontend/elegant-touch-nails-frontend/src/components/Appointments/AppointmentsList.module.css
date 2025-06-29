@@ -1,0 +1,175 @@
+.appointmentsContainer {
+  padding: 24px;
+  max-width: 850px;
+  margin-left: 55px;
+  margin-right: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.pageHeading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.appointmentsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 20px;
+  font-size: 1rem;
+  min-width: 600px;
+}
+
+.appointmentsTable th,
+.appointmentsTable td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.appointmentsTable th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.appointmentsTable tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+/* Buttons */
+.editButton,
+.deleteButton {
+  padding: 6px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.editButton {
+  background-color: #17a2b8;
+}
+.editButton:hover {
+  background-color: #138496;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .appointmentsContainer {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .appointmentsContainer {
+    padding: 16px;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .appointmentsTable {
+    font-size: 1rem;
+    min-width: 500px;
+  }
+
+  .appointmentsTable th,
+  .appointmentsTable td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .appointmentsTable,
+  .appointmentsTable thead,
+  .appointmentsTable tbody,
+  .appointmentsTable th,
+  .appointmentsTable td,
+  .appointmentsTable tr {
+    display: block;
+  }
+  .appointmentsTable {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .appointmentsTable thead {
+    display: none;
+  }
+
+  .appointmentsTable tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .appointmentsTable td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    position: relative;
+    padding-left: 50%;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .appointmentsTable td::before {
+    position: absolute;
+    left: 12px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #555;
+    content: attr(data-label);
+  }
+
+  .editButton,
+  .deleteButton {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .appointmentsContainer {
+    padding: 12px 10px;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
+  .pageHeading {
+    font-size: 18px;
+  }
+
+  .appointmentsTable {
+    font-size: 1rem;
+    min-width: 450px;
+  }
+
+  .editButton,
+  .deleteButton {
+    font-size: 1rem;
+    padding: 5px 8px;
+  }
+}

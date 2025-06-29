@@ -1,0 +1,179 @@
+.clientsContainer {
+  padding: 24px;
+  max-width: 100%; /* Was 850px */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pageHeading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.clientsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 20px;
+  font-size: 1rem;
+ table-layout: auto;
+}
+
+.clientsTable th,
+.clientsTable td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  text-align: left;
+  word-break: break-word;
+}
+
+.clientsTable th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.clientsTable tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+/* ✅ Button styling */
+.editButton,
+.deleteButton {
+  padding: 6px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.editButton {
+  background-color: #17a2b8;
+}
+.editButton:hover {
+  background-color: #138496;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .clientsContainer {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .clientsContainer {
+    padding: 16px;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .clientsTable {
+    font-size: 1rem;
+    min-width: 500px;
+  }
+
+  .clientsTable th,
+  .clientsTable td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .clientsTable,
+  .clientsTable thead,
+  .clientsTable tbody,
+  .clientsTable th,
+  .clientsTable td,
+  .clientsTable tr {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .clientsTable {
+    min-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .clientsTable tr {
+    margin-bottom: 15px;
+    border: 0.5px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .clientsTable td {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    padding-left: 12px; /* REMOVE 50% LEFT PADDING */
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #eee;
+    word-break: break-word; /* Ensure content wraps instead of overflowing */
+  }
+
+  .clientsTable td::before {
+    position: static; /* Switch from absolute to static positioning */
+    display: inline-block;
+    width: auto; /* Allow it to size naturally */
+    margin-right: 10px;
+    font-weight: 600;
+    color: #555;
+    white-space: nowrap;
+    content: attr(data-label);
+  }
+
+  .editButton,
+  .deleteButton {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .clientsContainer {
+    padding: 12px 10px;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
+
+  .pageHeading {
+    font-size: 18px;
+  }
+
+  .clientsTable {
+    font-size: 1rem;
+    width: 100%;
+    min-width: unset;
+  }
+
+  .editButton,
+  .deleteButton {
+    font-size: 1rem;
+    padding: 5px 8px;
+  }
+}

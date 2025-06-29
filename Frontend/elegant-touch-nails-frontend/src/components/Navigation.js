@@ -4,9 +4,6 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
@@ -20,10 +17,6 @@ export default function Navigation() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -32,21 +25,19 @@ export default function Navigation() {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    setAuth(false);
+    handleClose();
+  };
+
+  const handleLogin = () => {
+    setAuth(true);
+    handleClose();
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={auth ? "Logout" : "Login"}
-        />
-      </FormGroup>
-      <AppBar position="static">
+      <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
           <Link to="/clients" style={linkStyle}>
             <GroupIcon sx={{ marginRight: 1 }} /> Clients
@@ -67,7 +58,7 @@ export default function Navigation() {
             <ScheduleIcon sx={{ marginRight: 1 }} /> Staff Schedule
           </Link>
 
-          {auth && (
+          {auth ? (
             <div>
               <IconButton
                 size="large"
@@ -96,8 +87,13 @@ export default function Navigation() {
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
+          ) : (
+            <MenuItem onClick={handleLogin} sx={{ color: "white", cursor: "pointer", marginLeft: 2 }}>
+              Login
+            </MenuItem>
           )}
         </Toolbar>
       </AppBar>
@@ -105,11 +101,13 @@ export default function Navigation() {
   );
 }
 
-// Inline styling for links
+// Updated inline styling for links: bigger and bold font
 const linkStyle = {
   color: "white",
   textDecoration: "none",
-  marginRight: "20px",
+  marginRight: "30px",
   display: "flex",
   alignItems: "center",
+  fontWeight: "bold",
+  fontSize: "1.2rem",
 };

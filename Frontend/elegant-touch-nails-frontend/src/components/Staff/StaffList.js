@@ -1,41 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { fetchStaff } from "servicesdirectory/api";
-import "./StaffForm.css";
+import styles from "./StaffList.module.css";
 
 const StaffList = () => {
   const [staffList, setStaffList] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const getStaff = async () => {
-      setLoading(true);
+    const loadStaff = async () => {
       try {
-        const response = await fetchStaff();
-        console.log("Fetched Staff data:", response);
-        setStaffList(response);
-      } catch (error) {
-        console.error("Error fetching Staff:", error);
-        setError("Failed to fetch Staff.");
+        const data = await fetchStaff();
+        setStaffList(data);
+      } catch (err) {
+        setError("Failed to fetch staff.");
+        console.error("Fetch error:", err);
       } finally {
         setLoading(false);
       }
     };
-    getStaff();
+
+    loadStaff();
   }, []);
 
-  if (loading) return <div>Loading Staff...</div>;
+  if (loading) return <div>Loading staff...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
-  if (!Array.isArray(staffList)) return <div>Invalid data format.</div>;
+  if (!Array.isArray(staffList)) return <div>Invalid staff data format.</div>;
 
   return (
-    <div className="staff-table-container">
-      <h2 className="page-heading">Staff List</h2>
-
+    <div className={styles.staffListContainer}>
+      <h2 className={styles.pageheading}>Staff</h2>
       {staffList.length === 0 ? (
-        <p>No staff members available.</p>
+        <p>No staff members found.</p>
       ) : (
-        <table className="staff-table">
+        <table className={styles.staffTable}>
           <thead>
             <tr>
               <th>Staff ID</th>
@@ -47,10 +45,10 @@ const StaffList = () => {
           <tbody>
             {staffList.map((staff) => (
               <tr key={staff.StaffID}>
-                <td>{staff.StaffID}</td>
-                <td>{staff.FullName}</td>
-                <td>{staff.Role}</td>
-                <td>{staff.Email}</td>
+                <td data-label="StaffID">{staff.StaffID}</td>
+                <td data-label="FullName">{staff.FullName}</td>
+                <td data-label="Role">{staff.Role}</td>
+                <td data-label="Email">{staff.Email}</td>
               </tr>
             ))}
           </tbody>

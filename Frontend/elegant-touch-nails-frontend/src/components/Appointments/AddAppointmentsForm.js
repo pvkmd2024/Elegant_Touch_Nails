@@ -6,7 +6,7 @@ import {
   deleteAppointment,
 } from "servicesdirectory/api";
 
-import "./AppointmentsForm.css";
+import styles from "./AppointmentsForm.module.css";
 
 const AddAppointmentsForm = () => {
   const formRef = useRef(null);
@@ -103,7 +103,7 @@ const handleSubmit = async (e) => {
   };
 
   return (
-    <div className="appointments-form" ref={formRef}>
+    <div className={styles.appointmentsFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
         <h2>{editingId ? "Edit" : "Add"} Appointment</h2>
 
@@ -141,17 +141,17 @@ const handleSubmit = async (e) => {
           <option value="Cancelled">Cancelled</option>
         </select>
 
-        <div className="action-buttons">
-          <button className="add-appointment-btn" type="submit">
+        <div className={styles.actionButtons}>
+          <button className={styles.addAppointmentBtn} type="submit">
   {editingId ? "Update" : "Add"}
 </button>
-<button className="load-appointments-btn" type="button" onClick={fetchData}>
+<button className={styles.loadAppointmentsBtn} type="button" onClick={fetchData}>
   Load
 </button>
-<button className="unload-appointments-btn" type="button" onClick={unloadData}>
+<button className={styles.unloadAppointmentsBtn} type="button" onClick={unloadData}>
   Unload
 </button>
-<button className="clear-btn" type="button" onClick={resetForm}>
+<button className={styles.clearBtn} type="button" onClick={resetForm}>
   Clear
 </button>
 
@@ -164,7 +164,7 @@ const handleSubmit = async (e) => {
           {appointments.length === 0 ? (
             <p>No appointments found.</p>
           ) : (
-            <table className="appointments-table">
+            <table className={styles.appointmentsTable}>
               <thead>
                 <tr>
                   <th>AppointmentID</th>
@@ -178,14 +178,16 @@ const handleSubmit = async (e) => {
               <tbody>
                 {appointments.map((a) => (
                   <tr key={a.AppointmentID}>
-                    <td>{a.AppointmentID}</td>
-                    <td>{a.ClientID}</td>
-                    <td>{a.ServiceID}</td>
-                    <td>{a.AppointmentDate}</td>
-                    <td>{a.Status}</td>
-                    <td className="action-buttons">
-                      <button className="edit-button" onClick={() => handleEdit(a)}>Edit</button>
-                      <button className="delete-button" onClick={() => handleDelete(a.AppointmentID)}>Delete</button>
+                    <td data-label="AppointmentID">{a.AppointmentID}</td>
+                    <td data-label="ClientID">{a.ClientID}</td>
+                    <td data-label="ServiceID">{a.ServiceID}</td>
+                    <td data-label="AppointmentDate">{a.AppointmentDate.slice(0,10)}</td>
+                    <td data-label="Status">{a.Status}</td>
+                    <td className={styles.actionButtons}>
+                      <div className={styles.actionButtonWrapper}>
+                      <button className={styles.editButton} onClick={() => handleEdit(a)}>Edit</button>
+                      <button className={styles.deleteButton} onClick={() => handleDelete(a.AppointmentID)}>Delete</button>
+                    </div>
                     </td>
                   </tr>
                 ))}

@@ -1,0 +1,240 @@
+.paymentsFormContainer {
+  padding: 24px;
+  max-width: 900px;
+  margin-left: 35px;;
+  margin-right: auto;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input,
+select {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;  /* 🧠 Spread them evenly */
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Base form buttons */
+.addPaymentBtn,
+.loadPaymentsBtn,
+.unloadPaymentsBtn,
+.clearBtn {
+   padding: 6px 8px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  flex: 1;                /* 🧠 Distribute space evenly */
+  min-width: 0;           /* 🧠 Allow shrinking instead of overflowing */
+  max-width: 120px;       /* Optional: keep them reasonable on wide screens */
+  text-align: center;
+}
+
+.paymentsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 1rem;
+  min-width: 600px;
+}
+
+.paymentsTable th,
+.paymentsTable td {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.editButton,
+.deleteButton {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+/* Shared button base style */
+.actionButtons button,
+.editButton,
+.deleteButton {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Button colors */
+.addPaymentBtn {
+  background-color: #28a745;
+}
+.addPaymentBtn:hover {
+  background-color: #218838;
+}
+
+.loadPaymentsBtn {
+  background-color: #5c067d;
+}
+.loadPaymentsBtn:hover {
+  background-color: #4c0c56;
+}
+
+.unloadPaymentsBtn {
+  background-color: #ffc107;
+  color: #000;
+}
+.unloadPaymentsBtn:hover {
+  background-color: #e0a800;
+}
+
+.clearBtn {
+  background-color: #6c757d;
+}
+.clearBtn:hover {
+  background-color: #5a6268;
+}
+
+.editButton {
+  background-color: #17a2b8;
+}
+.editButton:hover {
+  background-color: #138496;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+.actionButtonWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+  .paymentsFormContainer {
+    padding: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+.actionButtons {
+  display: flex;
+  flex-direction: row !important;
+  gap: 6px;
+  justify-content: flex-start;
+  align-items: center;
+}
+   .paymentsTable {
+    font-size: 1rem;
+    min-width: 100%;
+  }
+
+  .paymentsTable,
+  .paymentsTable thead,
+  .paymentsTable tbody,
+  .paymentsTable th,
+  .paymentsTable td,
+  .paymentsTable tr {
+    display: block;
+  }
+
+  .paymentsTable thead {
+    display: none;
+  }
+
+  .paymentsTable tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+
+  .paymentsTable td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    position: relative;
+    padding-left: 50%;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .paymentsTable td::before {
+    position: absolute;
+    left: 12px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #555;
+    content: attr(data-label);
+  }
+}
+
+/* Mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .paymentsFormContainer {
+    padding: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  input,
+  select {
+    font-size: 1rem;
+  }
+
+  .actionButtons {
+  display: flex;
+  flex-direction: row !important;  /* ✅ Force row layout */
+  gap: 6px;
+  justify-content: flex-start;
+  align-items: center;
+  }
+
+  .actionButtons button,
+  .editButton,
+  .deleteButton {
+    width: auto;
+    margin-right: 0;
+  }
+
+  .paymentsTable {
+    font-size: 1rem;
+  }
+
+  .paymentsTable td {
+    font-size: 1rem;
+  }
+}

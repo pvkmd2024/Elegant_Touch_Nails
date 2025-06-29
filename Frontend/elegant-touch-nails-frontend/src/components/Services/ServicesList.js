@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchServices } from "servicesdirectory/api"; 
-import "./ServicesForm.css";
+import styles from "./ServicesList.module.css";
 
 const ServicesList = () => {
   const [services, setServices] = useState([]);
@@ -14,7 +14,6 @@ const ServicesList = () => {
         const response = await fetchServices();
         console.log("Fetched services data:", response);
 
-        // Defensive check: ensure the response is an array
         if (Array.isArray(response)) {
           setServices(response);
         } else if (response?.data && Array.isArray(response.data)) {
@@ -34,16 +33,20 @@ const ServicesList = () => {
     getServices();
   }, []);
 
+  const alertDescription = (description) => {
+    alert(description);
+  };
+
   if (loading) return <div>Loading services...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
 
   return (
-    <div className="services-container">
-      <h2 className="page-heading">Services</h2>
+    <div className={styles.servicesContainer}>
+      <h2 className={styles.pageHeading}>Services</h2>
       {services.length === 0 ? (
         <p>No services available.</p>
       ) : (
-        <table className="services-table">
+        <table className={styles.servicesTable}>
           <thead>
             <tr>
               <th>Service Name</th>
@@ -57,12 +60,16 @@ const ServicesList = () => {
           <tbody>
             {services.map((service) => (
               <tr key={service.ServiceID}>
-                <td>{service.ServiceName}</td>
-                <td>{service.Description}</td>
-                <td>{service.MinDuration}</td>
-                <td>{service.MaxDuration}</td>
-                <td>{service.MinPrice}</td>
-                <td>{service.MaxPrice}</td>
+                <td data-label="ServiceName">{service.ServiceName}</td>
+                <td data-label="Description">
+                  <button className={styles.viewButton} onClick={() => alertDescription(service.Description)}>
+                    View Description
+                  </button>
+                </td>
+                <td data-label="MinDuration">{service.MinDuration}</td>
+                <td data-label="MaxDuration">{service.MaxDuration}</td>
+                <td data-label="MinPrice">${service.MinPrice}</td>
+                <td data-label="MaxPrice">${service.MaxPrice}</td>
               </tr>
             ))}
           </tbody>
@@ -73,3 +80,4 @@ const ServicesList = () => {
 };
 
 export default ServicesList;
+

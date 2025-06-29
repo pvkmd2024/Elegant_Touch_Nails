@@ -1,0 +1,249 @@
+.staffFormContainer {
+  padding: 1rem;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Form input fields */
+.emailInput {
+  width: 100%;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input,
+select {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.actionButtonWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+/* Base form buttons */
+.addStaffBtn,
+.loadStaffBtn,
+.unloadStaffBtn,
+.clearBtn {
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  flex: 1;
+  min-width: 0;
+  max-width: 120px;
+  text-align: center;
+}
+
+.staffTable {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+/* Table header */
+.staffTable th {
+  padding: 8px;
+  text-align: left;
+  background-color: #f0f0f0;
+  white-space: nowrap;
+}
+
+/* Table data cells */
+.staffTable td {
+  padding: 8px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 150px;
+}
+
+/* Responsive email column */
+.emailCell {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 200px;
+  white-space: normal;
+}
+
+.editButton,
+.deleteButton {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  margin-right: 6px;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Button colors */
+.addStaffBtn {
+  background-color: #28a745;
+}
+.addStaffBtn:hover {
+  background-color: #218838;
+}
+
+.loadStaffBtn {
+  background-color: #5c067d;
+}
+.loadStaffBtn:hover {
+  background-color: #4c0c56;
+}
+
+.unloadStaffBtn {
+  background-color: #ffc107;
+  color: #000;
+}
+.unloadStaffBtn:hover {
+  background-color: #e0a800;
+}
+
+.clearBtn {
+  background-color: #6c757d;
+}
+.clearBtn:hover {
+  background-color: #5a6268;
+}
+
+.editButton {
+  background-color: #17a2b8;
+}
+.editButton:hover {
+  background-color: #138496;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+.actionButtonWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+  .staffFormContainer {
+    padding: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .actionButtons {
+    flex-direction: row !important;
+    gap: 6px;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .staffTable {
+    font-size: 1rem;
+    min-width: 100%;
+  }
+
+  .staffTable,
+  .staffTable thead,
+  .staffTable tbody,
+  .staffTable th,
+  .staffTable td,
+  .staffTable tr {
+    display: block;
+  }
+
+  .staffTable thead {
+    display: none;
+  }
+
+  .staffTable tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+
+  .staffTable td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    position: relative;
+    padding-left: 50%;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .staffTable td::before {
+    position: absolute;
+    left: 12px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #555;
+    content: attr(data-label);
+  }
+}
+
+/* Mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .staffFormContainer {
+    padding: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  input,
+  select {
+    font-size: 1rem;
+  }
+
+  .actionButtons {
+    flex-direction: row !important;
+    gap: 6px;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .actionButtons button,
+  .editButton,
+  .deleteButton {
+    width: auto;
+    margin-right: 0;
+  }
+
+  .staffTable {
+    font-size: 1rem;
+  }
+
+  .staffTable td {
+    font-size: 1rem;
+  }
+}

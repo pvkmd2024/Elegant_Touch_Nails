@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchPayments } from "servicesdirectory/api";
-import "./PaymentsForm.css"; 
+import styles from "./PaymentsList.module.css"; 
 
 const PaymentsList = () => {
   const [payments, setPayments] = useState([]); // Initialize with an empty array
@@ -42,12 +42,12 @@ const PaymentsList = () => {
 
   // Render payments data
   return (
-    <div className="payments-container">
-      <h2 className="page-heading">Payments</h2>
+    <div className={styles.paymentsContainer}>
+      <h2 className={styles.pageHeading}>Payments</h2>
       {payments.length === 0 ? (
         <p>No Payments data available.</p>
       ) : (
-        <table className="payments-table">
+        <table className={styles.paymentsTable}>
           <thead>
             <tr>         
               <th>Appointment ID</th>
@@ -55,20 +55,25 @@ const PaymentsList = () => {
               <th>Payment Status</th>
               <th>Amount</th>
               <th>PaidAt</th>
-              </tr>
+              {/* <th>Actions</th> */}
+             </tr>
           </thead>
           <tbody>
-            {payments.map((payment) => (
-              <tr key={payment.PaymentID}>
-                <td>{payment.AppointmentID}</td>
-                <td>{payment.PaymentMethod}</td>
-                <td>{payment.PaymentStatus}</td>
-                <td>{payment.Amount}</td>
-                <td>{payment.PaidAt}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  {payments.map((payment) => (
+    <tr key={payment.PaymentID}>
+      <td data-label="Appointment ID">{payment.AppointmentID}</td>
+      <td data-label="Payment Method">{payment.PaymentMethod}</td>
+      <td data-label="Payment Status">{payment.PaymentStatus}</td>
+      <td data-label="Amount">${payment.Amount}</td>
+      <td data-label="Paid At">{payment.PaidAt.slice(0, 10)}</td>
+      {/* <td data-label="Actions">
+        <button className={styles.editButton}>Edit</button>
+        <button className={styles.deleteButton}>Delete</button>
+      </td> */}
+    </tr>
+  ))}
+</tbody>
+</table>
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchAppointments } from "servicesdirectory/api"; 
-import "./AppointmentsForm.css"; 
+import styles from "./AppointmentsList.module.css"; 
 
 const AppointmentsList = () => {
   const [appointments, setAppointments] = useState([]);
@@ -29,13 +29,13 @@ const AppointmentsList = () => {
   if (!Array.isArray(appointments)) return <div>Invalid data format.</div>;
 
   return (
-    <div className="appointments-container">
-      <h2 className="page-heading">Appointments</h2>
+    <div className={styles.appointmentsContainer}>
+      <h2 className={styles.pageHeading}>Appointments</h2>
 
       {appointments.length === 0 ? (
         <p>No appointments available.</p>
       ) : (
-        <table className="appointments-table">
+        <table className={styles.appointmentsTable}>
           <thead>
             <tr>
               <th>AppointmentID</th>
@@ -48,11 +48,11 @@ const AppointmentsList = () => {
           <tbody>
             {appointments.map((appt) => (
               <tr key={appt.AppointmentID}>
-                <td>{appt.AppointmentID}</td>
-                <td>{appt.ClientID}</td>
-                <td>{appt.ServiceID}</td>
-                <td>{appt.AppointmentDate}</td>
-                <td>{appt.Status}</td>
+                <td data-label="AppointmentID">{appt.AppointmentID}</td>
+                <td data-label="ClientID">{appt.ClientID}</td>
+                <td data-label="ServiceID">{appt.ServiceID}</td>
+                <td data-label="AppointmentDate">{appt.AppointmentDate.slice(0,10)}</td>
+                <td data-label="Status">{appt.Status}</td>
               </tr>
             ))}
           </tbody>

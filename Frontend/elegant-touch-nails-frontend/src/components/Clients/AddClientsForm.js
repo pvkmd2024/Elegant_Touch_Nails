@@ -5,8 +5,7 @@ import {
   updateClient,
   deleteClient,
 } from "servicesdirectory/api";
-
-import "./ClientsForm.css"; 
+import styles from "./ClientsForm.module.css";
 
 const AddClientsForm = () => {
   const formRef = useRef(null);
@@ -20,18 +19,18 @@ const AddClientsForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-const fetchData = async () => {
-  setLoading(true);
-  try {
-    const data = await fetchClients();
-    setClients(data);
-    setShowClients(true);
-  } catch (error) {
-    console.error("Failed to fetch clients:", error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchClients();
+      setClients(data);
+      setShowClients(true);
+    } catch (error) {
+      console.error("Failed to fetch clients:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const unloadData = () => {
     setClients([]);
@@ -95,105 +94,115 @@ const fetchData = async () => {
   };
 
   return (
-    <div className="clients-container">
-    <div className="clients-form" ref={formRef}>
-      <form onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit" : "Add"} Client</h2>
+    <div className={styles.clientsPageWrapper}>
+      <div className={styles.clientsFormContainer} >
+        <div className={styles.clientsContainer} ref={formRef}>
+          <form onSubmit={handleSubmit}>
+            <h2>{editingId ? "Edit" : "Add"} Client</h2>
 
-        {editingId && (
-          <div>
-            <label>Client ID</label>
-            <input type="text" value={editingId} readOnly />
-          </div>
-        )}
+            {editingId && (
+              <div>
+                <label>Client ID</label>
+                <input type="text" value={editingId} readOnly />
+              </div>
+            )}
 
-        <input
-          type="text"
-          placeholder="Full Name"
-          value={FullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
-        />
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={FullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+            />
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={Email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+            <input
+              type="email"
+              placeholder="Email"
+              value={Email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-        <input
-          type="text"
-          placeholder="Phone Number"
-          value={PhoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          required
-        />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              pattern="\d{10}"
+              title="Enter a 10-digit phone number"
+              value={PhoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              required
+            />
 
-        <input
-          type="password"
-          placeholder="Password Hash"
-          value={PasswordHash}
-          onChange={(e) => setPasswordHash(e.target.value)}
-          required
-        />
+            <input
+              type="password"
+              placeholder="Password"
+              value={PasswordHash}
+              onChange={(e) => setPasswordHash(e.target.value)}
+              required
+            />
 
-        <div className="action-buttons">
-          <button className="add-clients-btn" type="submit">{editingId ? "Update" : "Add"}</button>
-     <button className="load-clients-btn" type="button" onClick={fetchData} disabled={loading}>
-  {loading ? "Loading..." : "Load"}
-</button>
-          <button className="unload-clients-btn" type="button" onClick={unloadData}>
-            Unload
-          </button>
-          <button className="clear-client-btn" type="button" onClick={resetForm}>
-            Clear
-          </button>
+            <div className={styles.actionButtons}>
+              <button
+                type="submit"
+                disabled={loading}
+                className={styles.addClientBtn}
+              >
+                {editingId ? "Update" : "Add"}
+              </button>
+
+              <button className={styles.loadClientsBtn} type="button" onClick={fetchData} disabled={loading}>{loading ? "Loading..." : "Load"}
+              </button>
+              <button className={styles.unloadClientsBtn} type="button" onClick={unloadData}>
+                Unload
+              </button>
+              <button className={styles.clearBtn} type="button" onClick={resetForm}>
+                Clear
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
-
-      {showClients && (
-        <>
-          <h3>Existing Clients</h3>
-          {Array.isArray(clients) && clients.length === 0 ? (
-            <p>No clients found.</p>
-          ) : (
-            <table className="clients-table">
-              <thead>
-                <tr>
-                  <th>Client ID</th>
-                  <th>Full Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Password Hash</th>
-                  <th>Created At</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {clients.map((c) => (
-                  <tr key={c.ClientID}>
-                    <td>{c.ClientID}</td>
-                    <td>{c.FullName}</td>
-                    <td>{c.Email}</td>
-                    <td>{c.PhoneNumber}</td>
-                    <td>{c.PasswordHash}</td>
-                    <td>{c.CreatedAt? new Date(c.CreatedAt).toLocaleString() : "N/A"}</td>
-                    <td className="action-buttons">
-                      <button className="edit-button" onClick={() => handleEdit(c)}>Edit</button>
-                      <button className="delete-button" onClick={() => handleDelete(c.ClientID)}>Delete</button>
-                    </td>
+        {showClients && (
+          <>
+            <h3>Existing Clients</h3>
+            {Array.isArray(clients) && clients.length === 0 ? (
+              <p>No clients found.</p>
+            ) : (
+              <table className={styles.clientsTable}>
+                <thead>
+                  <tr>
+                    <th>Client ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Password Hash</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </>
-      )}
-    </div>
+                </thead>
+                <tbody>
+                  {clients.map((c) => (
+                    <tr key={c.ClientID}>
+                      <td data-label="Client ID">{c.ClientID}</td>
+                      <td data-label="FullName">{c.FullName}</td>
+                      <td data-label="Email">{c.Email}</td>
+                      <td data-label="PhoneNumber">{c.PhoneNumber}</td>
+                      <td data-label="PasswordHash">{c.PasswordHash}</td>
+                      <td data-label="CreatedAt">{c.CreatedAt ? new Date(c.CreatedAt).toLocaleString() : "N/A"}</td>
+                      <td data-label="Actions" className={styles.actionButtons}>
+                        <div className={styles.actionButtonWrapper}>
+                          <button className={styles.editButton} onClick={() => handleEdit(c)}>Edit</button>
+                          <button className={styles.deleteButton} onClick={() => handleDelete(c.ClientID)}>Delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
-
 export default AddClientsForm;

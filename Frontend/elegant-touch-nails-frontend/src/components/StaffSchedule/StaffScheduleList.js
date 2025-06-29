@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchStaffSchedules } from "servicesdirectory/api";
-import "./StaffScheduleForm.css";
+import styles from "./StaffScheduleList.module.css";
 
 const StaffScheduleList = () => {
   const [scheduleList, setScheduleList] = useState([]);
@@ -30,13 +30,13 @@ const StaffScheduleList = () => {
   if (!Array.isArray(scheduleList)) return <div>Invalid data format.</div>;
 
   return (
-    <div className="staff-table-container">
-      <h2 className="page-heading">Staff Schedule List</h2>
+    <div className={styles.staffScheduleContainer}>
+      <h2 className={styles.pageHeading}>Staff Schedule List</h2>
 
       {scheduleList.length === 0 ? (
         <p>No staff schedules available.</p>
       ) : (
-        <table className="staff-table">
+        <table className={styles.staffScheduleTable}>
           <thead>
             <tr>
               <th>Staff ID</th>
@@ -48,10 +48,10 @@ const StaffScheduleList = () => {
           <tbody>
             {scheduleList.map((schedule, index) => (
               <tr key={index}>
-                <td>{schedule.StaffID}</td>
-                <td>{schedule.DayOfWeek}</td>
-                <td>{schedule.StartTime}</td>
-                <td>{schedule.EndTime}</td>
+                <td data-label="StaffID">{schedule.StaffID}</td>
+                <td data-label="DayOfWeek">{schedule.DayOfWeek}</td>
+                <td data-label="StartTime">{schedule.StartTime}</td>
+                <td data-label="EndTime">{schedule.EndTime}</td>
               </tr>
             ))}
           </tbody>

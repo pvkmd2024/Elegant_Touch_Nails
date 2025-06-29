@@ -6,7 +6,7 @@ import {
   deletePayment,
 } from "servicesdirectory/api";
 
-import "./PaymentsForm.css";
+import styles from "./PaymentsForm.module.css";
 
 const AddPaymentsForm = () => {
   const formRef = useRef(null);
@@ -100,7 +100,7 @@ const AddPaymentsForm = () => {
   };
 
   return (
-    <div className="payments-form" ref={formRef}>
+    <div className={styles.paymentsFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
         <h2>{editingId ? "Edit Payment" : "Add Payment"}</h2>
 
@@ -155,41 +155,40 @@ const AddPaymentsForm = () => {
           required
         />
 
-        <div className="action-buttons">
-          <button className="add-payment-btn" type="submit">
-            {editingId ? "Update" : "Add"}
-          </button>
-          <button
-            type="button"
-            className="load-payments-btn"
-            onClick={fetchData}
-          >
-            Load
-          </button>
-          <button
-            type="button"
-            className="unload-payments-btn"
-            onClick={unloadData}
-          >
-            Unload
-          </button>
-          <button
-            type="button"
-            className="clear-btn"
-            onClick={resetForm}
-          >
-            Clear
-          </button>
-        </div>
-      </form>
-
+        <div className={styles.actionButtons}>
+  <button className={styles.addPaymentBtn} type="submit">
+    {editingId ? "Update" : "Add"}
+  </button>
+  <button
+    type="button"
+    className={styles.loadPaymentsBtn}
+    onClick={fetchData}
+  >
+    Load
+  </button>
+  <button
+    type="button"
+    className={styles.unloadPaymentsBtn}
+    onClick={unloadData}
+  >
+    Unload
+  </button>
+  <button
+    type="button"
+    className={styles.clearBtn}
+    onClick={resetForm}
+  >
+    Clear
+  </button>
+</div>
+</form>
       {showPayments && (
         <>
-          <h3>Existing Payments</h3>
+          <h2>Existing Payments</h2>
           {payments.length === 0 ? (
             <p>No payments found.</p>
           ) : (
-            <table className="payments-table">
+            <table className={styles.paymentsTable}>
               <thead>
                 <tr>
                   <th>PaymentID</th>
@@ -202,31 +201,35 @@ const AddPaymentsForm = () => {
                 </tr>
               </thead>
               <tbody>
-                {payments.map((p) => (
-                  <tr key={p.PaymentID}>
-                    <td>{p.PaymentID}</td>
-                    <td>{p.AppointmentID}</td>
-                    <td>{p.PaymentMethod}</td>
-                    <td>{p.PaymentStatus}</td>
-                    <td>${parseFloat(p.Amount).toFixed(2)}</td>
-                    <td>{p.PaidAt}</td>
-                    <td className="action-buttons">
-                      <button
-                        className="edit-button"
-                        onClick={() => handleEdit(p)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="delete-button"
-                        onClick={() => handleDelete(p.PaymentID)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+  {payments.map((p) => (
+    <tr key={p.PaymentID}>
+      <td data-label="Payment ID">{p.PaymentID}</td>
+      <td data-label="Appointment ID">{p.AppointmentID}</td>
+      <td data-label="Method">{p.PaymentMethod}</td>
+      <td data-label="Status">{p.PaymentStatus}</td>
+      <td data-label="Amount">${parseFloat(p.Amount).toFixed(2)}</td>
+      <td data-label="Paid At">{p.PaidAt.slice(0,10)}</td>
+      <td data-label="Actions" className={styles.actionButtons}>
+  <div className={styles.actionButtonWrapper}>
+    <button
+      className={styles.editButton}
+      onClick={() => handleEdit(p)}
+    >
+      Edit
+    </button>
+    <button
+      className={styles.deleteButton}
+      onClick={() => handleDelete(p.PaymentID)}
+    >
+      Delete
+    </button>
+  </div>
+</td>
+
+    </tr>
+  ))}
+</tbody>
+
             </table>
           )}
         </>
@@ -235,4 +238,4 @@ const AddPaymentsForm = () => {
   );
 };
 
-export default AddPaymentsForm;
+export default AddPaymentsForm; 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchClients } from "servicesdirectory/api";
-import "./ClientsForm.css"; 
+import styles from "./ClientsList.module.css";
 
 const ClientsList = () => {
   const [clients, setClients] = useState([]);
@@ -21,6 +21,7 @@ const ClientsList = () => {
         setLoading(false);
       }
     };
+
     getClients();
   }, []);
 
@@ -29,36 +30,40 @@ const ClientsList = () => {
   if (!Array.isArray(clients)) return <div>Invalid data format.</div>;
 
   return (
-    <div className="clients-container">
-      <h2 className="page-heading">Clients Management</h2>
+    <div className={styles.clientsContainer}>
+      <h2 className={styles.pageHeading}>Clients Management</h2>
 
       {clients.length === 0 ? (
         <p>No clients available.</p>
       ) : (
-        <table className="clients-table">
-          <thead>
-            <tr>
-              <th>Client ID</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Password Hash</th>
-              <th>Created At</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clients.map((client) => (
-              <tr key={client.ClientID}>
-                <td>{client.ClientID}</td>
-                <td>{client.FullName}</td>
-                <td>{client.Email}</td>
-                <td>{client.PhoneNumber}</td>
-                <td>{client.PasswordHash}</td>
-                <td>{client.CreatedAt}</td>
+        <div className={styles.tableWrapper}>
+          <table className={styles.clientsTable}>
+            <thead>
+              <tr>
+                <th>Client ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Password Hash</th>
+                <th>Created At</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {clients.map((client) => (
+                <tr key={client.ClientID}>
+                  <td data-label="Client ID">{client.ClientID}</td>
+                  <td data-label="Full Name">{client.FullName}</td>
+                  <td data-label="Email">{client.Email}</td>
+                  <td data-label="Phone Number">{client.PhoneNumber}</td>
+                  <td data-label="Password Hash">{client.PasswordHash}</td>
+                  <td data-label="Created At">
+                    {client.CreatedAt ? client.CreatedAt.slice(0, 10) : "N/A"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

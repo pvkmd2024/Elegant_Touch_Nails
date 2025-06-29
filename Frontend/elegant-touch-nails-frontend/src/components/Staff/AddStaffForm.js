@@ -6,15 +6,14 @@ import {
   deleteStaff,
 } from "servicesdirectory/api";
 
-import "./StaffForm.css";
+import styles from "./StaffForm.module.css";
 
-const StaffForm = () => {
+const AddStaffForm = () => {
   const formRef = useRef(null);
 
   const [staffList, setStaffList] = useState([]);
   const [showStaff, setShowStaff] = useState(false);
   const [editingId, setEditingId] = useState(null);
-
   const [FullName, setFullName] = useState("");
   const [Role, setRole] = useState("");
   const [Email, setEmail] = useState("");
@@ -27,6 +26,7 @@ const StaffForm = () => {
       setShowStaff(true);
     } catch (error) {
       console.error("Failed to fetch staff:", error.message);
+      alert("Failed to load staff.");
     }
   };
 
@@ -45,7 +45,13 @@ const StaffForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const staff = { FullName, Role, Email, PasswordHash };
+
+    const staff = {
+      FullName,
+      Role,
+      Email,
+      PasswordHash,
+    };
 
     try {
       if (editingId) {
@@ -57,11 +63,10 @@ const StaffForm = () => {
       }
 
       await fetchData();
-      setShowStaff(true);
       resetForm();
     } catch (err) {
-      console.error("Operation failed:", err.message);
-      alert("Failed to submit staff.");
+      console.error("Staff operation failed:", err.message);
+      alert("Failed to submit staff data.");
     }
   };
 
@@ -78,7 +83,7 @@ const StaffForm = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this staff?")) return;
+    if (!window.confirm("Are you sure you want to delete this staff member?")) return;
     try {
       await deleteStaff(id);
       alert("Staff deleted successfully.");
@@ -91,9 +96,9 @@ const StaffForm = () => {
   };
 
   return (
-    <div className="staff-form" ref={formRef}>
+    <div className={styles.staffFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit" : "Add"} Staff Member</h2>
+        <h2>{editingId ? "Edit Staff" : "Add Staff"}</h2>
 
         {editingId && (
           <div>
@@ -121,6 +126,7 @@ const StaffForm = () => {
         <input
           type="email"
           placeholder="Email"
+          className={styles.emailInput}
           value={Email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -134,17 +140,17 @@ const StaffForm = () => {
           required
         />
 
-        <div className="action-buttons">
-          <button id="add-staff-btn" type="submit">
+        <div className={styles.actionButtons}>
+          <button className={styles.addStaffBtn} type="submit">
             {editingId ? "Update" : "Add"}
           </button>
-          <button id="load-staff-btn" type="button" onClick={fetchData}>
+          <button type="button" className={styles.loadStaffBtn} onClick={fetchData}>
             Load
           </button>
-          <button id="unload-staff-btn" type="button" onClick={unloadData}>
+          <button type="button" className={styles.unloadStaffBtn} onClick={unloadData}>
             Unload
           </button>
-          <button id="clear-btn" type="button" onClick={resetForm}>
+          <button type="button" className={styles.clearBtn} onClick={resetForm}>
             Clear
           </button>
         </div>
@@ -152,32 +158,38 @@ const StaffForm = () => {
 
       {showStaff && (
         <>
-          <h3>Existing Staff</h3>
+          <h2>Existing Staff</h2>
           {staffList.length === 0 ? (
             <p>No staff found.</p>
           ) : (
-            <table className="staff-table">
+            <table className={styles.staffTable}>
               <thead>
                 <tr>
                   <th>StaffID</th>
-                  <th>FullName</th>
+                  <th>Full Name</th>
                   <th>Role</th>
                   <th>Email</th>
-                  <th>PasswordHash</th>
+                  <th>Password Hash</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {staffList.map((s) => (
                   <tr key={s.StaffID}>
-                    <td>{s.StaffID}</td>
-                    <td>{s.FullName}</td>
-                    <td>{s.Role}</td>
-                    <td>{s.Email}</td>
-                    <td>{s.PasswordHash}</td>
-                    <td className="action-buttons">
-                      <button className="edit-button" onClick={() => handleEdit(s)}>Edit</button>
-                      <button className="delete-button" onClick={() => handleDelete(s.StaffID)}>Delete</button>
+                    <td data-label="Staff ID">{s.StaffID}</td>
+                    <td data-label="Full Name">{s.FullName}</td>
+                    <td data-label="Role">{s.Role}</td>
+                    <td data-label="Email" className={styles.emailCell}>{s.Email}</td>
+                    <td data-label="Password Hash">{s.PasswordHash}</td>
+                    <td data-label="Actions" className={styles.actionButtons}>
+                      <div className={styles.actionButtonWrapper}>
+                        <button className={styles.editButton} onClick={() => handleEdit(s)}>
+                          Edit
+                        </button>
+                        <button className={styles.deleteButton} onClick={() => handleDelete(s.StaffID)}>
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -190,4 +202,4 @@ const StaffForm = () => {
   );
 };
 
-export default StaffForm; 
+export default AddStaffForm;
