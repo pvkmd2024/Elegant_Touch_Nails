@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,9 +16,9 @@ import GroupIcon from "@mui/icons-material/Group";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 
 export default function Navigation() {
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const { role, accessLevel, logout } = useContext(AuthContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+const navigate = useNavigate();
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -26,12 +28,7 @@ export default function Navigation() {
   };
 
   const handleLogout = () => {
-    setAuth(false);
-    handleClose();
-  };
-
-  const handleLogin = () => {
-    setAuth(true);
+    logout();
     handleClose();
   };
 
@@ -39,26 +36,26 @@ export default function Navigation() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
-          <Link to="/clients" style={linkStyle}>
-            <GroupIcon sx={{ marginRight: 1 }} /> Clients
-          </Link>
-          <Link to="/services" style={linkStyle}>
-            <HomeIcon sx={{ marginRight: 1 }} /> Services
-          </Link>
-          <Link to="/appointments" style={linkStyle}>
-            <ScheduleIcon sx={{ marginRight: 1 }} /> Appointments
-          </Link>
-          <Link to="/payments" style={linkStyle}>
-            <PaymentsIcon sx={{ marginRight: 1 }} /> Payments
-          </Link>
-          <Link to="/staff" style={linkStyle}>
-            <PersonIcon sx={{ marginRight: 1 }} /> Staff
-          </Link>
-          <Link to="/staff-schedule" style={linkStyle}>
-            <ScheduleIcon sx={{ marginRight: 1 }} /> Staff Schedule
-          </Link>
+          {accessLevel === "Manager" && (
+  <>
+    <Link to="/clients" style={linkStyle}><GroupIcon sx={{ marginRight: 1 }} /> Clients</Link>
+    <Link to="/staff" style={linkStyle}><PersonIcon sx={{ marginRight: 1 }} /> Staff</Link>
+    <Link to="/staff-schedule" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Staff Schedule</Link>
+  </>
+)}
 
-          {auth ? (
+{["Manager", "Staff"].includes(accessLevel) && (
+  <>
+    <Link to="/appointments" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Appointments</Link>
+    <Link to="/services" style={linkStyle}><HomeIcon sx={{ marginRight: 1 }} /> Services</Link>
+  </>
+)}
+
+{["Manager", "Client"].includes(accessLevel) && (
+  <Link to="/payments" style={linkStyle}><PaymentsIcon sx={{ marginRight: 1 }} /> Payments</Link>
+)}
+
+          {role ? (
             <div>
               <IconButton
                 size="large"
@@ -73,15 +70,9 @@ export default function Navigation() {
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
@@ -91,9 +82,12 @@ export default function Navigation() {
               </Menu>
             </div>
           ) : (
-            <MenuItem onClick={handleLogin} sx={{ color: "white", cursor: "pointer", marginLeft: 2 }}>
-              Login
-            </MenuItem>
+            <MenuItem
+  onClick={() => navigate("/login")}
+  sx={{ color: "white", cursor: "pointer", marginLeft: 2 }}
+>
+  Login
+</MenuItem>
           )}
         </Toolbar>
       </AppBar>
@@ -101,7 +95,7 @@ export default function Navigation() {
   );
 }
 
-// Updated inline styling for links: bigger and bold font
+// Link styles
 const linkStyle = {
   color: "white",
   textDecoration: "none",

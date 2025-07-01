@@ -131,7 +131,7 @@ const AddServicesForm = () => {
   return (
     <div className={styles.servicesFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit" : "Add"} Service</h2>
+        <h2>{editingId ? "Edit" : "Add"} A Service</h2>
 
         {editingId && (
           <div>

@@ -9,6 +9,8 @@ const paymentRoutes = require("./routes/paymentRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const staffRoutes = require("./routes/staffRoutes");
 const staffScheduleRoutes = require("./routes/staffScheduleRoutes");
+const authRoutes = require("./routes/authRoutes");
+
 
 const app = express();
 
@@ -37,7 +39,7 @@ app.use("/api/staff", (req, res, next) => {
 }, staffRoutes);
 
 app.use("/api/staffSchedules", staffScheduleRoutes);
-
+app.use("/api/auth", authRoutes);
 // Example route for testing service addition
 app.post("/api/services", (req, res) => {
   const services = req.body;

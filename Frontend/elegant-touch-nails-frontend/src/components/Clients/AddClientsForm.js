@@ -98,7 +98,10 @@ const AddClientsForm = () => {
       <div className={styles.clientsFormContainer} >
         <div className={styles.clientsContainer} ref={formRef}>
           <form onSubmit={handleSubmit}>
-            <h2>{editingId ? "Edit" : "Add"} Client</h2>
+            <h2>{editingId ? "Edit" : "Sign Up"}
+
+
+            </h2>
 
             {editingId && (
               <div>

@@ -1,4 +1,5 @@
 const Staff = require("../models/staffModel");
+const bcrypt = require("bcryptjs");
 
 exports.createStaff = async (req, res) => {
   try {
@@ -10,49 +11,31 @@ exports.createStaff = async (req, res) => {
         .json({ error: "Expected an array of staff members" });
     }
 
-    const staffPromises = staffMembers.map((staff, index) => {
-      const { FullName, Role, Email, PasswordHash } = staff;
+    const staffPromises = staffMembers.map(async (staff, index) => {
+      const { FullName, Role, Email, Password } = staff;
 
-      if (!FullName || !Role || !Email || !PasswordHash) {
-        return Promise.reject(
-          new Error(
-            `Missing required fields for staff member at index ${index}`
-          )
-        );
+      if (!FullName || !Role || !Email || !Password) {
+        throw new Error(`Missing required fields for staff member at index ${index}`);
       }
+
+      const hashedPassword = await bcrypt.hash(Password, 10);
 
       return Staff.create({
         FullName,
         Role,
         Email,
-        PasswordHash,
+        PasswordHash: hashedPassword,
       });
     });
 
-   // Wait for all insert operations to complete
     await Promise.all(staffPromises);
 
     res.status(201).json({ message: "Staff members added successfully!" });
   } catch (error) {
-    console.error("Error in createStaff:", error.message); // Debugging
+    console.error("Error in createStaff:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
-// exports.creatStaff = async (req, res) => {
-//   try {
-//     const { fullname, role, Email, PasswordHash } =
-//       req.body;
-//     const result = await Staff.create({
-//     fullname, 
-//     role, 
-//     Email, 
-//     PasswordHash
-//     });
-//     res.status(201).json({ message: "Staff created successfully", result });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 exports.getAllStaff = async (req, res) => {
   try {
@@ -94,7 +77,7 @@ exports.updateStaff = async (req, res) => {
     if (PasswordHash && PasswordHash.trim() !== "") {
       updateData.PasswordHash = PasswordHash;
     }
-    
+
     const updatedStaff = await Staff.update(staffID, updateData); // ✅ Use updateData
 
     if (updatedStaff) {

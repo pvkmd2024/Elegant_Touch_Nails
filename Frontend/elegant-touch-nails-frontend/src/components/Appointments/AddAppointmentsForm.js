@@ -105,7 +105,7 @@ const handleSubmit = async (e) => {
   return (
     <div className={styles.appointmentsFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit" : "Add"} Appointment</h2>
+        <h2>{editingId ? "Edit" : "Book"} An Appointment</h2>
 
         {editingId && (
           <div>
