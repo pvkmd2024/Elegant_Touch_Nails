@@ -48,11 +48,13 @@ const navigate = useNavigate();
   <>
     <Link to="/appointments" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Appointments</Link>
     <Link to="/services" style={linkStyle}><HomeIcon sx={{ marginRight: 1 }} /> Services</Link>
-  </>
+    </>
 )}
 
 {["Manager", "Client"].includes(accessLevel) && (
-  <Link to="/payments" style={linkStyle}><PaymentsIcon sx={{ marginRight: 1 }} /> Payments</Link>
+  <>
+      <Link to="/payments" style={linkStyle}><PaymentsIcon sx={{ marginRight: 1 }} /> Payments</Link>
+</>
 )}
 
           {role ? (
@@ -86,7 +88,7 @@ const navigate = useNavigate();
   onClick={() => navigate("/login")}
   sx={{ color: "white", cursor: "pointer", marginLeft: 2 }}
 >
-  Login
+ {/* Login  */}
 </MenuItem>
           )}
         </Toolbar>

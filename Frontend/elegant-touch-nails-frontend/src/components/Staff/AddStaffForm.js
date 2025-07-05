@@ -17,7 +17,7 @@ const AddStaffForm = () => {
   const [FullName, setFullName] = useState("");
   const [Role, setRole] = useState("");
   const [Email, setEmail] = useState("");
-  const [PasswordHash, setPasswordHash] = useState("");
+  const [Password, setPassword] = useState("");
 
   const fetchData = async () => {
     try {
@@ -40,7 +40,7 @@ const AddStaffForm = () => {
     setFullName("");
     setRole("");
     setEmail("");
-    setPasswordHash("");
+    setPassword("");
   };
 
   const handleSubmit = async (e) => {
@@ -50,7 +50,7 @@ const AddStaffForm = () => {
       FullName,
       Role,
       Email,
-      PasswordHash,
+      Password,
     };
 
     try {
@@ -75,7 +75,7 @@ const AddStaffForm = () => {
     setFullName(staff.FullName);
     setRole(staff.Role);
     setEmail(staff.Email);
-    setPasswordHash(staff.PasswordHash);
+    setPassword(staff.Password);
 
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -134,9 +134,9 @@ const AddStaffForm = () => {
 
         <input
           type="text"
-          placeholder="Password Hash"
-          value={PasswordHash}
-          onChange={(e) => setPasswordHash(e.target.value)}
+          placeholder="Password"
+          value={Password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
 
@@ -169,7 +169,7 @@ const AddStaffForm = () => {
                   <th>Full Name</th>
                   <th>Role</th>
                   <th>Email</th>
-                  <th>Password Hash</th>
+                  <th>Password</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -180,7 +180,7 @@ const AddStaffForm = () => {
                     <td data-label="Full Name">{s.FullName}</td>
                     <td data-label="Role">{s.Role}</td>
                     <td data-label="Email" className={styles.emailCell}>{s.Email}</td>
-                    <td data-label="Password Hash">{s.PasswordHash}</td>
+                    <td data-label="Password">{s.Password}</td>
                     <td data-label="Actions" className={styles.actionButtons}>
                       <div className={styles.actionButtonWrapper}>
                         <button className={styles.editButton} onClick={() => handleEdit(s)}>

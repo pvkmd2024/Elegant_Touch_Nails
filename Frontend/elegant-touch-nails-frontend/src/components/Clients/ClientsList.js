@@ -44,7 +44,7 @@ const ClientsList = () => {
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Phone Number</th>
-                <th>Password Hash</th>
+                <th>Password</th>
                 <th>Created At</th>
               </tr>
             </thead>
@@ -55,7 +55,7 @@ const ClientsList = () => {
                   <td data-label="Full Name">{client.FullName}</td>
                   <td data-label="Email">{client.Email}</td>
                   <td data-label="Phone Number">{client.PhoneNumber}</td>
-                  <td data-label="Password Hash">{client.PasswordHash}</td>
+                  <td data-label="Password">{client.Password}</td>
                   <td data-label="Created At">
                     {client.CreatedAt ? client.CreatedAt.slice(0, 10) : "N/A"}
                   </td>

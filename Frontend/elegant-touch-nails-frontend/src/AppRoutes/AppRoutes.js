@@ -1,7 +1,8 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+// import { AuthContext } from "../context/AuthContext";
+import { Routes, Route } from "react-router-dom"; // Removed unused Navigate
 import ProtectedRoute from "../routes/ProtectedRoute";
-import LoginPage from "../pages/LoginPage"
+import LoginLandingPage from "../pages/LoginLandingPage";
 import Unauthorized from "../pages/Unauthorized";
 import Home from "../pages/Home";
 import ClientsPage from "../pages/ClientsPage";
@@ -10,19 +11,30 @@ import AppointmentsPage from "../pages/AppointmentsPage";
 import PaymentsPage from "../pages/PaymentsPage";
 import StaffPage from "../pages/StaffPage";
 import StaffSchedulePage from "../pages/StaffSchedulePage";
+import ManagerDashboard from "../pages/ManagerDashboard";
 
 const AppRoutes = () => {
+  // const { role } = useContext(AuthContext);
+
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-        <div className="center-heading">
-          <h1>Elegant Touch Nails</h1>
-        </div>
-      </div>
+    <>
+      {/* Header with Title only */}
+      <div>
+ <h1 style={{  textAlign: "center" }}>Elegant Touch Nails</h1>
+</div>
+      {/* Main Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
-<Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginLandingPage />} />
 
+        <Route
+          path="/dashboard/manager"
+          element={
+            <ProtectedRoute allowedRoles={["Manager"]}>
+              <ManagerDashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/clients"
           element={
@@ -31,7 +43,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/staff"
           element={
@@ -40,7 +51,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/staff-schedule"
           element={
@@ -49,7 +59,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/appointments"
           element={
@@ -58,7 +67,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/services"
           element={
@@ -67,7 +75,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/payments"
           element={
@@ -77,9 +84,8 @@ const AppRoutes = () => {
           }
         />
         <Route path="/unauthorized" element={<Unauthorized />} />
-
       </Routes>
-    </div>
+    </>
   );
 };
 

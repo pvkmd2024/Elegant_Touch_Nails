@@ -1,0 +1,38 @@
+.loginDialog {
+  max-width: 360px;
+  margin: 40px auto;
+  padding: 25px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loginDialog h2 {
+  margin-bottom: 20px;
+}
+
+.loginDialog select,
+.loginDialog input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.loginDialog button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #79186b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.loginDialog button:hover {
+  background-color: #79186b;
+}

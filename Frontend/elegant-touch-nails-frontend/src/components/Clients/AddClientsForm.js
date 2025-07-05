@@ -15,7 +15,7 @@ const AddClientsForm = () => {
   const [FullName, setFullName] = useState("");
   const [Email, setEmail] = useState("");
   const [PhoneNumber, setPhoneNumber] = useState("");
-  const [PasswordHash, setPasswordHash] = useState("");
+  const [Password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -42,12 +42,12 @@ const AddClientsForm = () => {
     setFullName("");
     setEmail("");
     setPhoneNumber("");
-    setPasswordHash("");
+    ("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const client = { FullName, Email, PhoneNumber, PasswordHash };
+    const client = { FullName, Email, PhoneNumbe };
 
     try {
       if (editingId) {
@@ -71,7 +71,7 @@ const AddClientsForm = () => {
     setFullName(client.FullName);
     setEmail(client.Email);
     setPhoneNumber(client.PhoneNumber);
-    setPasswordHash(client.PasswordHash);
+    setPassword(client.Password);
 
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -139,8 +139,8 @@ const AddClientsForm = () => {
             <input
               type="password"
               placeholder="Password"
-              value={PasswordHash}
-              onChange={(e) => setPasswordHash(e.target.value)}
+              value={Password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
 
@@ -189,7 +189,7 @@ const AddClientsForm = () => {
                       <td data-label="FullName">{c.FullName}</td>
                       <td data-label="Email">{c.Email}</td>
                       <td data-label="PhoneNumber">{c.PhoneNumber}</td>
-                      <td data-label="PasswordHash">{c.PasswordHash}</td>
+                      <td data-label="Password">{c.Password}</td>
                       <td data-label="CreatedAt">{c.CreatedAt ? new Date(c.CreatedAt).toLocaleString() : "N/A"}</td>
                       <td data-label="Actions" className={styles.actionButtons}>
                         <div className={styles.actionButtonWrapper}>

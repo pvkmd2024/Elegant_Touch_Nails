@@ -2,14 +2,14 @@ const db = require("../config/db");
 
 class Staff {
   static async create(staffData) {
-    const sql = `INSERT INTO Staff (FullName, Role, Email, PasswordHash) VALUES (?,?,?,?)`;
+    const sql = `INSERT INTO Staff (FullName, Role, Email, Password) VALUES (?,?,?,?)`;
     console.log("Staff data received in model:", staffData);
 
     const params = [
       staffData.FullName || null,
       staffData.Role || null,
       staffData.Email || null,
-      staffData.PasswordHash || null,
+      staffData.Password || null,
     ];
 
     console.log("SQL parameters:", params);
@@ -46,9 +46,9 @@ static async update(id, staffData) {
       fields.push("Email = ?");
       values.push(staffData.Email);
     }
-    if (staffData.PasswordHash) {
-      fields.push("PasswordHash = ?");
-      values.push(staffData.PasswordHash);
+    if (staffData.Password) {
+      fields.push("Password = ?");
+      values.push(staffData.Password);
     }
 
     if (fields.length === 0) {

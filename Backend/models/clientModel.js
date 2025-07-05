@@ -3,8 +3,8 @@ const db = require("../config/db"); // Import the db connection
 class Client {
   // Static method to create a new client
  static async create(data) {
-   if (!data.FullName || !data.Email || !data.PhoneNumber || !data.PasswordHash) {
-    throw new Error('FullName, Email, and PasswordHash are required fields');
+   if (!data.FullName || !data.Email || !data.PhoneNumber || !data.Password) {
+    throw new Error('FullName, Email, and Password are required fields');
   }
 
   // Handle optional fields, default to null if undefined
@@ -14,7 +14,7 @@ const CreatedAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.get
                   `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 
 
-  const sql = `INSERT INTO Clients (FullName, Email, PhoneNumber, PasswordHash, CreatedAt) 
+  const sql = `INSERT INTO Clients (FullName, Email, PhoneNumber, Password, CreatedAt) 
                VALUES (?, ?, ?, ?, ?)`;
 
   try {
@@ -24,7 +24,7 @@ const CreatedAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.get
       data.FullName,
       data.Email,
       data.PhoneNumber,  // Pass null if undefined
-      data.PasswordHash,
+      data.Password,
       CreatedAt     // Pass the current date if undefined
     ]);
 
@@ -32,7 +32,7 @@ const CreatedAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.get
       data.FullName,
       data.Email,
       data.PhoneNumber,  // Pass null if undefined
-      data.PasswordHash,
+      data.Password,
       CreatedAt     // Pass the current date if undefined
     ]);
 
