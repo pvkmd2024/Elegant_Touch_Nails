@@ -5,12 +5,13 @@ import {
   updatePayment,
   deletePayment,
 } from "servicesdirectory/api";
-
+import { useLocation } from "react-router-dom";
 import styles from "./PaymentsForm.module.css";
 
 const AddPaymentsForm = () => {
+   const location = useLocation();
+  const isLimitedView = location.state?.isLimitedView ?? false;
   const formRef = useRef(null);
-
   const [payments, setPayments] = useState([]);
   const [showPayments, setShowPayments] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -62,7 +63,7 @@ const AddPaymentsForm = () => {
         alert("Payment updated successfully.");
       } else {
         await createPayment(payment);
-        alert("Payment added successfully.");
+        alert("Payment was successful");
       }
 
       await fetchData();
@@ -159,6 +160,8 @@ const AddPaymentsForm = () => {
   <button className={styles.addPaymentBtn} type="submit">
     {editingId ? "Update" : "Add"}
   </button>
+  {!isLimitedView && (
+    <>
   <button
     type="button"
     className={styles.loadPaymentsBtn}
@@ -180,9 +183,11 @@ const AddPaymentsForm = () => {
   >
     Clear
   </button>
+  </>
+  )}
 </div>
 </form>
-      {showPayments && (
+      {!isLimitedView && showPayments && (
         <>
           <h2>Existing Payments</h2>
           {payments.length === 0 ? (

@@ -5,10 +5,12 @@ import {
   updateAppointment,
   deleteAppointment,
 } from "servicesdirectory/api";
-
+import { useLocation } from "react-router-dom";
 import styles from "./AppointmentsForm.module.css";
 
 const AddAppointmentsForm = () => {
+  const location = useLocation();
+  const isLimitedView = location.state?.isLimitedView ?? false;
   const formRef = useRef(null);
 
   const [appointments, setAppointments] = useState([]);
@@ -42,34 +44,34 @@ const AddAppointmentsForm = () => {
     setStatus("");
   };
   const formatDateTimeForMySQL = (datetimeLocal) => {
-  if (!datetimeLocal) return null;
-  return datetimeLocal.replace("T", " ") + ":00";
-};
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const appointment = {
-    ClientID,
-    ServiceID,
-    AppointmentDate: formatDateTimeForMySQL(AppointmentDate),  // <-- call here
-    Status,
+    if (!datetimeLocal) return null;
+    return datetimeLocal.replace("T", " ") + ":00";
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    if (editingId) {
-      await updateAppointment(editingId, appointment);
-      alert("Appointment updated successfully.");
-    } else {
-      await createAppointment(appointment);
-      alert("Appointment created successfully.");
+    const appointment = {
+      ClientID,
+      ServiceID,
+      AppointmentDate: formatDateTimeForMySQL(AppointmentDate),  // <-- call here
+      Status,
+    };
+
+    try {
+      if (editingId) {
+        await updateAppointment(editingId, appointment);
+        alert("Appointment updated successfully.");
+      } else {
+        await createAppointment(appointment);
+        alert("Appointment Booked successfully.");
+      }
+      await fetchData();
+      resetForm();
+    } catch (err) {
+      console.error("Failed to submit appointment:", err.message);
+      alert("Failed to submit appointment.");
     }
-    await fetchData();
-    resetForm();
-  } catch (err) {
-    console.error("Failed to submit appointment:", err.message);
-    alert("Failed to submit appointment.");
-  }
-};
+  };
 
 
   const handleEdit = (appointment) => {
@@ -77,9 +79,9 @@ const handleSubmit = async (e) => {
     setClientID(appointment.ClientID);
     setServiceID(appointment.ServiceID);
     // Convert MySQL datetime "YYYY-MM-DD HH:mm:ss" to "YYYY-MM-DDTHH:mm"
-  const formattedDate = appointment.AppointmentDate
-    ? appointment.AppointmentDate.replace(" ", "T").slice(0, 16)
-    : "";
+    const formattedDate = appointment.AppointmentDate
+      ? appointment.AppointmentDate.replace(" ", "T").slice(0, 16)
+      : "";
 
     setAppointmentDate(formattedDate);
     setStatus(appointment.Status);
@@ -143,22 +145,27 @@ const handleSubmit = async (e) => {
 
         <div className={styles.actionButtons}>
           <button className={styles.addAppointmentBtn} type="submit">
-  {editingId ? "Update" : "Add"}
-</button>
-<button className={styles.loadAppointmentsBtn} type="button" onClick={fetchData}>
-  Load
-</button>
-<button className={styles.unloadAppointmentsBtn} type="button" onClick={unloadData}>
-  Unload
-</button>
-<button className={styles.clearBtn} type="button" onClick={resetForm}>
-  Clear
-</button>
+            {editingId ? "Update" : "Add"}
+          </button>
 
+          {!isLimitedView && (
+            <>
+              <button className={styles.loadAppointmentsBtn} type="button" onClick={fetchData}>
+                Load
+              </button>
+              <button className={styles.unloadAppointmentsBtn} type="button" onClick={unloadData}>
+                Unload
+              </button>
+              <button className={styles.clearBtn} type="button" onClick={resetForm}>
+                Clear
+              </button>
+            </>
+          )}
         </div>
+
       </form>
 
-      {showAppointments && (
+      {!isLimitedView && showAppointments && (
         <>
           <h3>Existing Appointments</h3>
           {appointments.length === 0 ? (
@@ -181,13 +188,13 @@ const handleSubmit = async (e) => {
                     <td data-label="AppointmentID">{a.AppointmentID}</td>
                     <td data-label="ClientID">{a.ClientID}</td>
                     <td data-label="ServiceID">{a.ServiceID}</td>
-                    <td data-label="AppointmentDate">{a.AppointmentDate.slice(0,10)}</td>
+                    <td data-label="AppointmentDate">{a.AppointmentDate.slice(0, 10)}</td>
                     <td data-label="Status">{a.Status}</td>
                     <td className={styles.actionButtons}>
                       <div className={styles.actionButtonWrapper}>
-                      <button className={styles.editButton} onClick={() => handleEdit(a)}>Edit</button>
-                      <button className={styles.deleteButton} onClick={() => handleDelete(a.AppointmentID)}>Delete</button>
-                    </div>
+                        <button className={styles.editButton} onClick={() => handleEdit(a)}>Edit</button>
+                        <button className={styles.deleteButton} onClick={() => handleDelete(a.AppointmentID)}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                 ))}

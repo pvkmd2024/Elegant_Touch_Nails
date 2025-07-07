@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -18,15 +17,12 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 export default function Navigation() {
   const { role, accessLevel, logout } = useContext(AuthContext);
   const [anchorEl, setAnchorEl] = useState(null);
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+  const handleClose = () => setAnchorEl(null);
   const handleLogout = () => {
     logout();
     handleClose();
@@ -34,29 +30,46 @@ const navigate = useNavigate();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="transparent" elevation={0}>
+      <AppBar position="static" sx={{ backgroundColor: "blue" }} elevation={4}>
+
         <Toolbar>
+          {/* Manager Links */}
           {accessLevel === "Manager" && (
-  <>
-    <Link to="/clients" style={linkStyle}><GroupIcon sx={{ marginRight: 1 }} /> Clients</Link>
-    <Link to="/staff" style={linkStyle}><PersonIcon sx={{ marginRight: 1 }} /> Staff</Link>
-    <Link to="/staff-schedule" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Staff Schedule</Link>
-  </>
-)}
+            <>
+              <Link to="/clients-list" style={{ color: "black", fontSize: "20px" }}>
+                Clients
+              </Link>
 
-{["Manager", "Staff"].includes(accessLevel) && (
-  <>
-    <Link to="/appointments" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Appointments</Link>
-    <Link to="/services" style={linkStyle}><HomeIcon sx={{ marginRight: 1 }} /> Services</Link>
-    </>
-)}
+              <Link to="/clients-list" style={{ linkStyle, border: "1px solid red" }}><GroupIcon sx={{ marginRight: 1 }} /> Clients</Link>
+              <Link to="/staff-list" style={linkStyle}><PersonIcon sx={{ marginRight: 1 }} /> Staff</Link>
+              <Link to="/staff-schedule-list" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Staff Schedule</Link>
+              <Link to="/appointments-list" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Appointments</Link>
+              <Link to="/services-list" style={linkStyle}><HomeIcon sx={{ color: "white", fontSize: 40, marginRight: 1 }} /> Services</Link>
+              <Link to="/payments-list" style={linkStyle}><PaymentsIcon sx={{ marginRight: 1 }} /> Payments</Link>
+            </>
+          )}
 
-{["Manager", "Client"].includes(accessLevel) && (
-  <>
-      <Link to="/payments" style={linkStyle}><PaymentsIcon sx={{ marginRight: 1 }} /> Payments</Link>
-</>
-)}
+          {/* Staff Links */}
+          {accessLevel === "Staff" && (
+            <>
+              <Link to="/services-list" style={linkStyle}><HomeIcon sx={{ marginRight: 1 }} /> Services</Link>
+              <Link to="/appointments-list" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Appointments</Link>
+              <Link to="/staff-schedule-list" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Staff Schedule</Link>
+              <Link to="/payments-form" style={linkStyle}><PaymentsIcon sx={{ marginRight: 1 }} /> Payments</Link>
+            </>
+          )}
 
+          {/* Client Links */}
+          {accessLevel === "Client" && (
+            <>
+              <Link to="/services-list" style={linkStyle}><HomeIcon sx={{ marginRight: 1 }} /> Services</Link>
+              <Link to="/appointments-form" style={linkStyle}><ScheduleIcon sx={{ marginRight: 1 }} /> Appointments</Link>
+              <Link to="/payments-form" style={linkStyle}><PaymentsIcon sx={{ marginRight: 1 }} /> Payments</Link>
+              <Link to="/clients-form" style={linkStyle}><GroupIcon sx={{ marginRight: 1 }} /> Clients</Link>
+            </>
+          )}
+
+          {/* Login / Profile Dropdown */}
           {role ? (
             <div>
               <IconButton
@@ -85,11 +98,10 @@ const navigate = useNavigate();
             </div>
           ) : (
             <MenuItem
-  onClick={() => navigate("/login")}
-  sx={{ color: "white", cursor: "pointer", marginLeft: 2 }}
->
- {/* Login  */}
-</MenuItem>
+              onClick={() => navigate("/login")}
+              sx={{ color: "white", cursor: "pointer", marginLeft: 2 }}
+            >
+            </MenuItem>
           )}
         </Toolbar>
       </AppBar>

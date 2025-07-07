@@ -6,8 +6,10 @@ import {
   deleteClient,
 } from "servicesdirectory/api";
 import styles from "./ClientsForm.module.css";
-
+import { useLocation } from "react-router-dom";
 const AddClientsForm = () => {
+  const location = useLocation();
+  const isLimitedView = location.state?.isLimitedView ?? false;
   const formRef = useRef(null);
   const [clients, setClients] = useState([]);
   const [showClients, setShowClients] = useState(false);
@@ -42,12 +44,12 @@ const AddClientsForm = () => {
     setFullName("");
     setEmail("");
     setPhoneNumber("");
-    ("");
+    setPassword("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const client = { FullName, Email, PhoneNumbe };
+    const client = { FullName, Email, PhoneNumber };
 
     try {
       if (editingId) {
@@ -152,19 +154,24 @@ const AddClientsForm = () => {
               >
                 {editingId ? "Update" : "Add"}
               </button>
+{!isLimitedView && (
+  <>
+    <button className={styles.loadClientsBtn} type="button" onClick={fetchData} disabled={loading}>
+      {loading ? "Loading..." : "Load"}
+    </button>
+    <button className={styles.unloadClientsBtn} type="button" onClick={unloadData}>
+      Unload
+    </button>
+    <button className={styles.clearBtn} type="button" onClick={resetForm}>
+      Clear
+    </button>
+  </>
+)}
 
-              <button className={styles.loadClientsBtn} type="button" onClick={fetchData} disabled={loading}>{loading ? "Loading..." : "Load"}
-              </button>
-              <button className={styles.unloadClientsBtn} type="button" onClick={unloadData}>
-                Unload
-              </button>
-              <button className={styles.clearBtn} type="button" onClick={resetForm}>
-                Clear
-              </button>
             </div>
           </form>
         </div>
-        {showClients && (
+        { !isLimitedView && showClients && (
           <>
             <h3>Existing Clients</h3>
             {Array.isArray(clients) && clients.length === 0 ? (

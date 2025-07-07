@@ -1,3 +1,4 @@
+// src/components/LoginDialog.js
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
@@ -5,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./LoginDialog.module.css";
 
 export default function LoginDialog() {
-  const { login } = useContext(AuthContext);
+  const { login, authState } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("Client");
@@ -15,20 +16,28 @@ export default function LoginDialog() {
   const handleLogin = async () => {
     try {
       const res = await axios.post("/api/auth/login", { email, password, role });
-      login(res.data); // updates isAuthenticated in context
+      const userData = res.data;
 
-      // Navigate based on role
-      if (res.data.role === "Manager") {
-        navigate("/dashboard/manager");
-      } else if (res.data.role === "Staff") {
-        navigate("/appointments");
+      if (userData?.user && userData?.role && userData?.token) {
+  login(userData);
+        if (userData.role === "Manager") {
+          navigate("/manager");
+        } else if (userData.role === "Staff") {
+          navigate("/staff");
+        } else if (userData.role === "Client") {
+          navigate("/client");
+        } else {
+          console.error("Unknown role:", userData.role);
+        }
       } else {
-        navigate("/payments");
+        alert("Invalid login response.");
       }
     } catch (err) {
       alert("Login failed: " + (err.response?.data?.message || "Unexpected error"));
     }
   };
+
+  if (!authState || authState.isAuthenticated) return null;
 
   return (
     <div className={styles.loginDialog}>
