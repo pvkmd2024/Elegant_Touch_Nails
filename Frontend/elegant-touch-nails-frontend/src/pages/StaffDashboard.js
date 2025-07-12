@@ -1,42 +1,23 @@
-import React from "react";
-import LogoutButton from "../components/LogoutButton";
-import "./DashboardLayout.css";
-import { Link } from "react-router-dom";
-import Navigation from "../components/Navigation";
+import React, { useState } from "react";
+import AddPaymentsForm from "../components/Payments/AddPaymentsForm";
 
-const StaffDashboard = () => {
+import IconButton from "@mui/material/IconButton";
+import PaymentIcon from "@mui/icons-material/Payment";
+
+export default function StaffDashboard() {
+  const [showAddPaymentsForm, setShowAddPaymentsForm] = useState(false);
+
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <Navigation />
-        <h1>Staff Dashboard</h1>
-        <LogoutButton />
+    <div style={{ padding: "20px" }}>
+      <h2>Staff Dashboard</h2>
+
+      <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
+        <IconButton onClick={() => setShowAddPaymentsForm(true)}>
+          <PaymentIcon />
+        </IconButton>
       </div>
 
-      <ul>
-        <li>
-          <Link to="/services-list">
-            View Services
-          </Link>
-        </li>
-        <li>
-          <Link to="/appointments-list">
-            View Appointments
-          </Link>
-        </li>
-        <li>
-          <Link to="/staff-list">
-            View Staff
-          </Link>
-        </li>
-        <li>
-          <Link to="/payments-form" state={{ isLimitedView: true }}>
-            Process Payment
-          </Link>
-        </li>
-      </ul>
+      {showAddPaymentsForm && <AddPaymentsForm />}
     </div>
   );
-};
-
-export default StaffDashboard;
+}

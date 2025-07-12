@@ -10,7 +10,7 @@ import Unauthorized from "../pages/Unauthorized";
 import AddClientsForm from "../components/Clients/AddClientsForm";
 import ClientsList from "../components/Clients/ClientsList"; // Assuming this is a component for listing clients
 import AddStaffForm from "../components/Staff/AddStaffForm";
-import StaffList from "components/Staff/StaffList";
+import StaffList from "../components/Staff/StaffList";
 import AddAppointmentsForm from "../components/Appointments/AddAppointmentsForm";
 import AppointmentsList from "components/Appointments/AppointmentsList";
 import AddServicesForm from "../components/Services/AddServicesForm";
@@ -18,19 +18,18 @@ import ServicesList from "../components/Services/ServicesList";
 import AddPaymentsForm from "../components/Payments/AddPaymentsForm";
 import PaymentsList from "../components/Payments/PaymentsList"; // Assuming this is a component for listing payments
 import AddStaffScheduleForm from "../components/StaffSchedule/AddStaffScheduleForm";
-import StaffScheduleList from "components/StaffSchedule/StaffScheduleList"; // Assuming this is a component for listing staff schedules
+import StaffScheduleList from "../components/StaffSchedule/StaffScheduleList"; // Assuming this is a component for listing staff schedules
 import ManagersDashboard from "../pages/ManagersDashboard";
-import StaffDashboard from "pages/StaffDashboard";
-import ClientsDashboard from "pages/ClientsDashboard";
+import StaffDashboard from "../pages/StaffDashboard";
+import ClientsDashboard from "../pages/ClientsDashboard";
 import { Navigate } from "react-router-dom";
 
 const AppRoutes = () => {
-  // const { role } = useContext(AuthContext);
   console.log("AppRoutes rendering");
-  const { authState } = useContext(AuthContext);
-  // useEffect(() => {
-  //   localStorage.clear(); // only for dev testing
-  // }, []);
+  const { authState, loading } = useContext(AuthContext);
+
+  if (loading) return <div>Loading...</div>; // Or a spinner
+  console.log("Auth State:", authState);
 
   return (
     <>
@@ -45,11 +44,11 @@ const AppRoutes = () => {
           element={
             authState.isAuthenticated ? (
               authState.role === "Manager" ? (
-                <Navigate to="/manager" />
+                <Navigate to="/managers-dashboard" />
               ) : authState.role === "Staff" ? (
-                <Navigate to="/staff" />
+                <Navigate to="/staff-dashboard" />
               ) : (
-                <Navigate to="/client" />
+                <Navigate to="/clients-dashboard" />
               )
             ) : (
               <Navigate to="/login" />
@@ -59,11 +58,10 @@ const AppRoutes = () => {
 
         {/* <Route path="/" element={<Home />} /> */}
         <Route path="/login" element={<LoginLandingPage />} />
-
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         <Route
-          path="/manager"
+          path="/managers-dashboard"
           element={
             <ProtectedRoute allowedRoles={["Manager"]}>
               <ManagersDashboard />
@@ -74,7 +72,7 @@ const AppRoutes = () => {
         <Route
           path="/clients-form"
           element={
-            <ProtectedRoute allowedRoles={["Manager"]}>
+            <ProtectedRoute allowedRoles={["Manager", "Client"]}>
               <AddClientsForm />
             </ProtectedRoute>
           }
@@ -101,7 +99,7 @@ const AppRoutes = () => {
         <Route
           path="/staff-list"
           element={
-            <ProtectedRoute allowedRoles={["Staff", "Manager"]}>
+            <ProtectedRoute allowedRoles={["Manager"]}>
               <StaffList />
             </ProtectedRoute>
           }
@@ -110,7 +108,7 @@ const AppRoutes = () => {
         <Route
           path="/appointments-form"
           element={
-            <ProtectedRoute allowedRoles={["Manager"]}>
+            <ProtectedRoute allowedRoles={["Manager", "Client"]}>
               <AddAppointmentsForm />
             </ProtectedRoute>
           }
@@ -146,7 +144,7 @@ const AppRoutes = () => {
         <Route
           path="/payments-form"
           element={
-            <ProtectedRoute allowedRoles={["Manager"]}>
+            <ProtectedRoute allowedRoles={["Manager", "Staff", "Client"]}>
               <AddPaymentsForm />
             </ProtectedRoute>
           }
@@ -155,7 +153,7 @@ const AppRoutes = () => {
         <Route
           path="/payments-list"
           element={
-            <ProtectedRoute allowedRoles={["Manager", "Staff", "Client"]}>
+            <ProtectedRoute allowedRoles={["Manager"]}>
               <PaymentsList />
             </ProtectedRoute>
           }
@@ -180,7 +178,7 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="/client"
+          path="/clients-dashboard"
           element={
             <ProtectedRoute allowedRoles={["Client"]}>
               <ClientsDashboard />
@@ -189,7 +187,7 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="/staff"
+          path="/staff-dashboard"
           element={
             <ProtectedRoute allowedRoles={["Staff"]}>
               <StaffDashboard />

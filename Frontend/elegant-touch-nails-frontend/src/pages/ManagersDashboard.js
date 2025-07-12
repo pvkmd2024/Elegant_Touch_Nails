@@ -1,16 +1,13 @@
 import React from "react";
-import LogoutButton from "../components/LogoutButton"; 
 import "./DashboardLayout.css";
 import { Link } from "react-router-dom";
-import Navigation from "../components/Navigation";
+// import Navigation from "../components/Navigation";
 
 export default function ManagersDashboard () {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <Navigation />
         <h1>Manager's Dashboard</h1>
-        <LogoutButton />
       </div>
 
       <ul>

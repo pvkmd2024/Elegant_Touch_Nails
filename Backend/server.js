@@ -63,3 +63,7 @@ app.get("/", (req, res) => {
 // Start Server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.use((req, res) => {
+  console.log(`Unhandled ${req.method} request to ${req.originalUrl}`);
+  res.status(404).send(`Cannot ${req.method} ${req.originalUrl}`);
+});

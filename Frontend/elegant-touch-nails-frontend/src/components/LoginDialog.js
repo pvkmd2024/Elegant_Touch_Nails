@@ -21,11 +21,11 @@ export default function LoginDialog() {
       if (userData?.user && userData?.role && userData?.token) {
   login(userData);
         if (userData.role === "Manager") {
-          navigate("/manager");
+          navigate("/managers-dashboard");
         } else if (userData.role === "Staff") {
-          navigate("/staff");
+          navigate("/staff-dashboard");
         } else if (userData.role === "Client") {
-          navigate("/client");
+          navigate("/clients-dashboard");
         } else {
           console.error("Unknown role:", userData.role);
         }
