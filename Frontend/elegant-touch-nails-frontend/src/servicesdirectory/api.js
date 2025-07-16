@@ -368,3 +368,17 @@ export const deleteAppointment = async (id) => {
 
   return await response.json();
 };
+// servicesdirectory/api.js
+
+export const markAppointmentAsCompleted = async (appointmentId) => {
+  const response = await fetch(`/api/appointments/${appointmentId}/complete`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to mark appointment as completed.");
+  }
+
+  return response.json();
+};

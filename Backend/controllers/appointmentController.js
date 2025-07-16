@@ -1,5 +1,40 @@
 const Appointment = require("../models/appointmentModel");
 console.log("Imported Appointment model:", Appointment);
+const db = require('../config/db');
+
+exports.markAsCompleted = (req, res) => {
+  const appointmentId = req.params.id;
+
+  const query = 'UPDATE Appointments SET Status = ? WHERE AppointmentID = ?';
+
+  db.query(query, ['Completed', appointmentId], (err, result) => {
+    if (err) {
+      console.error('Error updating appointment status:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    res.json({ message: 'Appointment marked as completed' });
+  });
+};
+
+// exports.markAsCompleted = async (req, res) => {
+//   const { appointmentId } = req.params.id;
+
+//   try {
+//     const [result] = await db.execute(
+//       `UPDATE Appointments SET Status = 'Completed' WHERE AppointmentID = ?`,
+//       [appointmentId]
+//     );
+
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ message: "Appointment not found." });
+//     }
+
+//     res.status(200).json({ message: "Appointment marked as completed." });
+//   } catch (err) {
+//     console.error("Error marking appointment as completed:", err);
+//     res.status(500).json({ message: "Database error." });
+//   }
+// };
 
 exports.createAppointment = async (req, res) => {
   try {
@@ -31,13 +66,10 @@ exports.getAllAppointments = async (req, res) => {
 exports.getAppointmentById = async (req, res) => {
   try {
     const appointmentId = req.params.id;
-    
     const appointment = await Appointment.getById(appointmentId);
-
     if (!appointment) {
       return res.status(404).json({ error: "Appointment not found" });
     }
-
     res.status(200).json(appointment);
   } catch (error) {
     console.error("Error getting appointment by ID:", error);

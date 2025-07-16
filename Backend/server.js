@@ -10,8 +10,6 @@ const serviceRoutes = require("./routes/serviceRoutes");
 const staffRoutes = require("./routes/staffRoutes");
 const staffScheduleRoutes = require("./routes/staffScheduleRoutes");
 const authRoutes = require("./routes/authRoutes");
-
-
 const app = express();
 
 // Middleware

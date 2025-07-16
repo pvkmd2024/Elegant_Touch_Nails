@@ -1,8 +1,7 @@
 .appointmentsFormContainer {
-  padding: 24px;
-  max-width: 900px;
-  margin-left: 35px;
-  margin-right: auto;
+  padding: 1rem;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 form {

@@ -7,9 +7,11 @@
 /* Form input fields */
 .emailInput {
   width: 100%;
-  max-width: 100%;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 form {
@@ -25,19 +27,22 @@ select {
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 100%;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
 }
 
 /* Buttons */
 .actionButtons {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  /* flex-wrap: wrap; */
 }
+
 .actionButtonWrapper {
   display: flex;
   gap: 0.5rem;
 }
+
 /* Base form buttons */
 .addStaffBtn,
 .loadStaffBtn,
@@ -50,9 +55,11 @@ select {
   cursor: pointer;
   color: #fff;
   font-weight: bold;
-  flex: 1;
+  flex: 1 1 120px;
+  ;
   min-width: 0;
-  max-width: 120px;
+  max-width: 150px;
+  min-width: 100px;
   text-align: center;
 }
 
@@ -84,7 +91,7 @@ select {
 .emailCell {
   word-break: break-word;
   overflow-wrap: anywhere;
-  max-width: 200px;
+  max-width: 100px;
   white-space: normal;
 }
 
@@ -103,6 +110,7 @@ select {
 .addStaffBtn {
   background-color: #28a745;
 }
+
 .addStaffBtn:hover {
   background-color: #218838;
 }
@@ -110,6 +118,7 @@ select {
 .loadStaffBtn {
   background-color: #5c067d;
 }
+
 .loadStaffBtn:hover {
   background-color: #4c0c56;
 }
@@ -118,6 +127,7 @@ select {
   background-color: #ffc107;
   color: #000;
 }
+
 .unloadStaffBtn:hover {
   background-color: #e0a800;
 }
@@ -125,31 +135,86 @@ select {
 .clearBtn {
   background-color: #6c757d;
 }
+
 .clearBtn:hover {
   background-color: #5a6268;
 }
 
-.editButton {
-  background-color: #17a2b8;
+.actionsCell {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
 }
+
+.editButton,
+.deleteButton {
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.editButton {
+  background-color: #4caf50;
+  color: white;
+}
+
 .editButton:hover {
   background-color: #138496;
 }
 
 .deleteButton {
-  background-color: #dc3545;
+  background-color: #f44336;
+  color: white;
 }
+
 .deleteButton:hover {
   background-color: #c82333;
 }
 
 .actionButtonWrapper {
   display: flex;
-  flex-direction: row;
-  gap: 8px;
   flex-wrap: nowrap;
+  gap: 8px;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
+}
+
+.passwordCell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.staffTable {
+  border: 1px solid #aaa;
+}
+
+.staffTable th,
+.staffTable td {
+  border: 1px solid #aaa;
+}
+
+.staffTable td {
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+.showPasswordBtn {
+  background-color: #689dd6;
+  border: 1px solid #ccc;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.showPasswordBtn:hover {
+  background-color: rgb(74, 80, 192);
 }
 
 /* Tablet (≤ 768px) */
@@ -159,12 +224,30 @@ select {
     margin-left: 10px;
     margin-right: 10px;
   }
-  .actionButtons {
-    flex-direction: row !important;
-    gap: 6px;
-    justify-content: flex-start;
+
+  .passwordCell {
+    max-width: 100%;
+    flex-direction: column;
     align-items: center;
+    gap: 8px;
   }
+
+  .actionButtons {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .actionButtonWrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .actionButtons button {
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+  }
+
   .staffTable {
     font-size: 1rem;
     min-width: 100%;
@@ -185,10 +268,14 @@ select {
 
   .staffTable tr {
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     padding: 10px;
     border-radius: 8px;
     background-color: #fff;
+  }
+
+  .staffTable tr:last-child {
+    border-bottom: none;
   }
 
   .staffTable td {
@@ -199,6 +286,7 @@ select {
     padding-left: 50%;
     border: none;
     border-bottom: 1px solid #eee;
+    font-size: 1rem;
   }
 
   .staffTable td::before {
@@ -224,7 +312,7 @@ select {
   select {
     font-size: 1rem;
   }
-
+  
   .actionButtons {
     flex-direction: row !important;
     gap: 6px;

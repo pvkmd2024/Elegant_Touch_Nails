@@ -6,12 +6,16 @@ import {
   deleteAppointment,
 } from "servicesdirectory/api";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "context/AuthContext"; 
 import styles from "./AppointmentsForm.module.css";
 
 const AddAppointmentsForm = () => {
   const location = useLocation();
-  const isLimitedView = location.state?.isLimitedView ?? false;
   const formRef = useRef(null);
+  const { authState } = useAuth();
+  console.log("Logged-in user:", authState.user);
+  const isClient = authState.role === "Client"; 
+  const isLimitedView = location.state?.isLimitedView ?? isClient; 
 
   const [appointments, setAppointments] = useState([]);
   const [showAppointments, setShowAppointments] = useState(false);
@@ -43,17 +47,18 @@ const AddAppointmentsForm = () => {
     setAppointmentDate("");
     setStatus("");
   };
+
   const formatDateTimeForMySQL = (datetimeLocal) => {
-    if (!datetimeLocal) return null;
-    return datetimeLocal.replace("T", " ") + ":00";
+    return datetimeLocal ? datetimeLocal.replace("T", " ") + ":00" : null;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const appointment = {
       ClientID,
       ServiceID,
-      AppointmentDate: formatDateTimeForMySQL(AppointmentDate),  // <-- call here
+      AppointmentDate: formatDateTimeForMySQL(AppointmentDate),
       Status,
     };
 
@@ -63,7 +68,7 @@ const AddAppointmentsForm = () => {
         alert("Appointment updated successfully.");
       } else {
         await createAppointment(appointment);
-        alert("Appointment Booked successfully.");
+        alert("Appointment booked successfully.");
       }
       await fetchData();
       resetForm();
@@ -73,12 +78,11 @@ const AddAppointmentsForm = () => {
     }
   };
 
-
   const handleEdit = (appointment) => {
     setEditingId(appointment.AppointmentID);
     setClientID(appointment.ClientID);
     setServiceID(appointment.ServiceID);
-    // Convert MySQL datetime "YYYY-MM-DD HH:mm:ss" to "YYYY-MM-DDTHH:mm"
+
     const formattedDate = appointment.AppointmentDate
       ? appointment.AppointmentDate.replace(" ", "T").slice(0, 16)
       : "";
@@ -156,13 +160,13 @@ const AddAppointmentsForm = () => {
               <button className={styles.unloadAppointmentsBtn} type="button" onClick={unloadData}>
                 Unload
               </button>
-              <button className={styles.clearBtn} type="button" onClick={resetForm}>
-                Clear
-              </button>
+             
             </>
           )}
+           <button className={styles.clearBtn} type="button" onClick={resetForm}>
+                Clear
+              </button>
         </div>
-
       </form>
 
       {!isLimitedView && showAppointments && (
@@ -182,23 +186,36 @@ const AddAppointmentsForm = () => {
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {appointments.map((a) => (
-                  <tr key={a.AppointmentID}>
-                    <td data-label="AppointmentID">{a.AppointmentID}</td>
-                    <td data-label="ClientID">{a.ClientID}</td>
-                    <td data-label="ServiceID">{a.ServiceID}</td>
-                    <td data-label="AppointmentDate">{a.AppointmentDate.slice(0, 10)}</td>
-                    <td data-label="Status">{a.Status}</td>
-                    <td className={styles.actionButtons}>
-                      <div className={styles.actionButtonWrapper}>
-                        <button className={styles.editButton} onClick={() => handleEdit(a)}>Edit</button>
-                        <button className={styles.deleteButton} onClick={() => handleDelete(a.AppointmentID)}>Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+             <tbody>
+  {appointments.map((a) => (
+    <tr key={a.AppointmentID}>
+      <td data-label="AppointmentID">{a.AppointmentID}</td>
+      <td data-label="ClientID">{a.ClientID}</td>
+      <td data-label="ServiceID">{a.ServiceID}</td>
+      <td data-label="Date">{a.AppointmentDate.slice(0, 10)}</td>
+      <td data-label="Status">{a.Status}</td>
+      <td data-label="Actions" className={styles.actionButtons}>
+        {!isLimitedView && (
+          <div className={styles.actionButtonWrapper}>
+            <button
+              className={styles.editButton}
+              onClick={() => handleEdit(a)}
+            >
+              Edit
+            </button>
+            <button
+              className={styles.deleteButton}
+              onClick={() => handleDelete(a.AppointmentID)}
+            >
+              Delete
+            </button>
+          </div>
+        )}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
             </table>
           )}
         </>

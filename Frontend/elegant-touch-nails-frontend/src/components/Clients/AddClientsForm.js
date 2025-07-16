@@ -18,6 +18,7 @@ const AddClientsForm = () => {
   const [Email, setEmail] = useState("");
   const [PhoneNumber, setPhoneNumber] = useState("");
   const [Password, setPassword] = useState("");
+const [visiblePasswords, setVisiblePasswords] = useState({});
 
   const [loading, setLoading] = useState(false);
 
@@ -49,7 +50,7 @@ const AddClientsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const client = { FullName, Email, PhoneNumber };
+    const client = { FullName, Email, PhoneNumber, Password };
 
     try {
       if (editingId) {
@@ -94,6 +95,12 @@ const AddClientsForm = () => {
       alert("Failed to delete client.");
     }
   };
+const togglePasswordVisibility = (clientId) => {
+  setVisiblePasswords((prev) => ({
+    ...prev,
+    [clientId]: !prev[clientId],
+  }));
+};
 
   return (
     <div className={styles.clientsPageWrapper}>
@@ -138,7 +145,7 @@ const AddClientsForm = () => {
               required
             />
 
-            <input
+        <input
               type="password"
               placeholder="Password"
               value={Password}
@@ -177,6 +184,7 @@ const AddClientsForm = () => {
             {Array.isArray(clients) && clients.length === 0 ? (
               <p>No clients found.</p>
             ) : (
+              <div className={styles.clientsTableWrapper}>
               <table className={styles.clientsTable}>
                 <thead>
                   <tr>
@@ -184,7 +192,7 @@ const AddClientsForm = () => {
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Password Hash</th>
+                    <th>Password</th>
                     <th>Created At</th>
                     <th>Actions</th>
                   </tr>
@@ -196,7 +204,17 @@ const AddClientsForm = () => {
                       <td data-label="FullName">{c.FullName}</td>
                       <td data-label="Email">{c.Email}</td>
                       <td data-label="PhoneNumber">{c.PhoneNumber}</td>
-                      <td data-label="Password">{c.Password}</td>
+                      <td data-label="Password">
+  {visiblePasswords[c.ClientID] ? c.Password : "••••••••"}
+  <button
+    type="button"
+    onClick={() => togglePasswordVisibility(c.ClientID)}
+    className={styles.showPasswordBtn}
+  >
+    {visiblePasswords[c.ClientID] ? "Hide" : "Show"}
+  </button>
+</td>
+
                       <td data-label="CreatedAt">{c.CreatedAt ? new Date(c.CreatedAt).toLocaleString() : "N/A"}</td>
                       <td data-label="Actions" className={styles.actionButtons}>
                         <div className={styles.actionButtonWrapper}>
@@ -208,6 +226,7 @@ const AddClientsForm = () => {
                   ))}
                 </tbody>
               </table>
+              </div>
             )}
           </>
         )}

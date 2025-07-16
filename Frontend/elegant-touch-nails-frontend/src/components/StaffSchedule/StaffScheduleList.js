@@ -31,7 +31,7 @@ const StaffScheduleList = () => {
 
   return (
     <div className={styles.staffScheduleContainer}>
-      <h2 className={styles.pageHeading}>Staff Schedule List</h2>
+      <h2 className={styles.pageHeading}>Staff Schedule</h2>
 
       {scheduleList.length === 0 ? (
         <p>No staff schedules available.</p>

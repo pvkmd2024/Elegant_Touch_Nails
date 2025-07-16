@@ -1,39 +1,39 @@
-import React, { useState } from "react";
-import AddStaffForm from "../components/Staff/AddStaffForm";
-import AddServicesForm from "../components/Services/AddServicesForm";
-import AddPaymentsForm from "../components/Payments/AddPaymentsForm";
+// import React, { useState } from "react";
+// import AddStaffForm from "../components/Staff/AddStaffForm";
+// import AddServicesForm from "../components/Services/AddServicesForm";
+// import AddPaymentsForm from "../components/Payments/AddPaymentsForm";
 
-import IconButton from "@mui/material/IconButton";
-import PeopleIcon from "@mui/icons-material/People";
-import DesignServicesIcon from "@mui/icons-material/DesignServices";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+// import IconButton from "@mui/material/IconButton";
+// import PeopleIcon from "@mui/icons-material/People";
+// import DesignServicesIcon from "@mui/icons-material/DesignServices";
+// import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
-export default function ManagersDashboard() {
-  const [showAddStaffForm, setShowAddStaffForm] = useState(false);
-  const [showAddServicesForm, setShowAddServicesForm] = useState(false);
-  const [showAddPaymentsForm, setShowAddPaymentsForm] = useState(false);
+// export default function ManagersDashboard() {
+//   const [showAddStaffForm, setShowAddStaffForm] = useState(false);
+//   const [showAddServicesForm, setShowAddServicesForm] = useState(false);
+//   const [showAddPaymentsForm, setShowAddPaymentsForm] = useState(false);
 
-  return (
-    <div style={{ padding: "20px" }}>
-      <h2>Manager's Dashboard</h2>
-      <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-        <IconButton onClick={() => setShowAddStaffForm(true)}>
-          <PeopleIcon />
-        </IconButton>
-        <IconButton onClick={() => setShowAddServicesForm(true)}>
-          <DesignServicesIcon />
-        </IconButton>
-        <IconButton onClick={() => setShowAddPaymentsForm(true)}>
-          <AttachMoneyIcon />
-        </IconButton>
-      </div>
+//   return (
+//     <div style={{ padding: "20px" }}>
+//       <h2>Manager's Dashboard</h2>
+//       <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
+//         <IconButton onClick={() => setShowAddStaffForm(true)}>
+//           <PeopleIcon />
+//         </IconButton>
+//         <IconButton onClick={() => setShowAddServicesForm(true)}>
+//           <DesignServicesIcon />
+//         </IconButton>
+//         <IconButton onClick={() => setShowAddPaymentsForm(true)}>
+//           <AttachMoneyIcon />
+//         </IconButton>
+//       </div>
 
-      {showAddStaffForm && <AddStaffForm />}
-      {showAddServicesForm && <AddServicesForm />}
-      {showAddPaymentsForm && <AddPaymentsForm />}
-    </div>
-  );
-}
+//       {showAddStaffForm && <AddStaffForm />}
+//       {showAddServicesForm && <AddServicesForm />}
+//       {showAddPaymentsForm && <AddPaymentsForm />}
+//     </div>
+//   );
+// }
 
 
 // import React from "react";

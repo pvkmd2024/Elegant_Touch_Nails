@@ -12,7 +12,7 @@ import ClientsList from "../components/Clients/ClientsList"; // Assuming this is
 import AddStaffForm from "../components/Staff/AddStaffForm";
 import StaffList from "../components/Staff/StaffList";
 import AddAppointmentsForm from "../components/Appointments/AddAppointmentsForm";
-import AppointmentsList from "components/Appointments/AppointmentsList";
+import AppointmentsList from "../components/Appointments/AppointmentsList";
 import AddServicesForm from "../components/Services/AddServicesForm";
 import ServicesList from "../components/Services/ServicesList";
 import AddPaymentsForm from "../components/Payments/AddPaymentsForm";
@@ -35,7 +35,10 @@ const AppRoutes = () => {
     <>
       {/* Header with Title only */}
       <div>
-        <h1 style={{ textAlign: "center" }}>Elegant Touch Nails</h1>
+        <h1 style={{ textAlign: "left", marginLeft: "20px" }}>
+  Elegant Touch Nails
+</h1>
+
       </div>
       {/* Main Routes */}
       <Routes>

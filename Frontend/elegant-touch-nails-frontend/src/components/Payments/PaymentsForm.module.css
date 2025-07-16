@@ -1,10 +1,8 @@
 .paymentsFormContainer {
-  padding: 24px;
-  max-width: 900px;
-  margin-left: 35px;;
-  margin-right: auto;
+  padding: 1rem;
+  max-width: 100%;
+  overflow-x: auto;
 }
-
 form {
   display: flex;
   flex-direction: column;
@@ -141,6 +139,19 @@ select {
   justify-content: flex-start;
   align-items: center;
 }
+.markCompletedBtn {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.markCompletedBtn:hover {
+  background-color: #1b5e20;
+}
+
 /* Tablet (≤ 768px) */
 @media (max-width: 768px) {
   .paymentsFormContainer {

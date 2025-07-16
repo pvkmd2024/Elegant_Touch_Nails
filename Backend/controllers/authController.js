@@ -50,9 +50,9 @@ exports.loginUser = async (req, res) => {
     // ✅ Dynamic Client or Staff Lookup
     let rows;
     if (role === "Client") {
-      [rows] = await db.query("SELECT * FROM Clients WHERE Email = ?", [email]);
+      [rows] = await db.execute("SELECT * FROM Clients WHERE Email = ?", [email]);
     } else {
-      [rows] = await db.query("SELECT * FROM Staff WHERE Email = ?", [email]);
+      [rows] = await db.execute("SELECT * FROM Staff WHERE Email = ?", [email]);
     }
 
     if (!rows || rows.length === 0) {

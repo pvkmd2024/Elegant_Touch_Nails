@@ -9,31 +9,35 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import PaymentIcon from "@mui/icons-material/Payment";
 
 export default function ClientsDashboard() {
-  const [showAddClientsForm, setShowAddClientsForm] = useState(false);
-  const [showAddAppointmentsForm, setShowAddAppointmentsForm] = useState(false);
-  const [showAddPaymentsForm, setShowAddPaymentsForm] = useState(false);
+  const [activeForm, setActiveForm] = useState("clients"); // default is clients
+
+  const handleFormChange = (formName) => {
+    setActiveForm(formName);
+  };
 
   return (
     <div style={{ padding: "20px" }}>
       <h2>Clients Dashboard</h2>
 
+      {/* Navigation Icons */}
       <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-        <IconButton onClick={() => setShowAddClientsForm(true)}>
-          <PersonAddIcon />
+        <IconButton onClick={() => handleFormChange("clients")} title="Client Form">
+          <PersonAddIcon color={activeForm === "clients" ? "primary" : "action"} />
         </IconButton>
 
-        <IconButton onClick={() => setShowAddAppointmentsForm(true)}>
-          <CalendarMonthIcon />
+        <IconButton onClick={() => handleFormChange("appointments")} title="Appointments Form">
+          <CalendarMonthIcon color={activeForm === "appointments" ? "primary" : "action"} />
         </IconButton>
 
-        <IconButton onClick={() => setShowAddPaymentsForm(true)}>
-          <PaymentIcon />
+        <IconButton onClick={() => handleFormChange("payments")} title="Payments Form">
+          <PaymentIcon color={activeForm === "payments" ? "primary" : "action"} />
         </IconButton>
       </div>
 
-      {showAddClientsForm && <AddClientsForm />}
-      {showAddAppointmentsForm && <AddAppointmentsForm />}
-      {showAddPaymentsForm && <AddPaymentsForm />}
+      {/* Conditional Form Rendering */}
+      {activeForm === "clients" && <AddClientsForm />}
+      {activeForm === "appointments" && <AddAppointmentsForm />}
+      {activeForm === "payments" && <AddPaymentsForm />}
     </div>
   );
 }

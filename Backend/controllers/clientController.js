@@ -1,22 +1,59 @@
+const bcrypt = require("bcryptjs");
 const Client = require("../models/clientModel");
 
 exports.createClient = async (req, res) => {
   try {
-    const { FullName, Email, PhoneNumber, Password, CreatedAt } =
-      req.body;
-    const result = await Client.create({
-      FullName,
-      Email,
-      PhoneNumber,
-      Password,
-      CreatedAt,
+    let clients = req.body;
+
+    // Wrap in array if only one client is passed
+    if (!Array.isArray(clients)) {
+      clients = [clients];
+    }
+
+    const clientPromises = clients.map(async (client, index) => {
+      let { FullName, Email, PhoneNumber, Password } = client;
+
+      if (!FullName || !Email || !PhoneNumber || !Password) {
+        throw new Error(`Missing fields for client at index ${index}`);
+      }
+
+      // Hash password only if not already hashed
+      if (!Password.startsWith("$2b$")) {
+        Password = await bcrypt.hash(Password, 10);
+      }
+
+      return Client.create({ FullName, Email, PhoneNumber, Password });
     });
-    console.log(req.body);
-    res.status(201).json({ message: "Client created successfully", result });
+
+    const results = await Promise.all(clientPromises);
+
+    res.status(201).json({
+      message: "Clients added successfully!",
+      inserted: results.length,
+    });
   } catch (error) {
+    console.error("❌ Error in createClient:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
+
+// exports.createClient = async (req, res) => {
+//   try {
+//     const { FullName, Email, PhoneNumber, Password, CreatedAt } =
+//       req.body;
+//     const result = await Client.create({
+//       FullName,
+//       Email,
+//       PhoneNumber,
+//       Password,
+//       CreatedAt,
+//     });
+//     console.log(req.body);
+//     res.status(201).json({ message: "Client created successfully", result });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 exports.getAllClients = async (req, res) => {
   try {

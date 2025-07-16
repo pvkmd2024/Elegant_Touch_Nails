@@ -1,5 +1,5 @@
 // src/context/AuthContext.js
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 export const AuthContext = createContext();
@@ -90,4 +90,7 @@ const normalizeRole = (accessLevel, role) => {
       {children}
     </AuthContext.Provider>
   );
+};
+export const useAuth = () => {
+  return useContext(AuthContext);
 };

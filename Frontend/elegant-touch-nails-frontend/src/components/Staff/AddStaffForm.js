@@ -18,6 +18,7 @@ const AddStaffForm = () => {
   const [Role, setRole] = useState("");
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
+  const [visiblePasswords, setVisiblePasswords] = useState({});
 
   const fetchData = async () => {
     try {
@@ -94,11 +95,17 @@ const AddStaffForm = () => {
       alert("Failed to delete staff.");
     }
   };
+  const togglePasswordVisibility = (id) => {
+    setVisiblePasswords((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   return (
     <div className={styles.staffFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit Staff" : "Add Staff"}</h2>
+        <h2>{editingId ? "Edit Staff" : "Add A Staff Member"}</h2>
 
         {editingId && (
           <div>
@@ -180,16 +187,23 @@ const AddStaffForm = () => {
                     <td data-label="Full Name">{s.FullName}</td>
                     <td data-label="Role">{s.Role}</td>
                     <td data-label="Email" className={styles.emailCell}>{s.Email}</td>
-                    <td data-label="Password">{s.Password}</td>
-                    <td data-label="Actions" className={styles.actionButtons}>
-                      <div className={styles.actionButtonWrapper}>
+                    <td data-label="Password" className={styles.passwordCell}>
+                      {visiblePasswords[s.StaffID] ? s.Password : "••••••••"}
+                      <button
+                        type="button"
+                        className={styles.showPasswordBtn}
+                        onClick={() => togglePasswordVisibility(s.StaffID)}
+                      >
+                        {visiblePasswords[s.StaffID] ? "Hide" : "Show"}
+                      </button>
+                    </td>
+                    <td data-label="Actions" className={styles.actionCell}>
                         <button className={styles.editButton} onClick={() => handleEdit(s)}>
                           Edit
                         </button>
                         <button className={styles.deleteButton} onClick={() => handleDelete(s.StaffID)}>
                           Delete
-                        </button>
-                      </div>
+                        </button>                    
                     </td>
                   </tr>
                 ))}

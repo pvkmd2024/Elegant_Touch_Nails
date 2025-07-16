@@ -7,6 +7,7 @@ import {
 } from "servicesdirectory/api";
 import { useLocation } from "react-router-dom";
 import styles from "./PaymentsForm.module.css";
+import { markAppointmentAsCompleted } from "servicesdirectory/api";
 
 const AddPaymentsForm = () => {
    const location = useLocation();
@@ -68,6 +69,7 @@ const AddPaymentsForm = () => {
 
       await fetchData();
       resetForm();
+
     } catch (err) {
       console.error("Payment operation failed:", err.message);
       alert("Failed to submit payment.");
@@ -103,7 +105,7 @@ const AddPaymentsForm = () => {
   return (
     <div className={styles.paymentsFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit Payment" : "Add Payment"}</h2>
+        <h2>{editingId ? "Edit Payment" : "Add A Payment"}</h2>
 
         {editingId && (
           <div>
@@ -119,14 +121,41 @@ const AddPaymentsForm = () => {
           onChange={(e) => setAppointmentID(e.target.value)}
           required
         />
+<button
+  type="button"
+  className={styles.markCompletedBtn}
+  onClick={async () => {
+    try {
+      if (!AppointmentID) {
+        alert("Enter Appointment ID first.");
+        return;
+      }
 
-        <input
-          type="text"
-          placeholder="Payment Method"
-          value={PaymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value)}
-          required
-        />
+      await markAppointmentAsCompleted(AppointmentID);
+      alert("Appointment marked as completed.");
+    } catch (error) {
+      console.error("Failed to mark appointment:", error.message);
+      alert("Could not update appointment status.");
+    }
+  }}
+>
+  Mark Appointment as Completed
+</button>
+
+        <select
+  value={PaymentMethod}
+  onChange={(e) => setPaymentMethod(e.target.value)}
+  required
+>
+  <option value="">Select Payment Method</option>
+  <option value="Cash">Cash</option>
+  <option value="Online">Online</option>
+  <option value="Bank Transfer">Bank Transfer</option>
+  <option value="Loyalty Points">Loyalty Points</option>
+  <option value="Mobile Payment">Mobile Payment</option>
+  <option value="Credit/Debit Card">Credit/Debit Cards</option>
+</select>
+
 
         <select
           value={PaymentStatus}

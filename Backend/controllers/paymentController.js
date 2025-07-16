@@ -1,19 +1,32 @@
+const db = require("../config/db");
 const Payment = require("../models/paymentModel");
-
 exports.createPayment = async (req, res) => {
   try {
-    const { appointmentID, paymentMethod, paymentStatus, amount, paidAt } =
-      req.body;
-    const result = await Payment.create({
-      appointmentID,
-      paymentMethod,
-      paymentStatus,
-      amount,
-      paidAt,
-    });
-    res.status(201).json({ message: "Payment created successfully", result });
+    const { AppointmentID, PaymentMethod, PaymentStatus, Amount, PaidAt } = req.body;
+
+    if (!AppointmentID || !PaymentMethod || !PaymentStatus || !Amount || !PaidAt) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // Insert into Payments table
+    const [result] = await db.execute(
+      "INSERT INTO Payments (AppointmentID, PaymentMethod, PaymentStatus, Amount, PaidAt) VALUES (?, ?, ?, ?, ?)",
+      [AppointmentID, PaymentMethod, PaymentStatus, Amount, PaidAt]
+    );
+
+    // If payment status is 'paid', mark appointment as completed
+    if (PaymentStatus.toLowerCase() === "paid") {
+      await db.execute(
+        "UPDATE Appointments SET Status = 'completed' WHERE AppointmentID = ?",
+        [AppointmentID]
+      );
+    }
+
+    res.status(201).json({ message: "Payment created and appointment updated successfully" });
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error creating payment:", error);
+    res.status(500).json({ error: "Failed to create payment" });
   }
 };
 

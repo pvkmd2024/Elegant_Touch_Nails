@@ -1,20 +1,21 @@
 .paymentsContainer {
-  padding: 24px;
+ padding: 20px;
   max-width: 850px;
-  margin-left: 55px;
+  margin-left: 20px;
   margin-right: auto;
-  background-color: rgba(255, 255, 255, 0.9); /* Slight opacity */
-  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
 }
-
 .pageHeading {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: bold;
   margin-bottom: 20px;
+  margin-left: 10px; /* ⬅ pushes heading to the right */
   color: #333;
 }
+
 
 .paymentsTable {
   width: 100%;
@@ -41,7 +42,7 @@
   background-color: #fdfdfd;
 }
 
-/* ✅ Button styling */
+/* ✅ Optional action buttons for future editing */
 .editButton,
 .deleteButton {
   padding: 6px 10px;
@@ -67,15 +68,18 @@
 .deleteButton:hover {
   background-color: #c82333;
 }
+
+/* Tablet & smaller laptop screens */
 @media (max-width: 1024px) {
   .paymentsContainer {
-    max-width: 90%;   /* shrink max-width */
-    margin-left: auto; /* center horizontally */
+    max-width: 90%;
+    margin-left: auto;
     margin-right: auto;
     padding: 20px;
   }
 }
-/* ✅ Responsive adjustments */
+
+/* Tablet (≤ 768px) */
 @media (max-width: 768px) {
   .paymentsContainer {
     padding: 16px;
@@ -94,6 +98,8 @@
     padding: 8px;
   }
 }
+
+/* Mobile stacked layout (≤ 600px) */
 @media (max-width: 600px) {
   .paymentsTable,
   .paymentsTable thead,
@@ -103,13 +109,14 @@
   .paymentsTable tr {
     display: block;
   }
-.paymentsTable {
-  min-width: unset;
-  width: 100%;
-}
+
+  .paymentsTable {
+    min-width: unset;
+    width: 100%;
+  }
 
   .paymentsTable thead {
-    display: none; /* Hide table headers on small screens */
+    display: none;
   }
 
   .paymentsTable tr {
@@ -126,7 +133,7 @@
     align-items: center;
     padding: 8px 12px;
     position: relative;
-    padding-left: 50%; /* space for label */
+    padding-left: 50%;
     text-align: left;
     border: none;
     border-bottom: 1px solid #eee;
@@ -144,17 +151,19 @@
 
   .editButton,
   .deleteButton {
-    margin-top: 0px;
+    margin-top: 0;
   }
 }
 
+/* Small mobile (≤ 480px) */
 @media (max-width: 480px) {
-   .paymentsContainer {
+  .paymentsContainer {
     padding: 12px 10px;
     max-width: 100%;
     margin: 0 auto;
     border-radius: 8px;
   }
+
   .pageHeading {
     font-size: 18px;
   }

@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useLocation, Link, useNavigate } from "react-router-dom";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import Snackbar from '@mui/material/Snackbar';
 import {
   AppBar,
   Box,
@@ -35,7 +37,11 @@ export default function Navigation() {
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
   const handleMenu = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
   const handleLogout = () => {
@@ -65,9 +71,23 @@ export default function Navigation() {
   };
 
   const itemsToRender = navItems[role] || [];
-if (!itemsToRender.length && role) {
-  console.warn("⚠️ No nav items for role:", role);
-}
+  if (!itemsToRender.length && role) {
+    console.warn("⚠️ No nav items for role:", role);
+  }
+
+ const handleGoToDashboard = () => {
+  console.log("Redirecting to dashboard for role:", role);
+  if (role === "Manager") {
+    navigate("/managers-dashboard");
+  } else if (role === "Client") {
+    navigate("/clients-dashboard");
+  } else if (role === "Staff") {
+    navigate("/staff-dashboard");
+  } else {
+    navigate("/login");
+  }
+  setSnackbarOpen(true);
+};
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -117,6 +137,20 @@ if (!itemsToRender.length && role) {
           ))}
 
           {/* Spacer */}
+          <Tooltip title="Go to Dashboard">
+  <IconButton color="inherit" onClick={handleGoToDashboard}>
+    <DashboardIcon />
+  </IconButton>
+</Tooltip>
+
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={handleSnackbarClose}
+            message="Go To Dashboard"
+          />
+
+
           <Box sx={{ flexGrow: 1 }} />
 
           {/* Profile Menu or Login */}

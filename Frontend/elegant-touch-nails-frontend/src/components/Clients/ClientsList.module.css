@@ -1,34 +1,37 @@
 .clientsContainer {
   padding: 24px;
-  max-width: 100%; /* Was 850px */
-  width: 100%;
-  margin-left: auto;
+  max-width: 1600px;
+  margin-left: 35px;
   margin-right: auto;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
+.clientsCardsContainer {
+  display: none;
+}
 
 .pageHeading {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 50px;
+  font-weight:700;
   margin-bottom: 20px;
   color: #333;
 }
 
 .clientsTable {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
   background-color: white;
   margin-top: 20px;
   font-size: 1rem;
- table-layout: auto;
+  table-layout: auto;
 }
 
 .clientsTable th,
 .clientsTable td {
+  padding: 12px 16px;
   border: 1px solid #ccc;
-  padding: 10px 12px;
   text-align: left;
   word-break: break-word;
 }
@@ -41,11 +44,31 @@
 .clientsTable tr:nth-child(even) {
   background-color: #fdfdfd;
 }
+.clientsTable th:nth-child(3),
+.clientsTable td:nth-child(3) {
+  width: 22%;
+  min-width: 200px;
+  max-width: 280px;
+  word-break: break-word;
+}
 
-/* ✅ Button styling */
+.editButton {
+  background-color: #17a2b8;
+}
+.editButton:hover {
+  background-color: #cce5ff;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+.deleteButton:hover {
+  background-color: #ffcccc;
+}
+
 .editButton,
 .deleteButton {
-  padding: 6px 10px;
+  padding: 6px 12px;
   font-size: 1rem;
   font-weight: bold;
   border: none;
@@ -54,37 +77,35 @@
   cursor: pointer;
   color: #fff;
 }
-
-.editButton {
-  background-color: #17a2b8;
+.clientsTableWrapper {
+  display: block;
 }
-.editButton:hover {
-  background-color: #138496;
-}
-
-.deleteButton {
-  background-color: #dc3545;
-}
-.deleteButton:hover {
-  background-color: #c82333;
+.togglePasswordButton {
+  background: none;
+  border: none;
+  color: #007bff;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px;
 }
 
-/* Responsive Adjustments */
+.togglePasswordButton:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
   .clientsContainer {
     max-width: 90%;
-    margin-left: auto;
-    margin-right: auto;
     padding: 20px;
   }
 }
 
 @media (max-width: 768px) {
   .clientsContainer {
-    padding: 16px;
     max-width: 95%;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 16px;
   }
 
   .clientsTable {
@@ -96,8 +117,72 @@
   .clientsTable td {
     padding: 8px;
   }
-}
+  .clientsTableWrapper {
+    display: none;
+  }
 
+  .clientsCardsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .clientCard {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .clientCard h4 {
+    font-size: 1.1rem;
+    margin: 0 0 8px;
+    color: #333;
+  }
+
+  .clientCard p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  .clientCardActions {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .editButton {
+    background-color: #17a2b8;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .editButton:hover {
+    background-color: #138496;
+  }
+
+  .deleteButton {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .deleteButton:hover {
+    background-color: #c82333;
+  }
+}
+/* 
 @media (max-width: 600px) {
   .clientsTable,
   .clientsTable thead,
@@ -109,10 +194,13 @@
     width: 100%;
     box-sizing: border-box;
   }
-
-  .clientsTable {
-    min-width: 100%;
-    overflow-x: hidden;
+ .clientsTable td[data-label="Password"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .clientsTable thead {
+    display: none;
   }
 
   .clientsTable tr {
@@ -125,39 +213,27 @@
 
   .clientsTable td {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
-    align-items: center;
     padding: 8px 12px;
-    padding-left: 12px; /* REMOVE 50% LEFT PADDING */
     text-align: left;
-    border: none;
     border-bottom: 1px solid #eee;
-    word-break: break-word; /* Ensure content wraps instead of overflowing */
   }
 
   .clientsTable td::before {
-    position: static; /* Switch from absolute to static positioning */
-    display: inline-block;
-    width: auto; /* Allow it to size naturally */
-    margin-right: 10px;
+    content: attr(data-label);
     font-weight: 600;
     color: #555;
-    white-space: nowrap;
-    content: attr(data-label);
+    margin-right: 10px;
   }
-
-  .editButton,
-  .deleteButton {
-    margin-top: 0;
+  .actionButtonWrapper {
+    flex-direction: column;
+    align-items: stretch;
   }
-}
+} */
 
 @media (max-width: 480px) {
   .clientsContainer {
     padding: 12px 10px;
-    max-width: 100%;
-    margin: 0 auto;
     border-radius: 8px;
   }
 
@@ -168,7 +244,6 @@
   .clientsTable {
     font-size: 1rem;
     width: 100%;
-    min-width: unset;
   }
 
   .editButton,

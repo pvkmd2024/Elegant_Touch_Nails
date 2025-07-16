@@ -1,25 +1,61 @@
 const db = require("../config/db"); // Adjust the path to your db.js
 
 class Payment {
-  static async create() {
-    // Fetch appointments that are confirmed or completed (excluding future appointments)
-    const futureAppointments = await db.execute(`
-            SELECT AppointmentID FROM Appointments
-            WHERE AppointmentDate < CURDATE() AND Status IN ('Completed', 'Cancelled')
-        `);
+  static async create(paymentData) {
+  // Destructure and assign default values if needed
+  const {
+    AppointmentID,
+    PaymentMethod = null,
+    PaymentStatus = null,
+    Amount = null,
+    PaidAt = null,
+  } = paymentData;
 
-    if (futureAppointments.length > 0) {
-      const sql = `INSERT INTO Appointments (AppointmentID,PaymentMethod, PaymentStatus, Amount, PaidAt) 
+  // Ensure required fields are present
+  if (
+    AppointmentID === undefined ||
+    PaymentMethod === undefined ||
+    PaymentStatus === undefined ||
+    Amount === undefined ||
+    PaidAt === undefined
+  ) {
+     console.error("Missing required payment fields.");
+    return { error: "Missing required payment fields." };
+  }
+
+  // Validate the appointment
+  const [rows] = await db.execute(
+    `SELECT AppointmentID FROM Appointments 
+     WHERE AppointmentID = ? 
+     AND AppointmentDate < CURDATE() 
+     AND Status IN ('Completed', 'Cancelled')`,
+    [AppointmentID]
+  );
+
+  if (rows.length === 0) {
+     console.error("No eligible appointment found for payment.");
+    return { error: "No eligible appointment found for payment." };
+  }
+
+  const sql = `INSERT INTO Payments (AppointmentID, PaymentMethod, PaymentStatus, Amount, PaidAt) 
                VALUES (?, ?, ?, ?, ?)`;
 
-      // Insert the payments data
-      const [result] = await db.execute(sql);
-      return result;
-    }
-
-    // If no payments need to be inserted, just return a message
-    return { message: "No payments to insert for the future appointments." };
+  try {
+    const [result] = await db.execute(sql, [
+  AppointmentID ?? null,
+  PaymentMethod ?? null,
+  PaymentStatus ?? null,
+  Amount ?? null,
+  PaidAt ?? null,
+]);
+console.log("Payment created successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error creating payment:", error);
+    throw error;
   }
+}
+
 
   static async getAll() {
     const sql = `SELECT * FROM Payments`;
@@ -27,7 +63,6 @@ class Payment {
     return rows;
   }
 
-  // Delete a payment by ID
   static async delete(id) {
     const sql = `DELETE FROM Payments WHERE PaymentID = ?`;
     try {
@@ -39,7 +74,6 @@ class Payment {
     }
   }
 
-  // Update a payment
   static async update(id, updates) {
     const fields = Object.keys(updates)
       .map((key) => `${key} = ?`)

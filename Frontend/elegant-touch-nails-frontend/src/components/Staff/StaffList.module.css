@@ -1,18 +1,19 @@
-.staffContainer {
-  padding: 24px;
+.staffListContainer {
+  padding: 20px;
   max-width: 850px;
-  margin-left: 55px;
+  margin-left: 20px;
   margin-right: auto;
   background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
+  border-radius: 15px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
 }
 
 .pageHeading {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
   margin-bottom: 20px;
+  margin-left: 50px; 
   color: #333;
 }
 
@@ -106,39 +107,32 @@
   .staffTable tr {
     display: block;
   }
+
   .staffTable {
-    min-width: unset;
     width: 100%;
+    font-size: 1rem;
   }
 
   .staffTable thead {
     display: none;
   }
-.staffTable th {
-    font-size: 0.8rem;
-    padding: 6px;
-  }
-
-  .emailCell {
-    max-width: 140px;
-  }
 
   .staffTable tr {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
+    border-radius: 10px;
+    padding: 12px;
     background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   }
 
   .staffTable td {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* align text to start */
     align-items: center;
-    padding: 8px 12px;
     position: relative;
-    font-size: 0.8rem;
-    padding: 6px;
+    padding: 10px 16px 10px 130px; /* ⬅⬅⬅ adds left space between label and content */
+    font-size: 1rem;
     text-align: left;
     border: none;
     border-bottom: 1px solid #eee;
@@ -146,17 +140,20 @@
 
   .staffTable td::before {
     position: absolute;
-    left: 12px;
-    width: 45%;
-    white-space: nowrap;
+    left: 16px;
+    width: 100px; /* ⬅⬅⬅ increase width of label area */
     font-weight: 600;
-    color: #555;
+    color: #444;
     content: attr(data-label);
+    text-align: left;
+    white-space: nowrap;
   }
 
   .editButton,
   .deleteButton {
-    margin-top: 0;
+    font-size: 1rem;
+    padding: 6px 10px;
+    margin-top: 6px;
   }
 }
 

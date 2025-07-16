@@ -93,7 +93,7 @@ const StaffScheduleForm = () => {
   return (
     <div className={styles.scheduleFormContainer} ref={formRef}>
       <form onSubmit={handleSubmit}>
-        <h2>{editingId ? "Edit" : "Add"} Staff Schedule</h2>
+        <h2>{editingId ? "Edit" : "Add"} A Staff Schedule</h2>
 
         {editingId && (
           <input type="text" value={editingId} readOnly placeholder="Schedule ID" />
@@ -160,17 +160,17 @@ const StaffScheduleForm = () => {
               <tbody>
                 {schedules.map((s) => (
                   <tr key={s.ScheduleID}>
-                    <td data-label="SAcheduleID">{s.ScheduleID}</td>
+                    <td data-label="ScheduleID">{s.ScheduleID}</td>
                     <td data-label="StaffID">{s.StaffID}</td>
                     <td data-label="DayOfWeek">{s.DayOfWeek}</td>
                     <td data-label="StartTime">{s.StartTime}</td>
                     <td data-label="EndTime">{s.EndTime}</td>
                     <td className={styles.actionButtons}>
                       <div className={styles.actionButtonWrapper}>
-                        <button className={styles.edit} onClick={() => handleEdit(s)}>
+                        <button className={styles.editButton} onClick={() => handleEdit(s)}>
                           Edit
                         </button>
-                        <button className={styles.delete} onClick={() => handleDelete(s.ScheduleID)}>
+                        <button className={styles.deleteButton} onClick={() => handleDelete(s.ScheduleID)}>
                           Delete
                         </button>
                       </div>

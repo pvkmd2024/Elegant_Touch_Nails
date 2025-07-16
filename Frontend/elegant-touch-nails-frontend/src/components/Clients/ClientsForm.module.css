@@ -1,29 +1,38 @@
-.clientsFormContainer {
-  padding: 24px;
-  max-width: 100%; /* Was 900px */
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
 .clientsPageWrapper {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 0 24px;
+  flex-direction: column; /* Stack content vertically on small screens */
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+/* Scrollable wrapper for table on small screens */
+.clientsTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.clientsFormContainer {
+  padding: 1rem;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.clientsContainer {
+  width: 100%;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  width: 100%;
 }
 
 input,
 select {
-  padding: 8px;
+  padding: 10px;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -31,81 +40,25 @@ select {
 .actionButtons {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  flex-wrap: wrap;
   width: 100%;
-  box-sizing: border-box;
-}
-
-.addClientBtn,
-.loadClientsBtn,
-.unloadClientsBtn,
-.clearBtn {
-  padding: 6px 8px;
-  font-size: 0.95rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #fff;
-  font-weight: bold;
-  flex: 1;
-  min-width: 0;
-  max-width: 120px;
-  text-align: center;
-}
-
-.clientsTable {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  font-size: 1rem;
-  min-width: 600px;
-}
-
-.clientsTable th,
-.clientsTable td {
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  text-align: left;
-  font-size: 1rem;
-}
-
-.editButton,
-.deleteButton {
-  padding: 6px 10px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  margin-right: 6px;
-  cursor: pointer;
-}
-
-.actionButtons button,
-.editButton,
-.deleteButton {
-  padding: 6px 10px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  margin-right: 5px;
-  cursor: pointer;
-  color: #fff;
 }
 
 .addClientBtn {
-  background-color: #007bff;
+  background-color: #25ad3c;
 }
 .addClientBtn:hover {
-  background-color: #0069d9;
+  background-color: #158c31;
 }
 
 .loadClientsBtn {
-  background-color: #6f42c1;
+  background-color: #5c067d;
 }
 .loadClientsBtn:hover {
-  background-color: #5936a2;
+  background-color: #4c0c56;
 }
 
 .unloadClientsBtn {
@@ -137,84 +90,161 @@ select {
   background-color: #c82333;
 }
 
+.actionButtons button,
+.editButton,
+.deleteButton {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+}
+
 .actionButtonWrapper {
   display: flex;
-  flex-direction: row;
-  gap: 8px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  gap: 6px;
   justify-content: flex-start;
   align-items: center;
 }
 
-/* Tablet (≤ 768px) */
+.showPasswordBtn {
+  margin-left: 8px;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border: none;
+  background-color: #eee;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.showPasswordBtn:hover {
+  background-color: #ccc;
+}
+
+/* Table styling for client list */
+.clientsTable {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+  word-wrap: break-word;
+}
+
+.clientsTable td,
+.clientsTable th {
+  padding: 12px 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: middle;
+  max-width: 180px;
+  word-break: break-word;
+}
+
+.clientsTable th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+/* Responsive adjustments */
+@me/* Mobile Card Layout for Clients List */
+@media (max-width: 768px) {
+  .clientsTableWrapper {
+    display: none; /* Hide the table on small screens */
+  }
+
+  .clientsCardsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .clientCard {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .clientCard h4 {
+    font-size: 1.1rem;
+    margin: 0 0 8px;
+    color: #333;
+  }
+
+  .clientCard p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  .clientCardActions {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .clientCardActions button {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .clientCardActions .editButton {
+    background-color: #17a2b8;
+  }
+
+  .clientCardActions .editButton:hover {
+    background-color: #138496;
+  }
+
+  .clientCardActions .deleteButton {
+    background-color: #dc3545;
+  }
+
+  .clientCardActions .deleteButton:hover {
+    background-color: #c82333;
+  }
+}
 @media (max-width: 768px) {
   .clientsFormContainer {
     padding: 16px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 0 10px;
   }
 
   .actionButtons {
-    display: flex;
-    flex-direction: row !important;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 6px;
-    justify-content: flex-start;
-    align-items: center;
   }
 
-  .clientsTable {
-    font-size: 1rem;
-    min-width: 100%;
+  .clientsPageWrapper {
+    flex-direction: column;
+    padding: 16px 12px;
   }
 
-  .clientsTable,
-  .clientsTable thead,
-  .clientsTable tbody,
-  .clientsTable th,
-  .clientsTable td,
-  .clientsTable tr {
-    display: block;
-  }
-
-  .clientsTable thead {
-    display: none;
-  }
-
-  .clientsTable tr {
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #fff;
-  }
-
-  .clientsTable td {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 10px;
-    position: relative;
-    padding-left: 50%;
-    border: none;
-    border-bottom: 1px solid #eee;
-  }
-
-  .clientsTable td::before {
-    position: absolute;
-    left: 12px;
-    width: 45%;
-    white-space: nowrap;
-    font-weight: 600;
-    color: #555;
-    content: attr(data-label);
+  .clientsFormContainer {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
-/* Mobile (≤ 480px) */
 @media (max-width: 480px) {
   .clientsFormContainer {
-    padding: 12px;
-    margin-left: 5px;
-    margin-right: 5px;
+    padding: 12px 5px;
   }
 
   input,
@@ -223,25 +253,41 @@ select {
   }
 
   .actionButtons {
-    display: flex;
-    flex-direction: row !important;
-    gap: 6px;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .actionButtons button,
   .editButton,
-  .deleteButton {
-    width: auto;
-    margin-right: 0;
+  .deleteButton,
+  .showPasswordBtn {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 8px 10px;
   }
 
-  .clientsTable {
-    font-size: 1rem;
+  .showPasswordBtn {
+    margin-left: 0;
+    margin-top: 4px;
   }
 
+  .clientsTable th,
   .clientsTable td {
-    font-size: 1rem;
+    font-size: 0.85rem;
+    padding: 8px;
+    white-space: normal;
+  }
+
+  .clientsPageWrapper {
+    padding: 10px 6px;
+  }
+
+  .clientsTableWrapper {
+    margin-top: 10px;
+  }
+
+  .actionButtonWrapper {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
