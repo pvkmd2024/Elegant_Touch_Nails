@@ -76,31 +76,6 @@ exports.createService = async (req, res) => {
     res.status(500).json({ message: "Failed to create service" });
   }
 };
-// exports.createService = async (req, res) => {
-//   try {
-//     const services = req.body;
-
-//     if (!Array.isArray(services) || services.length === 0) {
-//       return sendError(res, 400, "Request body must be an array of services");
-//     }
-
-//     for (const service of services) {
-//       if (!isValidService(service)) {
-//         return sendError(res, 400, "Invalid service data provided");
-//       }
-//     }
-
-//     const newServices = await Service.create(services);
-//     res.status(201).json({
-//       status: "success",
-//       message: "Services created successfully",
-//       data: newServices,
-//     });
-//   } catch (error) {
-//     logError("createService", error);
-//     sendError(res, 500, "Failed to create services");
-//   }
-// };
 
 // PUT: Update a service by ID
 exports.updateService = async (req, res) => {

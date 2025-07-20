@@ -16,26 +16,6 @@ exports.markAsCompleted = (req, res) => {
   });
 };
 
-// exports.markAsCompleted = async (req, res) => {
-//   const { appointmentId } = req.params.id;
-
-//   try {
-//     const [result] = await db.execute(
-//       `UPDATE Appointments SET Status = 'Completed' WHERE AppointmentID = ?`,
-//       [appointmentId]
-//     );
-
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({ message: "Appointment not found." });
-//     }
-
-//     res.status(200).json({ message: "Appointment marked as completed." });
-//   } catch (err) {
-//     console.error("Error marking appointment as completed:", err);
-//     res.status(500).json({ message: "Database error." });
-//   }
-// };
-
 exports.createAppointment = async (req, res) => {
   try {
     const { ClientID, ServiceID, AppointmentDate, Status } =

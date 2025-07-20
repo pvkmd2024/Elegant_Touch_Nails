@@ -1,7 +1,6 @@
 import React from "react";
 import "./DashboardLayout.css";
 import { Link } from "react-router-dom";
-// import Navigation from "../components/Navigation";
 
 export default function ManagersDashboard () {
   return (

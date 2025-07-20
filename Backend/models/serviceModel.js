@@ -34,33 +34,6 @@ async create(service) {
   };
 },
 
-  // async create(services) {
-  //   const values = services.map(s => [
-  //     s.ServiceName,
-  //     s.Description,
-  //     s.MinDuration,
-  //     s.MaxDuration,
-  //     s.MinPrice,
-  //     s.MaxPrice,
-  //   ]);
-
-  //   const placeholders = services.map(() => "(?, ?, ?, ?, ?, ?)").join(", ");
-
-  //   const sql = `
-  //     INSERT INTO Services (
-  //       ServiceName, Description, MinDuration, MaxDuration, MinPrice, MaxPrice
-  //     ) VALUES ${placeholders}
-  //   `;
-
-  //   const flatValues = values.flat();
-  //   const [result] = await db.query(sql, flatValues);
-
-  //   return {
-  //     insertedCount: result.affectedRows,
-  //     insertId: result.insertId,
-  //   };
-  // },
-
   async update(ServiceID, service) {
     const {
       ServiceName,
